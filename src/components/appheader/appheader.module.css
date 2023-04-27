@@ -1,0 +1,49 @@
+.header{
+  display: flex;
+  align-items: center;
+  max-width: 1920px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #1c1c21;
+  border: 2px solid #4c4cff;
+}
+
+.nav{
+  max-width: 1280px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+
+}
+
+.list{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link{
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  color: #f2f2f3;
+}
+
+.icon{
+
+  width: 24px;
+  height: 24px;
+}
+
+.text{
+  
+}
+
