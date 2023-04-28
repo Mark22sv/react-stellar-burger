@@ -5,9 +5,11 @@ import {
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyle from '../BurgerConstructor/BurgerConstructor.module.css';
-import { ingredientPropTypes } from '../utils/data';
+import ingredientPropTypes from '../utils/prop-types';
+import PropTypes from "prop-types";
 
 const IngredientsItem = ({ ingredient }) => {
+
   return (
     <div>
       <ConstructorElement
@@ -20,7 +22,7 @@ const IngredientsItem = ({ ingredient }) => {
 }
 
 IngredientsItem.propTypes = {
-  ingredient : ingredientPropTypes
+  ingredient : ingredientPropTypes.isRequired
 };
 
 const BurgerConstructor = (props) => {
@@ -65,8 +67,10 @@ const BurgerConstructor = (props) => {
   )
 }
 
+
 BurgerConstructor.propTypes ={
-  props: ingredientPropTypes
+  ingredients: PropTypes.shape({
+   data: PropTypes.arrayOf(ingredientPropTypes)}).isRequired
 };
 
 export default BurgerConstructor;

@@ -5,7 +5,8 @@ import {
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyle from '../BurgerIngredients/BurgerIngredients.module.css';
-import { ingredientPropTypes } from '../utils/data';
+import ingredientPropTypes from '../utils/prop-types';
+import PropTypes from "prop-types";
 
 
 const IngredientsItem = ({ ingredient }) => {
@@ -27,7 +28,7 @@ const IngredientsItem = ({ ingredient }) => {
 }
 
 IngredientsItem.propTypes = {
-  ingredient : ingredientPropTypes
+  ingredient : ingredientPropTypes.isRequired
 };
 
 const BurgersIngredients = (props) => {
@@ -91,8 +92,9 @@ const BurgersIngredients = (props) => {
     )
   }
 
-BurgersIngredients.propTypes ={
-  props: ingredientPropTypes
-};
+  BurgersIngredients.propTypes ={
+    ingredients: PropTypes.shape({
+     data: PropTypes.arrayOf(ingredientPropTypes)}).isRequired
+  };
 
 export default BurgersIngredients;
