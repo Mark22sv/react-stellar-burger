@@ -37,24 +37,35 @@ const BurgersIngredients = (props) => {
           sauces = props.ingredients.data.filter((el) => el.type === "sauce"),
           mains = props.ingredients.data.filter((el) => el.type === "main");
 
+    const scrollElement = {
+      'one': document.querySelector('#one'),
+      'two': document.querySelector('#two'),
+      'three': document.querySelector('#three')
+    }
+
+    const tabSelect = (tab) => {
+      setCurrent(tab);
+      scrollElement[tab].scrollIntoView({ behavior: "smooth" });
+    };
+
     return (
       <div>
         <h1 className="text text_type_main-large pt-10 pb-5">
           Соберите бургер
         </h1>
         <div style={{ display: 'flex' }}>
-          <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+          <Tab value="one" active={current === 'one'} onClick={tabSelect}>
             Булки
           </Tab>
-          <Tab value="two" active={current === 'two'} onClick={setCurrent}>
+          <Tab value="two" active={current === 'two'} onClick={tabSelect}>
             Соусы
           </Tab>
-          <Tab value="three" active={current === 'three'} onClick={setCurrent}>
+          <Tab value="three" active={current === 'three'} onClick={tabSelect}>
             Начинки
           </Tab>
         </div>
         <div className={ `${burgerIngredientsStyle.container} pt-10` }>
-          <h2 className="text text_type_main-medium">
+          <h2 className="text text_type_main-medium" id="one">
             Булки
           </h2>
           <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
@@ -65,7 +76,7 @@ const BurgersIngredients = (props) => {
               ))
             }
           </ul>
-          <h2 className="text text_type_main-medium">
+          <h2 className="text text_type_main-medium" id="two">
             Соусы
           </h2>
           <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
@@ -76,7 +87,7 @@ const BurgersIngredients = (props) => {
               ))
             }
           </ul>
-          <h2 className="text text_type_main-medium">
+          <h2 className="text text_type_main-medium" id="three">
             Начинки
           </h2>
           <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
