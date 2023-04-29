@@ -1,0 +1,39 @@
+.list{
+  max-height: 664px;
+  overflow-y: scroll;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px;
+  background-color: #2F2F37;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: #8585AD
+}
+
+.item{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.item:last-child{
+  margin: 0;
+}
+
+.order{
+  display: flex;
+  gap: 40px;
+}
+
+.price{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
