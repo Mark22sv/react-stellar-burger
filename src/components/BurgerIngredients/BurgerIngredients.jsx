@@ -45,7 +45,8 @@ const BurgersIngredients = (props) => {
 
     const tabSelect = (tab) => {
       setCurrent(tab);
-      scrollElement[tab].scrollIntoView({ behavior: "smooth" });
+      console.log(tab)
+      if (tab) scrollElement[tab].scrollIntoView({ behavior: "smooth" });
     };
 
     return (
