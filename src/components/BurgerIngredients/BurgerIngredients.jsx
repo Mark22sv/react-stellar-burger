@@ -32,10 +32,11 @@ IngredientsItem.propTypes = {
 };
 
 const BurgersIngredients = (props) => {
-    const [current, setCurrent] = React.useState('one')
-    const buns = props.ingredients.data.filter((el) => el.type === "bun"),
-          sauces = props.ingredients.data.filter((el) => el.type === "sauce"),
-          mains = props.ingredients.data.filter((el) => el.type === "main");
+  console.log(props)
+    const [current, setCurrent] = React.useState('one');
+    const buns = props.ingredients.filter((el) => el.type === "bun"),
+          sauces = props.ingredients.filter((el) => el.type === "sauce"),
+          mains = props.ingredients.filter((el) => el.type === "main");
 
     const scrollElement = {
       'one': document.querySelector('#one'),
@@ -45,7 +46,7 @@ const BurgersIngredients = (props) => {
 
     const tabSelect = (tab) => {
       setCurrent(tab);
-      console.log(tab)
+      console.log(tab);
       if (tab) scrollElement[tab].scrollIntoView({ behavior: "smooth" });
     };
 
@@ -105,8 +106,7 @@ const BurgersIngredients = (props) => {
   }
 
   BurgersIngredients.propTypes ={
-    ingredients: PropTypes.shape({
-     data: PropTypes.arrayOf(ingredientPropTypes)}).isRequired
+    ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired
   };
 
 export default BurgersIngredients;

@@ -26,8 +26,8 @@ IngredientsItem.propTypes = {
 };
 
 const BurgerConstructor = (props) => {
-  const buns = props.ingredients.data.filter((el) => el.type === "bun"),
-        saucesAndMains = props.ingredients.data.filter((el) => el.type !== "bun");
+  const buns = props.ingredients.filter((el) => el.type === "bun"),
+        saucesAndMains = props.ingredients.filter((el) => el.type !== "bun");
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}>
@@ -69,8 +69,7 @@ const BurgerConstructor = (props) => {
 
 
 BurgerConstructor.propTypes ={
-  ingredients: PropTypes.shape({
-   data: PropTypes.arrayOf(ingredientPropTypes)}).isRequired
+  ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired
 };
 
 export default BurgerConstructor;

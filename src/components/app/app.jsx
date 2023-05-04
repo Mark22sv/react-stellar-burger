@@ -5,12 +5,13 @@ import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css'
 import {data} from '../utils/data'
 
-class App extends React.Component {
-  state = {
-    data
-  };
+const App = () => {
+  const [dataIngredients, setDataIngredients] = React.useState(data);
+  // state = {
+  //   data
+  // };
+console.log(data)
 
-  render() {
     return (
 
       <div>
@@ -19,16 +20,16 @@ class App extends React.Component {
         </header>
         <main className={ appStyles.main }>
           <section className={ appStyles.section }>
-            <BurgersIngredients ingredients={ this.state } />
+            <BurgersIngredients ingredients={ dataIngredients } />
           </section>
           <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
-            <BurgerConstructor ingredients={ this.state } />
+            <BurgerConstructor ingredients={ dataIngredients } />
           </section>
         </main>
       </div>
 
     );
-  }
-}
+
+};
 
 export default App;
