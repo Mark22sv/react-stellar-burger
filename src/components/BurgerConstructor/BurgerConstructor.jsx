@@ -29,8 +29,7 @@ IngredientsItem.propTypes = {
 };
 
 const BurgerConstructor = (props) => {
-  console.log(props)
-  const buns = useMemo(() => props.ingredients.filter((el) => el.type === "bun"), [props]);
+  const bun = useMemo(() => props.ingredients.find((el) => el.type === "bun"), [props]);
   const saucesAndMains = useMemo(() => props.ingredients.filter((el) => el.type !== "bun"), [props]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -45,13 +44,15 @@ const BurgerConstructor = (props) => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}>
+      {bun &&
       <ConstructorElement
         type="top"
         isLocked={true}
-        text={`${buns[0].name} '(верх)'`}
-        price={buns[0].price}
-        thumbnail={buns[0].image_mobile}
+        text={`${bun.name} '(верх)'`}
+        price={bun.price}
+        thumbnail={bun.image_mobile}
       />
+      }
       <ul className={ burgerConstructorStyle.list }>
         {saucesAndMains.map((item, index) => (
           <li className={ burgerConstructorStyle.item } key={index}>
@@ -61,13 +62,15 @@ const BurgerConstructor = (props) => {
           ))
         }
       </ul>
+      {bun &&
       <ConstructorElement
         type="bottom"
         isLocked={true}
-        text={`${buns[0].name} '(низ)'`}
-        price={buns[0].price}
-        thumbnail={buns[0].image_mobile}
+        text={`${bun.name} '(низ)'`}
+        price={bun.price}
+        thumbnail={bun.image_mobile}
       />
+      }
       <div className={`${burgerConstructorStyle.order} pt-10 pr-4`}>
         <div className={`${burgerConstructorStyle.price}`}>
           <p className="text text_type_digits-medium">610</p>

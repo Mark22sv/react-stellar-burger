@@ -10,16 +10,19 @@ import { getDataIngredientsFetch } from '../../api/api.js';
 const App = () => {
   const [dataIngredients, setDataIngredients] = useState([]);
 
-  useEffect(() => {
+  const getDataIngredients = () => {
     getDataIngredientsFetch()
       .then((res) => {
-        console.log(res.data);
         setDataIngredients(res.data);
       })
       .catch((error) => {
         console.log(error);
-      });
-  }, []);
+      })
+  };
+
+  useEffect(() => {
+      getDataIngredients();
+    }, []);
 
   return (
 

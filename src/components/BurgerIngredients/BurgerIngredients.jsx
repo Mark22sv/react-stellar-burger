@@ -40,7 +40,7 @@ const BurgersIngredients = (props) => {
   const buns = useMemo(() => props.ingredients.filter((el) => el.type === "bun"), [props]);
   const sauces = useMemo(() => props.ingredients.filter((el) => el.type === "sauce"), [props]);
   const mains = useMemo(() => props.ingredients.filter((el) => el.type === "main"), [props]);
-
+  
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
