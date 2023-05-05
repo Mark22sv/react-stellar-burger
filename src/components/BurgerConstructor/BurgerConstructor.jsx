@@ -5,8 +5,11 @@ import {
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyle from '../BurgerConstructor/BurgerConstructor.module.css';
-import ingredientPropTypes from '../utils/prop-types';
+import { ingredientPropTypes } from "../../utils/prop-types";
 import PropTypes from "prop-types";
+import { useState, useMemo } from "react";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 
 const IngredientsItem = ({ ingredient }) => {
 
@@ -26,15 +29,26 @@ IngredientsItem.propTypes = {
 };
 
 const BurgerConstructor = (props) => {
-  const buns = props.ingredients.filter((el) => el.type === "bun"),
-        saucesAndMains = props.ingredients.filter((el) => el.type !== "bun");
+  console.log(props)
+  const buns = useMemo(() => props.ingredients.filter((el) => el.type === "bun"), [props]);
+  const saucesAndMains = useMemo(() => props.ingredients.filter((el) => el.type !== "bun"), [props]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsOpen(true)
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false)
+  };
+
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}>
       <ConstructorElement
         type="top"
         isLocked={true}
-        text={`${buns[0].name} '(вверх)'`}
+        text={`${buns[0].name} '(верх)'`}
         price={buns[0].price}
         thumbnail={buns[0].image_mobile}
       />
@@ -59,10 +73,16 @@ const BurgerConstructor = (props) => {
           <p className="text text_type_digits-medium">610</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large">
+        <Button htmlType="button" type="primary" size="large" onClick={handleOpenModal}>
           Оформить заказ
         </Button>
       </div>
+      {isOpen && (
+        <Modal onClose={handleCloseModal}>
+          <OrderDetails/>
+        </Modal>
+        )
+      }
     </div>
   )
 }

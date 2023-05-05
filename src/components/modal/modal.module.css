@@ -1,0 +1,41 @@
+.container {
+  max-width: 720px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #1c1c21;
+  border-radius: 40px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title_container {
+  width: 640px;
+  display: grid;
+  grid-template-columns: 1fr 24px;
+  align-items: center;
+
+}
+
+.title {
+  justify-self: flex-start;
+  width: 580px;
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+.button {
+  padding: 0;
+  margin: 0;
+  max-width: 24px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  justify-self: flex-end;
+}
