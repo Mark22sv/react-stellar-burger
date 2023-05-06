@@ -14,13 +14,13 @@ const OrderDetails = () => {
         </p>
       </li>
       <li>
-        <div className={orderDetails.done}></div>
+        <div className={ orderDetails.done} ></div>
       </li>
-      <p className={`${orderDetails.text} text text_type_main-default pt-15`}>
-          Ваш заказ начали готовить
+      <p className={`${ orderDetails.text } text text_type_main-default pt-15`}>
+        Ваш заказ начали готовить
       </p>
-      <p className={`${orderDetails.text} text text_type_main-default text_color_inactive pt-2 pb-30`}>
-          Дождитесь готовности на орбитальной станции
+      <p className={`${ orderDetails.text } text text_type_main-default text_color_inactive pt-2 pb-30`}>
+        Дождитесь готовности на орбитальной станции
       </p>
     </ul>
   );

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useMemo } from "react";
 import {
   Tab,
@@ -10,7 +9,6 @@ import { ingredientPropTypes } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-
 
 const IngredientsItem = ({ ingredient, selected }) => {
   return (
@@ -31,16 +29,17 @@ const IngredientsItem = ({ ingredient, selected }) => {
 }
 
 IngredientsItem.propTypes = {
-  ingredient : ingredientPropTypes.isRequired
+  ingredient : ingredientPropTypes.isRequired,
+  selected: PropTypes.func.isRequired
 };
 
 const BurgersIngredients = (props) => {
 
-  const [current, setCurrent] = useState('one');
   const buns = useMemo(() => props.ingredients.filter((el) => el.type === "bun"), [props]);
   const sauces = useMemo(() => props.ingredients.filter((el) => el.type === "sauce"), [props]);
   const mains = useMemo(() => props.ingredients.filter((el) => el.type === "main"), [props]);
-  
+
+  const [current, setCurrent] = useState('one');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 

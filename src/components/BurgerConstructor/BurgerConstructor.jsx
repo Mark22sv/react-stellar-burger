@@ -14,7 +14,7 @@ import OrderDetails from "../order-details/order-details";
 const IngredientsItem = ({ ingredient }) => {
 
   return (
-    <div>
+    <div className={ burgerConstructorStyle.element }>
       <ConstructorElement
           text={ingredient.name}
           price={ingredient.price}
@@ -40,7 +40,6 @@ const BurgerConstructor = (props) => {
   const handleCloseModal = () => {
     setIsOpen(false)
   };
-
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}>
@@ -89,7 +88,6 @@ const BurgerConstructor = (props) => {
     </div>
   )
 }
-
 
 BurgerConstructor.propTypes ={
   ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired

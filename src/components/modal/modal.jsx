@@ -11,7 +11,7 @@ const modalRoot = document.querySelector('#react-modals');
 const Modal = ({ title, children, onClose }) => {
   useEffect(() => {
     const keyHandler = (evt) => {
-      if (evt.key === 'Escape') onClose()
+      if (evt.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', keyHandler);
     return () => {
@@ -36,7 +36,6 @@ const Modal = ({ title, children, onClose }) => {
     </>),
     modalRoot
   );
-
 }
 
 Modal.propTypes = {

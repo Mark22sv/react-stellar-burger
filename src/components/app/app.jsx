@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
 import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';

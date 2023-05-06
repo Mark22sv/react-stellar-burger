@@ -1,4 +1,3 @@
-import React from 'react';
 import headerStyle from './appheader.module.css'
 import {Logo,
         BurgerIcon,
@@ -40,7 +39,7 @@ const AppHeader = () => {
 
         </header>
       );
-    
+
 }
 
 export default AppHeader;
