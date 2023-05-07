@@ -1,0 +1,28 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.number {
+  padding: 0;
+  margin: 0;
+  text-shadow: 0 0 16px rgba(51, 51, 255, .25), 0 0 8px rgba(51, 51, 255, .25), 0 4px 32px rgba(51, 51, 255, .5);
+}
+
+.done {
+  width: 120px;
+  height: 120px;
+  display: block;
+  background-image: url('../../images/graphics.svg');
+  object-fit: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.text {
+  margin: 0;
+}

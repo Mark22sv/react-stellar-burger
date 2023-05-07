@@ -1,4 +1,3 @@
-import React from 'react';
 import headerStyle from './appheader.module.css'
 import {Logo,
         BurgerIcon,
@@ -6,8 +5,8 @@ import {Logo,
         ProfileIcon
        } from '@ya.praktikum/react-developer-burger-ui-components';
 
-class AppHeader extends React.Component {
-    render() {
+const AppHeader = () => {
+
       return (
         <header className={ `${headerStyle.header} pt-4 pb-4` }>
           <nav className={ headerStyle.nav }>
@@ -40,7 +39,7 @@ class AppHeader extends React.Component {
 
         </header>
       );
-    }
+
 }
 
 export default AppHeader;
