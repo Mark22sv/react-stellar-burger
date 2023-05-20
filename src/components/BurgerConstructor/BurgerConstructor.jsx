@@ -7,18 +7,20 @@ import {
 import burgerConstructorStyle from '../BurgerConstructor/BurgerConstructor.module.css';
 import { ingredientPropTypes } from "../../utils/prop-types";
 import PropTypes from "prop-types";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
+import { IngredientsContext } from '../services/IngredientsContext';
 
-const IngredientsItem = ({ ingredient }) => {
+const IngredientsItem = ({ ingredient, removeElement }) => {
 
   return (
-    <div className={ burgerConstructorStyle.element }>
+    <div className={ burgerConstructorStyle.element } >
       <ConstructorElement
           text={ingredient.name}
           price={ingredient.price}
           thumbnail={ingredient.image_mobile}
+          handleClose={() => removeElement(ingredient)}
       />
     </div>
   );
@@ -28,17 +30,34 @@ IngredientsItem.propTypes = {
   ingredient : ingredientPropTypes.isRequired
 };
 
-const BurgerConstructor = (props) => {
-  const bun = useMemo(() => props.ingredients.find((el) => el.type === "bun"), [props]);
-  const saucesAndMains = useMemo(() => props.ingredients.filter((el) => el.type !== "bun"), [props]);
+const BurgerConstructor = () => {
+  const { dataIngredients, setDataIngredients } = useContext(IngredientsContext);
+
+  const bun = useMemo(() => dataIngredients.find((el) => el.type === "bun"), [dataIngredients]);
+  const saucesAndMains = useMemo(() => dataIngredients.filter((el) => el.type !== "bun"), [dataIngredients]);
+
+
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpenModal = () => {
-    setIsOpen(true)
+    setIsOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsOpen(false)
+    setIsOpen(false);
+  };
+
+  const totalSum = useMemo(
+    () =>
+      dataIngredients.reduce(
+        (sum, ingredient) => sum + ingredient.price, 0),
+    [dataIngredients]
+  );
+
+  const removeElement = (ingredient) =>{
+    console.log(ingredient._id);
+  //  setDataIngredients([dataIngredients.filter((el) => el._id !== ingredient._id)])
   };
 
   return (
@@ -56,7 +75,7 @@ const BurgerConstructor = (props) => {
         {saucesAndMains.map((item, index) => (
           <li className={ burgerConstructorStyle.item } key={index}>
             <DragIcon type="primary" />
-            <IngredientsItem ingredient={ item } />
+            <IngredientsItem ingredient={ item } removeElement={ removeElement }/>
           </li>
           ))
         }
@@ -72,7 +91,7 @@ const BurgerConstructor = (props) => {
       }
       <div className={`${burgerConstructorStyle.order} pt-10 pr-4`}>
         <div className={`${burgerConstructorStyle.price}`}>
-          <p className="text text_type_digits-medium">610</p>
+          <p className="text text_type_digits-medium">{ totalSum }</p>
           <CurrencyIcon type="primary" />
         </div>
         <Button htmlType="button" type="primary" size="large" onClick={handleOpenModal}>
@@ -81,7 +100,7 @@ const BurgerConstructor = (props) => {
       </div>
       {isOpen && (
         <Modal onClose={handleCloseModal}>
-          <OrderDetails/>
+          <OrderDetails />
         </Modal>
         )
       }

@@ -1,6 +1,6 @@
 import orderDetails from "./order-details.module.css";
 
-const OrderDetails = () => {
+const OrderDetails = ( ) => {
   return (
     <ul className={`${ orderDetails.container } pt-9`}>
       <li>

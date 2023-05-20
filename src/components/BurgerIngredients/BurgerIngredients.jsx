@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import {
   Tab,
   CurrencyIcon,
@@ -9,6 +9,7 @@ import { ingredientPropTypes } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { DataContext, IngredientsContext } from '../services/IngredientsContext';
 
 const IngredientsItem = ({ ingredient, selected }) => {
   return (
@@ -33,19 +34,24 @@ IngredientsItem.propTypes = {
   selected: PropTypes.func.isRequired
 };
 
-const BurgersIngredients = (props) => {
+const BurgersIngredients = () => {
+  const { data, setData } = useContext(DataContext);
+  const { dataIngredients, setDataIngredients } = useContext(IngredientsContext);
 
-  const buns = useMemo(() => props.ingredients.filter((el) => el.type === "bun"), [props]);
-  const sauces = useMemo(() => props.ingredients.filter((el) => el.type === "sauce"), [props]);
-  const mains = useMemo(() => props.ingredients.filter((el) => el.type === "main"), [props]);
+  const buns = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
+  const sauces = useMemo(() => data.filter((el) => el.type === "sauce"), [data]);
+  const mains = useMemo(() => data.filter((el) => el.type === "main"), [data]);
 
   const [current, setCurrent] = useState('one');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
   const handleOpenModal = (item) => {
-    setIsOpen(true);
-    setSelectedIngredient(item);
+    //setIsOpen(true);
+    //setSelectedIngredient(item);
+    setDataIngredients(
+      [...dataIngredients, item]
+    );
   };
 
   const handleCloseModal = () => {
