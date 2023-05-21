@@ -10,7 +10,8 @@ import PropTypes from "prop-types";
 import { useState, useMemo, useContext } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { IngredientsContext } from '../services/IngredientsContext';
+import { DataContext, OrderContext } from '../services/IngredientsContext';
+import { setOrderFetch } from "../../api/api";
 
 const IngredientsItem = ({ ingredient, removeElement }) => {
 
@@ -31,16 +32,46 @@ IngredientsItem.propTypes = {
 };
 
 const BurgerConstructor = () => {
-  const { dataIngredients, setDataIngredients } = useContext(IngredientsContext);
+  const { data, setData } = useContext(DataContext);
+  const { orderState, orderDispatcher } = useContext(OrderContext);
 
-  const bun = useMemo(() => dataIngredients.find((el) => el.type === "bun"), [dataIngredients]);
-  const saucesAndMains = useMemo(() => dataIngredients.filter((el) => el.type !== "bun"), [dataIngredients]);
+  // const bunApiData = useMemo(() => data.find((el) => el.type === "bun"), [data]);
+  // const saucesAndMainsApiData = useMemo(() => data.filter((el) => el.type !== "bun"), [data]);
 
+  // //const startIngredient = [...bunApiData, ...saucesAndMainsApiData];
+  // //console.log(startIngredient)
+  // useEffect(() => {
+  //   orderDispatcher({type: "setIngedients", payload: startIngredient});
+  // }, []);
 
+  const bun = useMemo(() => orderState.orderIngredients.find((el) => el.type === "bun"),
+                      [orderState.orderIngredients]);
+  const saucesAndMains = useMemo(() => orderState.orderIngredients.filter((el) => el.type !== "bun"),
+                      [orderState.orderIngredients]);
 
   const [isOpen, setIsOpen] = useState(false);
 
+
+  const [orderNumber, setOrderNumber] = useState();
+
+  const setOrder = (order) => {
+    setOrderFetch(order)
+      .then((res) => {
+        setOrderNumber(res.order.number);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
   const handleOpenModal = () => {
+    let order = {
+      ingredients: []
+    };
+    for (let i = 0; i < orderState.orderIngredients.length; i++){
+      order = {ingredients: [...order.ingredients, orderState.orderIngredients[i]._id]};
+    }
+    setOrder(order);
     setIsOpen(true);
   };
 
@@ -49,15 +80,21 @@ const BurgerConstructor = () => {
   };
 
   const totalSum = useMemo(
-    () =>
-      dataIngredients.reduce(
-        (sum, ingredient) => sum + ingredient.price, 0),
-    [dataIngredients]
+    () => {
+      let bun, priceBun;
+      if (orderState.orderIngredients.find((el) => el.type === "bun")){
+        bun = orderState.orderIngredients.find((el) => el.type === "bun");
+        priceBun = bun.price;
+      } else priceBun = 0;
+      return priceBun + orderState.orderIngredients.reduce((sum, ingredient) => sum + ingredient.price, 0)
+    },
+    [orderState.orderIngredients]
+
   );
 
-  const removeElement = (ingredient) =>{
-    console.log(ingredient._id);
-  //  setDataIngredients([dataIngredients.filter((el) => el._id !== ingredient._id)])
+  const removeIngredient = (ingredient) =>{
+    const newOrderIngredients = orderState.orderIngredients.filter((el) => el._id !== ingredient._id);
+    orderDispatcher({type: "removeIngredient", payload: newOrderIngredients});
   };
 
   return (
@@ -75,7 +112,7 @@ const BurgerConstructor = () => {
         {saucesAndMains.map((item, index) => (
           <li className={ burgerConstructorStyle.item } key={index}>
             <DragIcon type="primary" />
-            <IngredientsItem ingredient={ item } removeElement={ removeElement }/>
+            <IngredientsItem ingredient={ item } removeElement={ removeIngredient }/>
           </li>
           ))
         }
@@ -100,7 +137,7 @@ const BurgerConstructor = () => {
       </div>
       {isOpen && (
         <Modal onClose={handleCloseModal}>
-          <OrderDetails />
+          <OrderDetails orderNumber={ orderNumber }/>
         </Modal>
         )
       }
@@ -108,9 +145,7 @@ const BurgerConstructor = () => {
   )
 }
 
-BurgerConstructor.propTypes ={
-  ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired
-};
+
 
 export default BurgerConstructor;
 

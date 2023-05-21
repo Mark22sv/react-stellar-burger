@@ -9,7 +9,7 @@ import { ingredientPropTypes } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { DataContext, IngredientsContext } from '../services/IngredientsContext';
+import { DataContext, OrderContext } from '../services/IngredientsContext';
 
 const IngredientsItem = ({ ingredient, selected }) => {
   return (
@@ -36,7 +36,8 @@ IngredientsItem.propTypes = {
 
 const BurgersIngredients = () => {
   const { data, setData } = useContext(DataContext);
-  const { dataIngredients, setDataIngredients } = useContext(IngredientsContext);
+  const { orderState, orderDispatcher } = useContext(OrderContext);
+
 
   const buns = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
   const sauces = useMemo(() => data.filter((el) => el.type === "sauce"), [data]);
@@ -49,9 +50,12 @@ const BurgersIngredients = () => {
   const handleOpenModal = (item) => {
     //setIsOpen(true);
     //setSelectedIngredient(item);
-    setDataIngredients(
-      [...dataIngredients, item]
-    );
+    if ((orderState.orderIngredients.find((el) => el.type === "bun")) && (item.type === "bun")){
+      console.log("Булка уже выбрана");
+    } else {
+        const newOrderIngredients = [...orderState.orderIngredients, item];
+        orderDispatcher({type: "addIngedient", payload: newOrderIngredients});
+      }
   };
 
   const handleCloseModal = () => {
@@ -130,8 +134,6 @@ const BurgersIngredients = () => {
   )
 }
 
-  BurgersIngredients.propTypes ={
-    ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired
-};
+
 
 export default BurgersIngredients;

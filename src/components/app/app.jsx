@@ -1,25 +1,45 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import AppHeader from '../appheader/appheader';
 import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
 import { getDataIngredientsFetch } from '../../api/api.js';
-import { DataContext, IngredientsContext } from '../services/IngredientsContext';
+import { DataContext, OrderContext } from '../services/IngredientsContext';
 //import { data } from '../../utils/data';
+
+const initialOrderState = {
+  orderIngredients: []
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "setIngedients":
+      return { orderIngredients: action.payload };
+    case "addIngedient":
+      return { orderIngredients: action.payload };
+    case "removeIngredient":
+      return { orderIngredients: action.payload };
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+}
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [dataIngredients, setDataIngredients] = useState([]);
+  const [load, setLoad] = useState(false);
+  const [orderState, orderDispatcher] = useReducer(reducer, initialOrderState);
+
 
   const getDataIngredients = () => {
+    setLoad(true);
     getDataIngredientsFetch()
       .then((res) => {
         setData(res.data);
-        setDataIngredients(res.data);
       })
       .catch((error) => {
         console.log(error);
       })
+      .finally(() => setLoad(false))
   };
 
   useEffect(() => {
@@ -33,15 +53,16 @@ const App = () => {
         <AppHeader />
       </header>
       <main className={ appStyles.main }>
+        {load && <p>Loading...........</p>}
         <DataContext.Provider value={{ data, setData }}>
-        <IngredientsContext.Provider value={{ dataIngredients, setDataIngredients }}>
+          <OrderContext.Provider value={{ orderState, orderDispatcher }}>
           <section className={ appStyles.section }>
-            {dataIngredients.length && (<BurgersIngredients />)}
+            {!load && data.length && (<BurgersIngredients />)}
           </section>
           <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
-            {dataIngredients.length && (<BurgerConstructor />)}
+            {!load && data.length && (<BurgerConstructor />)}
           </section>
-        </IngredientsContext.Provider>
+          </OrderContext.Provider>
         </DataContext.Provider>
       </main>
     </div>
@@ -49,5 +70,6 @@ const App = () => {
   );
 
 };
+
 
 export default App;
