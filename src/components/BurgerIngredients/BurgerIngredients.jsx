@@ -9,7 +9,8 @@ import { ingredientPropTypes } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { DataContext, OrderContext } from '../services/IngredientsContext';
+import { DataContext } from '../../services/data-context/DataContext';
+import { OrderContext } from '../../services/order-context/OrderContext';
 
 const IngredientsItem = ({ ingredient, selected }) => {
   return (
@@ -38,10 +39,11 @@ const BurgersIngredients = () => {
   const { data, setData } = useContext(DataContext);
   const { orderState, orderDispatcher } = useContext(OrderContext);
 
-
-  const buns = useMemo(() => data.filter((el) => el.type === "bun"), [data]);
-  const sauces = useMemo(() => data.filter((el) => el.type === "sauce"), [data]);
-  const mains = useMemo(() => data.filter((el) => el.type === "main"), [data]);
+  const dataIngredients = useMemo(() => ({
+    "buns": data.filter((el) => el.type === "bun"),
+    "sauces": data.filter((el) => el.type === "sauce"),
+    "mains": data.filter((el) => el.type === "main")
+  }), [data]);
 
   const [current, setCurrent] = useState('one');
   const [isOpen, setIsOpen] = useState(false);
@@ -95,7 +97,7 @@ const BurgersIngredients = () => {
           Булки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {buns.map((item, index) => (
+          {dataIngredients.buns.map((item, index) => (
             <li key={index}>
               <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
             </li>
@@ -106,7 +108,7 @@ const BurgersIngredients = () => {
           Соусы
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {sauces.map((item, index) => (
+          {dataIngredients.sauces.map((item, index) => (
             <li key={index}>
               <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
             </li>
@@ -117,7 +119,7 @@ const BurgersIngredients = () => {
           Начинки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-        {mains.map((item, index) => (
+        {dataIngredients.mains.map((item, index) => (
           <li key={index}>
             <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
           </li>
@@ -133,7 +135,5 @@ const BurgersIngredients = () => {
     </div>
   )
 }
-
-
 
 export default BurgersIngredients;

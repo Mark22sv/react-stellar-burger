@@ -6,11 +6,10 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyle from '../BurgerConstructor/BurgerConstructor.module.css';
 import { ingredientPropTypes } from "../../utils/prop-types";
-import PropTypes from "prop-types";
 import { useState, useMemo, useContext } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-import { DataContext, OrderContext } from '../services/IngredientsContext';
+import { OrderContext } from '../../services/order-context/OrderContext';
 import { setOrderFetch } from "../../api/api";
 
 const IngredientsItem = ({ ingredient, removeElement }) => {
@@ -32,25 +31,13 @@ IngredientsItem.propTypes = {
 };
 
 const BurgerConstructor = () => {
-  const { data, setData } = useContext(DataContext);
   const { orderState, orderDispatcher } = useContext(OrderContext);
-
-  // const bunApiData = useMemo(() => data.find((el) => el.type === "bun"), [data]);
-  // const saucesAndMainsApiData = useMemo(() => data.filter((el) => el.type !== "bun"), [data]);
-
-  // //const startIngredient = [...bunApiData, ...saucesAndMainsApiData];
-  // //console.log(startIngredient)
-  // useEffect(() => {
-  //   orderDispatcher({type: "setIngedients", payload: startIngredient});
-  // }, []);
-
-  const bun = useMemo(() => orderState.orderIngredients.find((el) => el.type === "bun"),
-                      [orderState.orderIngredients]);
-  const saucesAndMains = useMemo(() => orderState.orderIngredients.filter((el) => el.type !== "bun"),
-                      [orderState.orderIngredients]);
+  const orderIngredients = useMemo(() => ({
+    "bun": orderState.orderIngredients.find((el) => el.type === "bun"),
+    "saucesAndMains": orderState.orderIngredients.filter((el) => el.type !== "bun")
+  }), [orderState.orderIngredients]);
 
   const [isOpen, setIsOpen] = useState(false);
-
 
   const [orderNumber, setOrderNumber] = useState();
 
@@ -99,17 +86,17 @@ const BurgerConstructor = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}>
-      {bun &&
+      {orderIngredients.bun &&
       <ConstructorElement
         type="top"
         isLocked={true}
-        text={`${bun.name} '(верх)'`}
-        price={bun.price}
-        thumbnail={bun.image_mobile}
+        text={`${orderIngredients.bun.name} '(верх)'`}
+        price={orderIngredients.bun.price}
+        thumbnail={orderIngredients.bun.image_mobile}
       />
       }
       <ul className={ burgerConstructorStyle.list }>
-        {saucesAndMains.map((item, index) => (
+        {orderIngredients.saucesAndMains.map((item, index) => (
           <li className={ burgerConstructorStyle.item } key={index}>
             <DragIcon type="primary" />
             <IngredientsItem ingredient={ item } removeElement={ removeIngredient }/>
@@ -117,13 +104,13 @@ const BurgerConstructor = () => {
           ))
         }
       </ul>
-      {bun &&
+      {orderIngredients.bun &&
       <ConstructorElement
         type="bottom"
         isLocked={true}
-        text={`${bun.name} '(низ)'`}
-        price={bun.price}
-        thumbnail={bun.image_mobile}
+        text={`${orderIngredients.bun.name} '(низ)'`}
+        price={orderIngredients.bun.price}
+        thumbnail={orderIngredients.bun.image_mobile}
       />
       }
       <div className={`${burgerConstructorStyle.order} pt-10 pr-4`}>

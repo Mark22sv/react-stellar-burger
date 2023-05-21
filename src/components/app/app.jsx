@@ -4,8 +4,9 @@ import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
 import { getDataIngredientsFetch } from '../../api/api.js';
-import { DataContext, OrderContext } from '../services/IngredientsContext';
-//import { data } from '../../utils/data';
+import { DataContext } from '../../services/data-context/DataContext';
+import { OrderContext } from '../../services/order-context/OrderContext';
+
 
 const initialOrderState = {
   orderIngredients: []
