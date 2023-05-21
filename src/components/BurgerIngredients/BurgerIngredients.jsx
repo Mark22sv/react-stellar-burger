@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import {
   Tab,
   CurrencyIcon,
@@ -9,6 +9,8 @@ import { ingredientPropTypes } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { DataContext } from '../../services/data-context/DataContext';
+import { OrderContext } from '../../services/order-context/OrderContext';
 
 const IngredientsItem = ({ ingredient, selected }) => {
   return (
@@ -33,19 +35,29 @@ IngredientsItem.propTypes = {
   selected: PropTypes.func.isRequired
 };
 
-const BurgersIngredients = (props) => {
+const BurgersIngredients = () => {
+  const { data, setData } = useContext(DataContext);
+  const { orderState, orderDispatcher } = useContext(OrderContext);
 
-  const buns = useMemo(() => props.ingredients.filter((el) => el.type === "bun"), [props]);
-  const sauces = useMemo(() => props.ingredients.filter((el) => el.type === "sauce"), [props]);
-  const mains = useMemo(() => props.ingredients.filter((el) => el.type === "main"), [props]);
+  const dataIngredients = useMemo(() => ({
+    "buns": data.filter((el) => el.type === "bun"),
+    "sauces": data.filter((el) => el.type === "sauce"),
+    "mains": data.filter((el) => el.type === "main")
+  }), [data]);
 
   const [current, setCurrent] = useState('one');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
   const handleOpenModal = (item) => {
-    setIsOpen(true);
-    setSelectedIngredient(item);
+    //setIsOpen(true);
+    //setSelectedIngredient(item);
+    if ((orderState.orderIngredients.find((el) => el.type === "bun")) && (item.type === "bun")){
+      console.log("Булка уже выбрана");
+    } else {
+        const newOrderIngredients = [...orderState.orderIngredients, item];
+        orderDispatcher({type: "addIngedient", payload: newOrderIngredients});
+      }
   };
 
   const handleCloseModal = () => {
@@ -85,7 +97,7 @@ const BurgersIngredients = (props) => {
           Булки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {buns.map((item, index) => (
+          {dataIngredients.buns.map((item, index) => (
             <li key={index}>
               <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
             </li>
@@ -96,7 +108,7 @@ const BurgersIngredients = (props) => {
           Соусы
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {sauces.map((item, index) => (
+          {dataIngredients.sauces.map((item, index) => (
             <li key={index}>
               <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
             </li>
@@ -107,7 +119,7 @@ const BurgersIngredients = (props) => {
           Начинки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-        {mains.map((item, index) => (
+        {dataIngredients.mains.map((item, index) => (
           <li key={index}>
             <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
           </li>
@@ -123,9 +135,5 @@ const BurgersIngredients = (props) => {
     </div>
   )
 }
-
-  BurgersIngredients.propTypes ={
-    ingredients: PropTypes.arrayOf(ingredientPropTypes).isRequired
-};
 
 export default BurgersIngredients;

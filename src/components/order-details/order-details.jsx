@@ -1,11 +1,12 @@
 import orderDetails from "./order-details.module.css";
+import PropTypes from "prop-types";
 
-const OrderDetails = () => {
+const OrderDetails = ( { orderNumber } ) => {
   return (
     <ul className={`${ orderDetails.container } pt-9`}>
       <li>
         <p className={`${ orderDetails.number } text text_type_digits-large`}>
-          034536
+          { orderNumber }
         </p>
       </li>
       <li>
@@ -24,6 +25,10 @@ const OrderDetails = () => {
       </p>
     </ul>
   );
+}
+
+OrderDetails.propTypes = {
+  orderNumber: PropTypes.number.isRequired,
 }
 
 export default OrderDetails;
