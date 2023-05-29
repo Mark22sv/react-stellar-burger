@@ -1,7 +1,8 @@
 import orderDetails from "./order-details.module.css";
-import PropTypes from "prop-types";
+import { useSelector } from 'react-redux';
 
-const OrderDetails = ( { orderNumber } ) => {
+const OrderDetails = () => {
+  const { orderNumber } = useSelector(state => state.order);
   return (
     <ul className={`${ orderDetails.container } pt-9`}>
       <li>
@@ -25,10 +26,6 @@ const OrderDetails = ( { orderNumber } ) => {
       </p>
     </ul>
   );
-}
-
-OrderDetails.propTypes = {
-  orderNumber: PropTypes.number.isRequired,
 }
 
 export default OrderDetails;

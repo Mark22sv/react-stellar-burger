@@ -1,4 +1,5 @@
-import { useState, useMemo, useContext } from "react";
+import { useState, useMemo } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Tab,
   CurrencyIcon,
@@ -9,8 +10,16 @@ import { ingredientPropTypes } from '../../utils/prop-types';
 import PropTypes from "prop-types";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { DataContext } from '../../services/data-context/DataContext';
-import { OrderContext } from '../../services/order-context/OrderContext';
+import {
+  ADD_CONSRUCTOR_INGREDIENTS,
+  REMOVE_CONSRUCTOR_INGREDIENTS
+} from '../../services/actions/constructor-ingredients';
+import {
+  ADD_SELECTED_INGREDIENT,
+  RESET_SELECTED_INGREDIENT
+} from '../../services/actions/data';
+
+
 
 const IngredientsItem = ({ ingredient, selected }) => {
   return (
@@ -36,8 +45,9 @@ IngredientsItem.propTypes = {
 };
 
 const BurgersIngredients = () => {
-  const { data, setData } = useContext(DataContext);
-  const { orderState, orderDispatcher } = useContext(OrderContext);
+  const { data, selectedIngredient } = useSelector(state => state.dataIngredients);
+  const { constructorDataIngredients } = useSelector(state => state.constructorDataIngredients);
+  const dispatch = useDispatch()
 
   const dataIngredients = useMemo(() => ({
     "buns": data.filter((el) => el.type === "bun"),
@@ -47,21 +57,22 @@ const BurgersIngredients = () => {
 
   const [current, setCurrent] = useState('one');
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedIngredient, setSelectedIngredient] = useState(null);
+
 
   const handleOpenModal = (item) => {
-    //setIsOpen(true);
-    //setSelectedIngredient(item);
-    if ((orderState.orderIngredients.find((el) => el.type === "bun")) && (item.type === "bun")){
+    // setIsOpen(true);
+    // dispatch({type: ADD_SELECTED_INGREDIENT, data: item});
+    if ((constructorDataIngredients.find((el) => el.type === "bun")) && (item.type === "bun")){
       console.log("Булка уже выбрана");
     } else {
-        const newOrderIngredients = [...orderState.orderIngredients, item];
-        orderDispatcher({type: "addIngedient", payload: newOrderIngredients});
+        const newOrderIngredients = [...constructorDataIngredients, item];
+        dispatch({type: ADD_CONSRUCTOR_INGREDIENTS, payload: newOrderIngredients});
       }
   };
 
   const handleCloseModal = () => {
-    setIsOpen(false)
+    setIsOpen(false);
+    dispatch({type: RESET_SELECTED_INGREDIENT});
   };
 
   const scrollElement = {

@@ -1,51 +1,20 @@
-import { useState, useEffect, useReducer } from 'react';
+import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
 import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
-import { getDataIngredientsFetch } from '../../api/api.js';
-import { DataContext } from '../../services/data-context/DataContext';
-import { OrderContext } from '../../services/order-context/OrderContext';
+import { getDataIngredients } from '../../services/actions/data';
+import { useDispatch, useSelector } from 'react-redux';
 
 
-const initialOrderState = {
-  orderIngredients: []
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "setIngedients":
-      return { orderIngredients: action.payload };
-    case "addIngedient":
-      return { orderIngredients: action.payload };
-    case "removeIngredient":
-      return { orderIngredients: action.payload };
-    default:
-      throw new Error(`Wrong type of action: ${action.type}`);
-  }
-}
 
 const App = () => {
-  const [data, setData] = useState([]);
-  const [load, setLoad] = useState(false);
-  const [orderState, orderDispatcher] = useReducer(reducer, initialOrderState);
-
-
-  const getDataIngredients = () => {
-    setLoad(true);
-    getDataIngredientsFetch()
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => setLoad(false))
-  };
+  const dispatch = useDispatch();
+  const { dataRequest, dataFailed } = useSelector(state => state.dataIngredients);
 
   useEffect(() => {
-      getDataIngredients();
-    }, []);
+    dispatch(getDataIngredients());
+    }, [dispatch]);
 
   return (
 
@@ -54,17 +23,15 @@ const App = () => {
         <AppHeader />
       </header>
       <main className={ appStyles.main }>
-        {load && <p>Loading...........</p>}
-        <DataContext.Provider value={{ data, setData }}>
-          <OrderContext.Provider value={{ orderState, orderDispatcher }}>
+        {dataRequest && <p>Loading...........</p>}
+
           <section className={ appStyles.section }>
-            {!load && data.length && (<BurgersIngredients />)}
+            {!dataFailed && <BurgersIngredients />}
           </section>
           <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
-            {!load && data.length && (<BurgerConstructor />)}
+            {!dataFailed && <BurgerConstructor />}
           </section>
-          </OrderContext.Provider>
-        </DataContext.Provider>
+
       </main>
     </div>
 
