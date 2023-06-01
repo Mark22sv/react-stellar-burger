@@ -5,7 +5,8 @@ import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
 import { getDataIngredients } from '../../services/actions/data';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 
 const App = () => {
@@ -24,14 +25,14 @@ const App = () => {
       </header>
       <main className={ appStyles.main }>
         {dataRequest && <p>Loading...........</p>}
-
-          <section className={ appStyles.section }>
-            {!dataFailed && <BurgersIngredients />}
-          </section>
-          <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
-            {!dataFailed && <BurgerConstructor />}
-          </section>
-
+          <DndProvider backend={ HTML5Backend }>
+            <section className={ appStyles.section }>
+              {!dataFailed && <BurgersIngredients />}
+            </section>
+            <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
+              {!dataFailed && <BurgerConstructor />}
+            </section>
+          </DndProvider>
       </main>
     </div>
 

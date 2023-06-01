@@ -15,6 +15,9 @@ import {
   ADD_CONSRUCTOR_INGREDIENTS,
   REMOVE_CONSRUCTOR_INGREDIENTS
 } from '../../services/actions/constructor-ingredients';
+import { useDrop, useDrag } from "react-dnd";
+import { v4 as uuidv4 } from 'uuid';
+import cloneDeep from 'lodash.clonedeep'
 
 
 const IngredientsItem = ({ ingredient, removeElement }) => {
@@ -75,12 +78,37 @@ const BurgerConstructor = () => {
   );
 
   const removeIngredient = (ingredient) =>{
-    const newconstructorIngredients = constructorDataIngredients.filter((el) => el._id !== ingredient._id);
-    dispatch({type: REMOVE_CONSRUCTOR_INGREDIENTS, payload: newconstructorIngredients});
+    dispatch({
+      type: REMOVE_CONSRUCTOR_INGREDIENTS,
+      payload: constructorDataIngredients.filter((el) => el.id !== ingredient.id)
+    });
   };
 
+  const [, dropTargetIngredients] = useDrop({
+    accept: "ingredients",
+    drop(item) {
+      let newItem = cloneDeep(item);
+      newItem.ingredient.id =  uuidv4();
+      ((constructorDataIngredients.find((el) => el.type === "bun"))
+      && (newItem.ingredient.type === "bun"))
+      ? console.log("Булка уже выбрана")
+      : dispatch({
+          type: ADD_CONSRUCTOR_INGREDIENTS,
+          payload: [...constructorDataIngredients, newItem.ingredient]
+        });
+    },
+    collect: monitor => ({
+      isHover: monitor.isOver(),
+      })
+  });
+
+
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}
+      ref={ dropTargetIngredients }
+    >
       {constructorIngredients.bun &&
       <ConstructorElement
         type="top"
