@@ -11,10 +11,6 @@ import PropTypes from "prop-types";
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import {
-  ADD_CONSRUCTOR_INGREDIENTS,
-  REMOVE_CONSRUCTOR_INGREDIENTS
-} from '../../services/actions/constructor-ingredients';
-import {
   ADD_SELECTED_INGREDIENT,
   RESET_SELECTED_INGREDIENT
 } from '../../services/actions/data';

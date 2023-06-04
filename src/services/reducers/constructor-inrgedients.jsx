@@ -1,7 +1,9 @@
 
 import {
   ADD_CONSRUCTOR_INGREDIENTS,
-  REMOVE_CONSRUCTOR_INGREDIENTS
+  REMOVE_CONSRUCTOR_INGREDIENTS,
+  ADD_BUN_CONSRUCTOR,
+  MOVE_CONSRUCTOR_INGREDIENTS
 } from '../actions/constructor-ingredients';
 
 const initialState = {
@@ -13,6 +15,10 @@ export function constructorIngredientsReducer(state = initialState, action) {
     case ADD_CONSRUCTOR_INGREDIENTS:
       return { constructorDataIngredients: action.payload };
     case REMOVE_CONSRUCTOR_INGREDIENTS:
+      return { constructorDataIngredients: action.payload };
+    case ADD_BUN_CONSRUCTOR:
+      return { constructorDataIngredients: action.payload };
+    case MOVE_CONSRUCTOR_INGREDIENTS:
       return { constructorDataIngredients: action.payload };
     default:
       return state;
