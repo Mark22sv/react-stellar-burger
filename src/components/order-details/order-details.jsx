@@ -1,8 +1,10 @@
+import React from 'react';
 import orderDetails from "./order-details.module.css";
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
+import { getSelectorOrderDetails } from '../../utils/get-selector'
 
 const OrderDetails = () => {
-  const { orderNumber } = useSelector(state => state.order);
+  const { orderNumber } = useSelector(getSelectorOrderDetails, shallowEqual);
   return (
     <ul className={`${ orderDetails.container } pt-9`}>
       <li>
@@ -28,4 +30,4 @@ const OrderDetails = () => {
   );
 }
 
-export default OrderDetails;
+export default React.memo(OrderDetails);

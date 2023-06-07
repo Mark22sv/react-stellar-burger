@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
@@ -44,5 +45,5 @@ Modal.propTypes = {
   title: PropTypes.string
 }
 
-export default Modal;
+export default React.memo(Modal);
 

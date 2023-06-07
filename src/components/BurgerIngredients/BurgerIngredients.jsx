@@ -1,5 +1,6 @@
+import React from 'react';
 import { useState, useMemo, useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
   Tab,
   CurrencyIcon,
@@ -16,11 +17,13 @@ import {
 } from '../../services/actions/data';
 import { useDrag } from "react-dnd";
 import { useInView } from 'react-intersection-observer';
+import { getSelectorDataIngredients, getSelectorConstuctorIngredients } from '../../utils/get-selector';
 
 
 
 const IngredientsItem = ({ ingredient, selected }) => {
-  const { constructorDataIngredients } = useSelector(state => state.constructorDataIngredients);
+
+  const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
   const [{ opacity }, dragRef] = useDrag({
     type: "ingredients",
     item: { ingredient },
@@ -29,23 +32,18 @@ const IngredientsItem = ({ ingredient, selected }) => {
     })
   });
 
-  const constructorIngredients = useMemo(() => ({
-    "bun": constructorDataIngredients.find((el) => el.type === "bun"),
-    "saucesAndMains": constructorDataIngredients.filter((el) => el.type !== "bun")
-  }), [constructorDataIngredients]);
-
   const counter = useMemo(
 		() =>
 			(count = 0) => {
-				for (let { _id } of constructorIngredients.saucesAndMains)
+				for (let { _id } of ingredients)
 					if (_id === ingredient._id) count++;
 
-				if (constructorIngredients.bun && constructorIngredients.bun._id === ingredient._id)
+				if (bun && bun._id === ingredient._id)
         return 2;
 
         return count;
 			},
-		[constructorIngredients, ingredient._id]
+		[bun, ingredients, ingredient._id]
 	);
 
   return (
@@ -75,7 +73,8 @@ IngredientsItem.propTypes = {
 };
 
 const BurgersIngredients = () => {
-  const { data, selectedIngredient } = useSelector(state => state.dataIngredients);
+
+  const { data, selectedIngredient } = useSelector(getSelectorDataIngredients, shallowEqual);
   const dispatch = useDispatch()
 
   const dataIngredients = useMemo(() => ({
@@ -206,4 +205,4 @@ const BurgersIngredients = () => {
   )
 }
 
-export default BurgersIngredients;
+export default React.memo(BurgersIngredients);

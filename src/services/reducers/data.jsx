@@ -31,6 +31,7 @@ export const dataReducer = (state = initialState, action) => {
     case GET_INGREDIENTS_FAILED:
       return {
         ...state,
+        data: [],
         dataFailed: true,
         dataRequest: false
       };

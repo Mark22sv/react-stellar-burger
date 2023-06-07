@@ -8,21 +8,36 @@ import {
 } from '../actions/constructor-ingredients';
 
 const initialState = {
-  constructorDataIngredients: []
+  bun: null,
+  ingredients: []
 };
 
 export function constructorIngredientsReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_CONSRUCTOR_INGREDIENTS:
-      return { constructorDataIngredients: action.payload };
+      return {
+        ...state,
+        ingredients: [...state.ingredients, action.payload]
+      };
     case REMOVE_CONSRUCTOR_INGREDIENTS:
-      return { constructorDataIngredients: action.payload };
+      return {
+        ...state,
+        ingredients: action.payload
+      };
     case ADD_BUN_CONSRUCTOR:
-      return { constructorDataIngredients: action.payload };
+      return {
+        ...state,
+        bun: action.payload
+      };
     case MOVE_CONSRUCTOR_INGREDIENTS:
-      return { constructorDataIngredients: action.payload };
+      return {
+        ...state,
+        ingredients: action.payload
+      };
     case RESET_CONSRUCTOR_INGREDIENTS:
-      return { constructorDataIngredients: [] };
+      return {
+        bun: null,
+        ingredients: [] };
     default:
       return state;
   }

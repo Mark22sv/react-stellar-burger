@@ -1,17 +1,18 @@
+import React from 'react';
 import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
 import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
 import { getDataIngredients } from '../../services/actions/data';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
+import { getSelectorDataIngredients } from '../../utils/get-selector';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { dataRequest, dataFailed } = useSelector(state => state.dataIngredients);
+  const { dataRequest, dataFailed } = useSelector(getSelectorDataIngredients, shallowEqual);
 
   useEffect(() => {
     dispatch(getDataIngredients());
@@ -41,4 +42,4 @@ const App = () => {
 };
 
 
-export default App;
+export default React.memo(App);

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   ConstructorElement,
   DragIcon,
@@ -10,7 +11,7 @@ import { useState, useMemo, useRef, useCallback } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { setOrder, RESET_ORDER } from "../../services/actions/order-details";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch,shallowEqual } from 'react-redux';
 import {
   ADD_CONSRUCTOR_INGREDIENTS,
   REMOVE_CONSRUCTOR_INGREDIENTS,
@@ -20,11 +21,12 @@ import {
 import { useDrop, useDrag } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import cloneDeep from 'lodash.clonedeep'
-
+import { getSelectorConstuctorIngredients } from '../../utils/get-selector';
 
 const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
-  const { constructorDataIngredients } = useSelector(state => state.constructorDataIngredients);
-  const index = constructorDataIngredients.indexOf(ingredient);
+
+  const { ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
+  const index = ingredients.indexOf(ingredient);
   const [{ isDragging }, dragRef] = useDrag({
     type: "item",
     item:  { index },
@@ -83,20 +85,16 @@ IngredientsItem.propTypes = {
 };
 
 const BurgerConstructor = () => {
-  const { constructorDataIngredients } = useSelector(state => state.constructorDataIngredients);
+  const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
   const dispatch = useDispatch();
-  const constructorIngredients = useMemo(() => ({
-    "bun": constructorDataIngredients.find((el) => el.type === "bun"),
-    "saucesAndMains": constructorDataIngredients.filter((el) => el.type !== "bun")
-  }), [constructorDataIngredients]);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const order = useMemo(() => ({
-    "ingredients": constructorDataIngredients.map((item) => item._id)
-  }),	[constructorDataIngredients]);
-
   const handleOpenModal = () => {
+    const ingredientsId = ingredients.map((item) => item._id)
+    const order = {
+        "ingredients": [...ingredientsId, bun._id]
+        }
     dispatch(setOrder(order));
     setIsOpen(true);
   };
@@ -108,21 +106,20 @@ const BurgerConstructor = () => {
 
   const totalSum = useMemo(
     () => {
-      let bun, priceBun;
-      if (constructorDataIngredients.find((el) => el.type === "bun")){
-        bun = constructorDataIngredients.find((el) => el.type === "bun");
-        priceBun = bun.price;
+      let priceBun;
+      if (bun){
+        priceBun = bun.price*2;
       } else priceBun = 0;
-      return priceBun + constructorDataIngredients.reduce((sum, ingredient) => sum + ingredient.price, 0)
+      return priceBun + ingredients.reduce((sum, ingredient) => sum + ingredient.price, 0)
     },
-    [constructorDataIngredients]
+    [bun, ingredients]
 
   );
 
   const removeIngredient = (ingredient) =>{
     dispatch({
       type: REMOVE_CONSRUCTOR_INGREDIENTS,
-      payload: constructorDataIngredients.filter((el) => el.id !== ingredient.id)
+      payload: ingredients.filter((el) => el.id !== ingredient.id)
     });
   };
 
@@ -131,22 +128,16 @@ const BurgerConstructor = () => {
     drop(item) {
       let newItem = cloneDeep(item);
       newItem.ingredient.id =  uuidv4();
-      if ((constructorDataIngredients.find((el) => el.type === "bun"))
-          && (newItem.ingredient.type === "bun"))
+      if (newItem.ingredient.type === "bun")
       {
-        (constructorDataIngredients.filter((el) => el.type !== "bun").length > 0)
-        ? dispatch({
+        dispatch({
           type: ADD_BUN_CONSRUCTOR,
-          payload: [...constructorDataIngredients.filter((el) => el.type !== "bun"), newItem.ingredient]
-        })
-        : dispatch({
-          type: ADD_BUN_CONSRUCTOR,
-          payload: [newItem.ingredient]
+          payload: newItem.ingredient
         })
       } else {
           dispatch({
             type: ADD_CONSRUCTOR_INGREDIENTS,
-            payload: [...constructorDataIngredients, newItem.ingredient]
+            payload: newItem.ingredient
           });
         }
     },
@@ -155,18 +146,18 @@ const BurgerConstructor = () => {
 
   const moveIngredient = useCallback(
     (dragIndex, hoverIndex) => {
-        const dragItem = constructorDataIngredients[dragIndex];
-        const hoverItem = constructorDataIngredients[hoverIndex];
+        const dragItem = ingredients[dragIndex];
+        const hoverItem = ingredients[hoverIndex];
         // Swap places of dragItem and hoverItem in the array
-        const updateConstructorDataIngredients = [...constructorDataIngredients];
-        updateConstructorDataIngredients[dragIndex] = hoverItem;
-        updateConstructorDataIngredients[hoverIndex] = dragItem;
+        const updateConstructorIngredients = [...ingredients];
+        updateConstructorIngredients[dragIndex] = hoverItem;
+        updateConstructorIngredients[hoverIndex] = dragItem;
         dispatch({
           type: MOVE_CONSRUCTOR_INGREDIENTS,
-          payload: updateConstructorDataIngredients
+          payload: updateConstructorIngredients
         });
     },
-    [constructorDataIngredients, dispatch],
+    [ingredients, dispatch],
   )
 
   return (
@@ -174,18 +165,18 @@ const BurgerConstructor = () => {
       style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'end' }}
       ref={ dropTargetIngredients }
     >
-      {constructorIngredients.bun &&
+      {bun &&
         <ConstructorElement
           type="top"
           isLocked={true}
-          text={`${constructorIngredients.bun.name} '(верх)'`}
-          price={constructorIngredients.bun.price}
-          thumbnail={constructorIngredients.bun.image_mobile}
+          text={`${bun.name} '(верх)'`}
+          price={bun.price}
+          thumbnail={bun.image_mobile}
         />
       }
       <ul className={ burgerConstructorStyle.list }>
-        {constructorIngredients.saucesAndMains &&
-          constructorIngredients.saucesAndMains
+        {ingredients &&
+          ingredients
             .map((item) => (
               <IngredientsItem
                 ingredient={ item }
@@ -196,13 +187,13 @@ const BurgerConstructor = () => {
             ))
         }
       </ul>
-      {constructorIngredients.bun &&
+      {bun &&
       <ConstructorElement
         type="bottom"
         isLocked={true}
-        text={`${constructorIngredients.bun.name} '(низ)'`}
-        price={constructorIngredients.bun.price}
-        thumbnail={constructorIngredients.bun.image_mobile}
+        text={`${bun.name} '(низ)'`}
+        price={bun.price}
+        thumbnail={bun.image_mobile}
       />
       }
       <div className={`${burgerConstructorStyle.order} pt-10 pr-4`}>
@@ -210,7 +201,7 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">{ totalSum }</p>
           <CurrencyIcon type="primary" />
         </div>
-        {constructorDataIngredients.length === 0
+        {ingredients.length === 0 || !bun
         ? (<Button
             htmlType="button"
             type="primary"
@@ -237,8 +228,6 @@ const BurgerConstructor = () => {
   )
 }
 
-
-
-export default BurgerConstructor;
+export default React.memo(BurgerConstructor);
 
 
