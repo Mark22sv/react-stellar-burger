@@ -66,12 +66,14 @@ const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
       style={{ opacity }}
     >
       <DragIcon type="primary" />
-      <ConstructorElement
-        text={ingredient.name}
-        price={ingredient.price}
-        thumbnail={ingredient.image_mobile}
-        handleClose={() => removeElement(ingredient)}
-      />
+      <div className={ burgerConstructorStyle.element }>
+        <ConstructorElement
+          text={ingredient.name}
+          price={ingredient.price}
+          thumbnail={ingredient.image_mobile}
+          handleClose={() => removeElement(ingredient)}
+        />
+      </div>
     </li>
   );
 }
@@ -90,13 +92,11 @@ const BurgerConstructor = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-   const handleOpenModal = () => {
-    let order = {
-      ingredients: []
-    };
-    for (let i = 0; i < constructorDataIngredients.length; i++){
-      order = {ingredients: [...constructorDataIngredients, constructorDataIngredients[i]._id]};
-    }
+  const order = useMemo(() => ({
+    "ingredients": constructorDataIngredients.map((item) => item._id)
+  }),	[constructorDataIngredients]);
+
+  const handleOpenModal = () => {
     dispatch(setOrder(order));
     setIsOpen(true);
   };
@@ -210,9 +210,22 @@ const BurgerConstructor = () => {
           <p className="text text_type_digits-medium">{ totalSum }</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="large" onClick={handleOpenModal}>
+        {constructorDataIngredients.length === 0
+        ? (<Button
+            htmlType="button"
+            type="primary"
+            size="large"
+            disabled
+            onClick={handleOpenModal}>
+            Оформить заказ
+          </Button>)
+        : (<Button
+          htmlType="button"
+          type="primary"
+          size="large"
+          onClick={handleOpenModal}>
           Оформить заказ
-        </Button>
+          </Button>)}
       </div>
       {isOpen && (
         <Modal onClose={handleCloseModal}>
