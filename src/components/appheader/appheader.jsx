@@ -1,3 +1,4 @@
+import React from 'react';
 import headerStyle from './appheader.module.css'
 import {Logo,
         BurgerIcon,
@@ -42,4 +43,4 @@ const AppHeader = () => {
 
 }
 
-export default AppHeader;
+export default React.memo(AppHeader);

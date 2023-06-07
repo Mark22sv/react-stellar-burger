@@ -1,7 +1,10 @@
+import React from 'react';
 import orderDetails from "./order-details.module.css";
-import PropTypes from "prop-types";
+import { useSelector, shallowEqual } from 'react-redux';
+import { getSelectorOrderDetails } from '../../utils/get-selector'
 
-const OrderDetails = ( { orderNumber } ) => {
+const OrderDetails = () => {
+  const { orderNumber } = useSelector(getSelectorOrderDetails, shallowEqual);
   return (
     <ul className={`${ orderDetails.container } pt-9`}>
       <li>
@@ -27,8 +30,4 @@ const OrderDetails = ( { orderNumber } ) => {
   );
 }
 
-OrderDetails.propTypes = {
-  orderNumber: PropTypes.number.isRequired,
-}
-
-export default OrderDetails;
+export default React.memo(OrderDetails);

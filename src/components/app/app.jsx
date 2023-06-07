@@ -1,51 +1,22 @@
-import { useState, useEffect, useReducer } from 'react';
+import React from 'react';
+import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
 import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
-import { getDataIngredientsFetch } from '../../api/api.js';
-import { DataContext } from '../../services/data-context/DataContext';
-import { OrderContext } from '../../services/order-context/OrderContext';
-
-
-const initialOrderState = {
-  orderIngredients: []
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "setIngedients":
-      return { orderIngredients: action.payload };
-    case "addIngedient":
-      return { orderIngredients: action.payload };
-    case "removeIngredient":
-      return { orderIngredients: action.payload };
-    default:
-      throw new Error(`Wrong type of action: ${action.type}`);
-  }
-}
+import { getDataIngredients } from '../../services/actions/data';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { getSelectorDataIngredients } from '../../utils/get-selector';
 
 const App = () => {
-  const [data, setData] = useState([]);
-  const [load, setLoad] = useState(false);
-  const [orderState, orderDispatcher] = useReducer(reducer, initialOrderState);
-
-
-  const getDataIngredients = () => {
-    setLoad(true);
-    getDataIngredientsFetch()
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => setLoad(false))
-  };
+  const dispatch = useDispatch();
+  const { dataRequest, dataFailed } = useSelector(getSelectorDataIngredients, shallowEqual);
 
   useEffect(() => {
-      getDataIngredients();
-    }, []);
+    dispatch(getDataIngredients());
+    }, [dispatch]);
 
   return (
 
@@ -54,17 +25,15 @@ const App = () => {
         <AppHeader />
       </header>
       <main className={ appStyles.main }>
-        {load && <p>Loading...........</p>}
-        <DataContext.Provider value={{ data, setData }}>
-          <OrderContext.Provider value={{ orderState, orderDispatcher }}>
-          <section className={ appStyles.section }>
-            {!load && data.length && (<BurgersIngredients />)}
-          </section>
-          <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
-            {!load && data.length && (<BurgerConstructor />)}
-          </section>
-          </OrderContext.Provider>
-        </DataContext.Provider>
+        {dataRequest && <p>Loading...........</p>}
+          <DndProvider backend={ HTML5Backend }>
+            <section className={ appStyles.section }>
+              {!dataFailed && <BurgersIngredients />}
+            </section>
+            <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
+              {!dataFailed && <BurgerConstructor />}
+            </section>
+          </DndProvider>
       </main>
     </div>
 
@@ -73,4 +42,4 @@ const App = () => {
 };
 
 
-export default App;
+export default React.memo(App);

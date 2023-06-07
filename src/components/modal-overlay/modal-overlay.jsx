@@ -1,3 +1,4 @@
+import React from 'react';
 import modalOverlay from "./modal-overlay.module.css";
 import PropTypes from "prop-types";
 
@@ -11,4 +12,4 @@ ModalOverlay.propTypes = {
   onClose: PropTypes.func.isRequired
 }
 
-export default ModalOverlay;
+export default React.memo(ModalOverlay);
