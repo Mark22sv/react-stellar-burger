@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
+import { HomePage } from '../../pages';
 import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
@@ -9,6 +10,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { getSelectorDataIngredients } from '../../utils/get-selector';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -24,17 +26,12 @@ const App = () => {
       <header className={ appStyles.header }>
         <AppHeader />
       </header>
-      <main className={ appStyles.main }>
-        {dataRequest && <p>Loading...........</p>}
-          <DndProvider backend={ HTML5Backend }>
-            <section className={ appStyles.section }>
-              {!dataFailed && <BurgersIngredients />}
-            </section>
-            <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
-              {!dataFailed && <BurgerConstructor />}
-            </section>
-          </DndProvider>
-      </main>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+
+        </Routes>
+      </BrowserRouter>
     </div>
 
   );
