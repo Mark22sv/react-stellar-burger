@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
-import { HomePage } from '../../pages';
+import { HomePage, Register } from '../../pages';
 import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import appStyles from '../app/app.module.css';
@@ -29,7 +29,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-
+          <Route path='/register' element={<Register />} />
         </Routes>
       </BrowserRouter>
     </div>
