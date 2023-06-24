@@ -7,7 +7,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link, Navigate, useLocation } from 'react-router-dom';
-import { registerUser, setRegisterFormValue } from '../../services/actions/auth';
+import { registerUser, setRegisterFormValue } from '../../services/actions/user';
 import { getCookie } from '../../utils/get-cookie';
 import styles from './register.module.css';
 

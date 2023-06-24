@@ -26,7 +26,7 @@ import {
 	UPDATE_TOKEN_FAILED,
 	UPDATE_TOKEN_REQUEST,
 	UPDATE_TOKEN_SUCCESS
-} from "../actions/auth";
+} from "../actions/user";
 
 
 const initialState = {
