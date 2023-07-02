@@ -1,305 +1,180 @@
 import {
-	FORGOT_PASSWORD_FAILED,
-	FORGOT_PASSWORD_REQUEST,
-	FORGOT_PASSWORD_SUCCESS,
-	GET_USER_FAILED,
-	GET_USER_REQUEST,
-	GET_USER_SUCCESS,
-	LOGIN_FORM_FAILED,
-	LOGIN_FORM_REQUEST,
-	LOGIN_FORM_SET_VALUE,
-	LOGIN_FORM_SUCCESS,
-	LOGOUT_FORM_FAILED,
-	LOGOUT_FORM_REQUEST,
-	LOGOUT_FORM_SUCCESS,
-	PATCH_USER_FAILED,
-	PATCH_USER_REQUEST,
-	PATCH_USER_SUCCESS,
-	REGISTER_FORM_FAILED,
-	REGISTER_FORM_REQUEST,
-	REGISTER_FORM_SET_VALUE,
-	REGISTER_FORM_SUCCESS,
-	RESET_FORM_SET_VALUE,
-	RESET_PASSWORD_FAILED,
-	RESET_PASSWORD_REQUEST,
-	RESET_PASSWORD_SUCCESS,
-	UPDATE_TOKEN_FAILED,
-	UPDATE_TOKEN_REQUEST,
-	UPDATE_TOKEN_SUCCESS
+	SET_USER_REQUEST,
+  SET_USER_SUCCESS,
+  SET_USER_FAILED,
+
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILED,
+
+  ADD_USER,
+  RESET_USER,
+
+  SIGNIN_USER_REQUEST,
+  SIGNIN_USER_SUCCESS,
+  SIGNIN_USER_FAILED,
+
+  SIGNOUT_USER_REQUEST,
+  SIGNOUT_USER_SUCCESS,
+  SIGNOUT_USER_FAILED,
+
+  SET_AUTH_CHECKED,
+
+
 } from "../actions/user";
 
 
 const initialState = {
-	message: '',
+  user: {email:'', name:''},
+  isAuthChecked: false,
 
-	forgetPassRequest: false,
-	forgetPassFailed: false,
-	forgetPassSuccess: false,
-
-	resetPassRequest: false,
-	resetPassFailed: false,
-	resetPassSuccess: false,
-
-	form: {
-		email: '',
-		password: '',
-		code: '',
-		name: ''
-	},
-
-	user: {
-		email: '',
-		name: '',
-	},
-
-	loginRequest: false,
+  loginRequest: false,
 	loginFailed: false,
-	loginSuccess: false,
 
-	logoutRequest: false,
-	logoutFailed: false,
+  updateRequest: false,
+	updateFailed: false,
 
-	getUserRequest: false,
-	getUserFailed: false,
+  signInRequest: false,
+	signInFailed: false,
 
-	updateUserRequest: false,
-	updateUserFailed: false,
+  signoutRequest: false,
+  signoutFailed: false,
 
-	updateupdateTokenRequest: false,
-	updateupdateTokenSuccess: false,
-	updateupdateTokenFailed: false,
+
 };
 
 export const authReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case GET_USER_REQUEST: {
+    case SET_AUTH_CHECKED:
+      return {
+        ...state,
+        isAuthChecked: action.payload
+      }
+
+    case SET_USER_REQUEST:
 			return {
 				...state,
-				getUserFailed: false,
-				getUserRequest: true,
-			};
-		}
-		case GET_USER_FAILED: {
+        loginRequest: true,
+	      loginFailed: false,
+	    }
+
+		case SET_USER_FAILED:
 			return {
 				...state,
-				getUserFailed: true,
-				getUserRequest: false,
-			};
-		}
-		case GET_USER_SUCCESS: {
+        loginRequest: false,
+	      loginFailed: true,
+			}
+
+		case SET_USER_SUCCESS:
 			return {
 				...state,
-				user: action.user,
-				getUserRequest: false,
-				getUserFailed: false,
-			};
-		}
-		case FORGOT_PASSWORD_REQUEST: {
-			return {
-				...state,
-				forgetPassFailed: false,
-				forgetPassRequest: true
-			};
-		}
-		case FORGOT_PASSWORD_FAILED: {
-			return {
-				...state,
-				forgetPassFailed: true,
-				forgetPassRequest: false
-			};
-		}
-		case FORGOT_PASSWORD_SUCCESS: {
-			return {
-				...state,
-				form: {
-					...state.form,
-					email: ''
-				},
-				message: action.message,
-				forgetPassRequest: false,
-				forgetPassFailed: false,
-				forgetPassSuccess: true,
-			};
-		}
-		case RESET_FORM_SET_VALUE: {
-			return {
-				...state,
-				form: {
-					...state.form,
-					[action.field]: action.value
-				}
-			};
-		}
-		case RESET_PASSWORD_REQUEST: {
-			return {
-				...state,
-				resetPassFailed: false,
-				resetPassRequest: true
-			};
-		}
-		case RESET_PASSWORD_FAILED: {
-			return {
-				...state,
-				resetPassFailed: true,
-				resetPassRequest: false
-			};
-		}
-		case RESET_PASSWORD_SUCCESS: {
-			return {
-				...state,
-				resetPassRequest: false,
-				resetPassFailed: false,
-				resetPassSuccess: true
-			};
-		}
-		case LOGIN_FORM_SET_VALUE: {
-			return {
-				...state,
-				form: {
-					...state.form,
-					[action.field]: action.value
-				}
-			};
-		}
-		case LOGIN_FORM_REQUEST: {
-			return {
-				...state,
-				loginFailed: false,
-				loginRequest: true
-			};
-		}
-		case LOGIN_FORM_FAILED: {
-			return {
-				...state,
-				loginFailed: true,
+        user: {
+          ...state.user,
+          name: action.user.user.name,
+          email: action.user.user.email
+        },
 				loginRequest: false
-			};
-		}
-		case LOGIN_FORM_SUCCESS: {
-			return {
-				...state,
-				user: action.user,
-				form: {
-					...state.form,
-					email: '',
-					password: '',
-				},
-				loginRequest: false,
-				loginFailed: false,
-				loginSuccess: true,
-			};
-		}
-		case LOGOUT_FORM_REQUEST: {
-			return {
-				...state,
-				logoutFailed: false,
-				logoutRequest: true
-			};
-		}
-		case LOGOUT_FORM_FAILED: {
-			return {
-				...state,
-				logoutFailed: true,
-				logoutRequest: false
-			};
-		}
-		case LOGOUT_FORM_SUCCESS: {
-			return {
-				...state,
-				user: {
-					...state.user,
-					email: '',
-					name: '',
-				},
-				logoutFailed: true,
-				logoutRequest: false
 			}
-		}
-		case REGISTER_FORM_SET_VALUE: {
-			return {
-				...state,
-				form: {
-					...state.form,
-					[action.field]: action.value
-				}
-			};
-		}
-		case REGISTER_FORM_REQUEST: {
-			return {
-				...state,
-				loginFailed: false,
-				loginRequest: true
-			};
-		}
-		case REGISTER_FORM_FAILED: {
-			return {
-				...state,
-				loginFailed: true,
-				loginRequest: false
-			};
-		}
-		case REGISTER_FORM_SUCCESS: {
-			return {
-				...state,
-				user: action.playload,
-				form: {
-					...state.form,
-					email: '',
-					password: '',
-					name: ''
-				},
-				loginRequest: false,
-				loginFailed: false,
-				loginSuccess: true,
-			};
-		}
-		case PATCH_USER_REQUEST: {
-			return {
-				...state,
-				updateUserFailed: false,
-				updateUserRequest: true
-			};
-		}
-		case PATCH_USER_FAILED: {
-			return {
-				...state,
-				updateUserFailed: true,
-				updateUserRequest: false
-			};
-		}
-		case PATCH_USER_SUCCESS: {
-			return {
-				...state,
-				user: action.playload,
-				form: {
-					...state.form,
-					email: '',
-					password: '',
-					name: ''
-				},
-				updateUserRequest: false,
-				updateUserFailed: false,
-			};
-		}
-		case UPDATE_TOKEN_REQUEST:
-			return {
-				...state,
-				updateTokenRequest: true,
-				updateTokenFailed: false,
-			}
-		case UPDATE_TOKEN_FAILED:
-			return {
-				...state,
-				updateTokenRequest: false,
-				updateTokenFailed: true,
-			}
-		case UPDATE_TOKEN_SUCCESS:
-			return {
-				...state,
-				updateTokenRequest: false,
-				updateTokenSuccess: true,
-				updateTokenFailed: false,
-			}
+
+
+      case UPDATE_USER_REQUEST:
+        return {
+          ...state,
+          updateRequest: true,
+          updateFailed: false,
+        }
+
+      case UPDATE_USER_FAILED:
+        return {
+          ...state,
+          updateRequest: false,
+          updateFailed: true,
+        }
+
+      case UPDATE_USER_SUCCESS:
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            name: action.user.user.name,
+            email: action.user.user.email
+          },
+          updateRequest: false
+        }
+
+    case SIGNIN_USER_REQUEST:
+      return {
+        ...state,
+        signRequest: true,
+        signFailed: false,
+      }
+
+    case SIGNIN_USER_FAILED:
+      return {
+        ...state,
+        signRequest: false,
+        signFailed: true,
+      }
+
+    case SIGNIN_USER_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name: action.user.user.name,
+          email: action.user.user.email
+        },
+        signRequest: false
+      }
+
+      case SIGNOUT_USER_REQUEST: {
+        return {
+          ...state,
+          signoutRequest: true,
+          signoutFailed: false,
+
+        }
+      }
+      case SIGNOUT_USER_SUCCESS: {
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            name: '',
+            email: ''
+          },
+          signoutRequest: false,
+          signoutFailed: true,
+        }
+      }
+      case SIGNOUT_USER_FAILED: {
+        return {
+          ...state,
+          signoutRequest: false,
+          signoutFailed: true,
+        }
+      }
+
+    case ADD_USER:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name: action.user.user.name,
+          email: action.user.user.email
+        }
+      }
+
+    case RESET_USER:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name: '',
+          email: ''
+        }
+      }
+
 		default: {
 			return state;
 		}

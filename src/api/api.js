@@ -34,62 +34,62 @@ const setOrderFetch = (order) => {
   .catch((error) => console.log(error));
 };
 
-const forgotPassRequest = async email => {
-	return await fetch(`${config.url}/password-reset`, {
+const postMailFetch = async (email) => {
+  return await fetch(`${config.url}/password-reset`, {
 		method: 'POST',
-		body: JSON.stringify(
-			email
-		),
-		mode: 'cors',
-		cache: 'no-cache',
-		credentials: 'same-origin',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		redirect: 'follow',
-		referrerPolicy: 'no-referrer',
-	})
-  .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
+		body: JSON.stringify({
+			email,
+    })
+	});
+};
 
-const resetPassRequest = async (password, token) => {
-	return await fetch(`${config.url}/password-reset/reset`, {
+const resetPassFetch = async ({ password, token }) => {
+  return await fetch(`${config.url}/password-reset/reset`, {
 		method: 'POST',
-		body: JSON.stringify(
-			password,
-			token,
-		),
 		headers: {
 			'Content-Type': 'application/json',
 		},
-	})
-  .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
+		body: JSON.stringify({
+			password, token
+    }),
+	});
 }
 
-const loginRequest = async (email, password) => {
+const signInFetch = async ({email, password}) => {
 	return await fetch(`${config.url}/auth/login`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({
-			email: email,
-			password: password,
+			email, password,
 		}),
 	})
   .then((res) => checksAnswer(res))
   .catch((error) => console.log(error));
 }
 
-const resgisterUserRequest = async (email, password, name) => {
+const signOutFetch = async () => {
+  return await fetchWithRefresh(`auth/logout`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json',
+    authorization: localStorage.getItem('accessToken') },
+    body: JSON.stringify({
+    token: localStorage.getItem("refreshToken"),
+	  }),
+  })
+}
+
+const resgisterUserFetch = async ({email, password, name}) => {
 	return await fetch(`${config.url}/auth/register`, {
 		method: 'POST',
 		body: JSON.stringify({
 			email: email,
 			password: password,
-			name: name,
+			name: name
 		}),
 		headers: {
 			'Content-Type': 'application/json',
@@ -99,63 +99,61 @@ const resgisterUserRequest = async (email, password, name) => {
   .catch((error) => console.log(error));
 }
 
-const logoutRequest = async () => {
-	return await fetch(`${config.url}/auth/logout`, {
+const updateUserFetch = async ({email, name, password}) => {
+  return fetch(`${config.url}/auth/user`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+      authorization: localStorage.getItem('accessToken')
+    },
+    body: JSON.stringify({
+      name, email, password
+    }),
+  })
+  .then((res) => checksAnswer(res))
+  .catch((error) => console.log(error));
+};
+
+
+const getUserFetch = () => {
+  return fetchWithRefresh('auth/user', {
+    headers: {
+      authorization: localStorage.getItem('accessToken')
+    },
+  })
+};
+
+export const refreshToken = async () => {
+  return await fetch(`${config.url}/auth/token`, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json',
+			"Content-Type": "application/json;charset=utf-8",
 		},
 		body: JSON.stringify({
-			token: localStorage.getItem('refreshToken'),
+			token: localStorage.getItem("refreshToken"),
 		}),
-	})
-  .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
+  });
+};
 
-const getUserRequest = async () => {
-	return await fetch(`${config.url}auth/user`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: 'Bearer ' + getCookie('token'),
-		},
-	})
-  .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
+export const fetchWithRefresh = async (endpoint, options) => {
+  try {
+    const res = await fetch(`${config.url}/${endpoint}`, options);
+    return await checksAnswer(res);
+  } catch (err) {
+    if (err.message === "jwt expired") {
+      const refreshData = await refreshToken(); //обновляем токен
+      if (!refreshData.success) {
+        return Promise.reject(refreshData);
+      }
+      localStorage.setItem("refreshToken", refreshData.refreshToken);
+      localStorage.setItem("accessToken", refreshData.accessToken);
+      options.headers.authorization = refreshData.accessToken;
+      const res = await fetch(`${config.url}/${endpoint}`, options); //повторяем запрос
+      return await checksAnswer(res);
+    } else {
+      return Promise.reject(err);
+    }
+  }
+};
 
-const updateUserRequest = async (email, name, password) => {
-	return await fetch(`${config.url}/auth/user`, {
-		method: 'PATCH',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: 'Bearer ' + getCookie('token'),
-		},
-		body: JSON.stringify({
-			email: email,
-			name: name,
-			password: password,
-		}),
-	})
-  .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
-
-const updateTokenRequest = async () => {
-	return await fetch(`${config.url}/auth/token`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			token: localStorage.getItem('refreshToken'),
-		}),
-	})
-  .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
-
-
-
-export { getDataIngredientsFetch, setOrderFetch, forgotPassRequest, resetPassRequest, loginRequest, resgisterUserRequest, logoutRequest, getUserRequest, updateUserRequest, updateTokenRequest };
+export { getDataIngredientsFetch, setOrderFetch, signInFetch, resgisterUserFetch,  updateUserFetch, getUserFetch, postMailFetch, signOutFetch, resetPassFetch };

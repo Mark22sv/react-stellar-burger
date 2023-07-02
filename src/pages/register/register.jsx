@@ -3,33 +3,38 @@ import { Button,
          Input,
          PasswordInput
        } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { Link, Navigate, useLocation } from 'react-router-dom';
-import { registerUser, setRegisterFormValue } from '../../services/actions/user';
-import { getCookie } from '../../utils/get-cookie';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { registerUser } from '../../services/actions/user';
+
 import styles from './register.module.css';
 
 export const Register = () => {
-
+  const [userForm, setUserForm] = useState({name:'', email:'', password:''});
+  const [isVisible, setVisible] = useState(false);
   const dispatch = useDispatch();
-	const location = useLocation();
-	const cookie = getCookie('token');
-	const { email, password, name } = useSelector(state => state.auth.form);
+  const navigate = useNavigate();
+//	const { email, password, name } = useSelector(state => state.auth.form);
 
 	const onChange = e => {
-	  dispatch(setRegisterFormValue(e.target.name, e.target.value));
-	}
+    setUserForm({
+      ...userForm,
+      [e.target.name]:e.target.value});
+  };
 
 	const onFormSubmit = e => {
 		e.preventDefault();
-		dispatch(registerUser(email, password, name));
+    console.log(userForm)
+
+		dispatch(registerUser(userForm));
+    navigate('/', { replace: true });
 	}
 
-	// if (cookie) {
-	// 	return (<Navigate to={location.state?.from || '/'} />);
-	// }
+  //   function onClick() {
+  //     navigate('/login', { replace: true });
+  // }
 
   return (
 		<div className={styles.container}>
@@ -40,19 +45,42 @@ export const Register = () => {
 						type={'text'}
 						placeholder={'Имя'}
 						onChange={onChange}
-						value={name}
+						value={userForm.name}
 						name={'name'}
 						error={false}
 						size={'default'}
+            errorText={"Ошибка"}
 					/>
 				</div>
 				<div className="pb-6">
-					<EmailInput onChange={onChange} value={email} name={'email'} size="default" />
+					<EmailInput
+            onChange={onChange}
+            value={userForm.email}
+            name={'email'}
+            size="default"
+            placeholder="E-mail"
+          />
 				</div>
 				<div className="pb-6">
-					<PasswordInput onChange={onChange} value={password} name={'password'} size="default" />
+					<PasswordInput
+            type={isVisible ? 'text' : 'password'}
+            placeholder={"Пароль"}
+            onChange={onChange}
+            icon={isVisible ? 'ShowIcon' : 'HideIcon'}
+            value={userForm.password}
+            name={"password"}
+            error={false}
+            onIconClick={() => setVisible(!isVisible)}
+            errorText={"Ошибка"}
+            size={"default"}
+          />
 				</div>
-				<Button type="primary" size="medium">
+				<Button
+          htmlType="button"
+          type="primary"
+          size="medium"
+          onClick={onFormSubmit}
+        >
 					Зарегистрироваться
 				</Button>
 			</form>

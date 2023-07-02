@@ -1,54 +1,64 @@
-import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { forgotPassword } from '../../services/actions/user';
 import { getCookie } from '../../utils/get-cookie';
+import { postMailFetch } from '../../api/api';
 import styles from './forgot-password.module.css';
 
 export const ForgotPassword = () => {
-	const [email, setEmail] = useState('');
-	const dispatch = useDispatch();
-	const location = useLocation();
-	const cookie = getCookie('token');
-
-	const { forgetPassSuccess } = useSelector(state => state.auth);
+	const [email, setEmail] = useState({email: ''});
+  const navigate = useNavigate();
 
 	const onChangeEmail = e => {
-		setEmail(e.target.value);
-	}
+		setEmail({
+      ...email,
+      [e.target.name]:e.target.value});
+  };
+
+  function postMail() {
+    return postMailFetch(email.email)
+      .then(res => {
+        email.email = res.email;
+        localStorage.setItem('email', res.email);
+      })
+      .catch((err) => {
+        console.error(`Ошибка: ${err}`);
+      })
+  };
 
 	const onFormSubmit = e => {
 		e.preventDefault();
-		dispatch(forgotPassword({ email }));
-	}
-
-	// if (cookie) {
-	// 	return (<Navigate to={location.state?.from || '/'} />);
-	// }
+		postMail();
+    if (localStorage.getItem('email') !== null) {
+      return <Navigate to={'/reset-password'} replace={true} />;
+    }
+  };
 
 	return (
 		<div className={styles.container}>
 			<h2 className={`${styles.title} text text_type_main-medium pb-6`}>Восстановление пароля</h2>
 			<form className={styles.form} onSubmit={onFormSubmit}>
 				<div className="pb-6">
-					<Input
-						type={'email'}
-						placeholder={'Укажите e-mail'}
-						onChange={onChangeEmail}
-						value={email}
-						name={'email'}
+					<EmailInput
+            onChange={onChangeEmail}
+            value={email.email}
+            name={"email"}
+            isIcon={false}
+            placeholder={"Укажите e-mail"}
 						error={false}
 						errorText={'Ошибка'}
 						size={'default'}
 					/>
 				</div>
-				<Button type="primary" size="medium">
-					{!!forgetPassSuccess
-						? (<Navigate to='/reset-password' />)
-						: ''
-					}
+				<Button
+          htmlType="button"
+          type="primary"
+          size="medium"
+          onClick={onFormSubmit}
+        >
 					Восстановить
 				</Button>
 			</form>

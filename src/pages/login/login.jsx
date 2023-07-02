@@ -1,44 +1,67 @@
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { Link, Navigate, useLocation } from 'react-router-dom';
-import { setLoginFormValue, singIn } from '../../services/actions/user';
+import { Link, useNavigate } from 'react-router-dom';
+import { setLoginFormValue, signIn } from '../../services/actions/user';
 import { getCookie } from '../../utils/get-cookie';
 import styles from './login.module.css';
 
 export const Login = () => {
-	const dispatch = useDispatch();
-	const location = useLocation();
-	const cookie = getCookie('token');
-	const { email, password } = useSelector(state => state.auth.form);
-
-
-	const onChange = e => {
-		dispatch(setLoginFormValue(e.target.name, e.target.value));
-	}
+  const [userForm, setUserForm] = useState({email:'', password:''});
+  const [isVisible, setVisible] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const inputEmailRef = useRef(null);
+  const inputPasswordRef = useRef(null);
+  const onChange = e => {
+    setUserForm({
+      ...userForm,
+      [e.target.name]:e.target.value});
+  };
 
 	const onFormSubmit = e => {
 		e.preventDefault();
-		dispatch(singIn(email, password));
-	}
-
-
-  if (cookie) {
-    return (<Navigate to={location.state?.from || '/'} />);
+    dispatch(signIn(userForm));
+    navigate('/', { replace: true });
   }
 
-	return (
+
+  return (
 		<div className={styles.container}>
 			<h2 className={`${styles.title} text text_type_main-medium pb-6`}>Вход</h2>
 			<form className={styles.form} onSubmit={onFormSubmit}>
 				<div className="pb-6">
-					<EmailInput onChange={onChange} value={email} name={'email'} size="default" />
+        <EmailInput
+            onChange={onChange}
+            value={userForm.email}
+            name={'email'}
+            size="default"
+            placeholder="E-mail"
+            ref={inputEmailRef}
+          />
 				</div>
 				<div className="pb-6">
-					<PasswordInput onChange={onChange} value={password} name={'password'} size="default" />
+        <PasswordInput
+            type={isVisible ? 'text' : 'password'}
+            placeholder={"Пароль"}
+            onChange={onChange}
+            icon={isVisible ? 'ShowIcon' : 'HideIcon'}
+            value={userForm.password}
+            name={"password"}
+            error={false}
+            onIconClick={() => setVisible(!isVisible)}
+            errorText={"Ошибка"}
+            size={"default"}
+            ref={inputPasswordRef}
+          />
 				</div>
-				<Button type="primary" size="medium">
+				<Button
+          htmlType="button"
+          type="primary"
+          size="medium"
+          onClick={onFormSubmit}
+        >
 					Войти
 				</Button>
 			</form>
