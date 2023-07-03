@@ -100,7 +100,7 @@ const resgisterUserFetch = async ({email, password, name}) => {
 }
 
 const updateUserFetch = async ({email, name, password}) => {
-  return fetch(`${config.url}/auth/user`, {
+  return fetchWithRefresh('auth/user', {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -114,11 +114,12 @@ const updateUserFetch = async ({email, name, password}) => {
   .catch((error) => console.log(error));
 };
 
-
 const getUserFetch = () => {
   return fetchWithRefresh('auth/user', {
+    method: "GET",
     headers: {
-      authorization: localStorage.getItem('accessToken')
+      authorization: localStorage.getItem('accessToken'),
+      "Content-Type": "application/json;charset=utf-8",
     },
   })
 };
@@ -134,6 +135,7 @@ export const refreshToken = async () => {
 		}),
   });
 };
+
 
 export const fetchWithRefresh = async (endpoint, options) => {
   try {
@@ -155,5 +157,6 @@ export const fetchWithRefresh = async (endpoint, options) => {
     }
   }
 };
+
 
 export { getDataIngredientsFetch, setOrderFetch, signInFetch, resgisterUserFetch,  updateUserFetch, getUserFetch, postMailFetch, signOutFetch, resetPassFetch };

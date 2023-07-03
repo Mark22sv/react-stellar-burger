@@ -146,19 +146,18 @@ export const getUser = () => {
 
 export const checkUserAuth = () => {
   return (dispatch) => {
-      if (localStorage.getItem("accessToken")) {
-          dispatch(getUser())
-            .catch(() => {
-                localStorage.removeItem("accessToken");
-                localStorage.removeItem("refreshToken");
-                dispatch({
-                  type: RESET_USER,
-                });
-             })
-            .finally(() => dispatch(setAuthChecked(true)));
-      } else {
-          dispatch(setAuthChecked(true));
-      }
+    if (localStorage.getItem("accessToken")) {
+        dispatch(getUser())
+          .catch(() => {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            dispatch({
+              type: RESET_USER,
+            });
+          })
+          .finally(() => dispatch(setAuthChecked(true)));
+    } else {
+        dispatch(setAuthChecked(true));
+    }
   };
 };
-

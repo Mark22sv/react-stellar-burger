@@ -1,10 +1,6 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { forgotPassword } from '../../services/actions/user';
-import { getCookie } from '../../utils/get-cookie';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { resetPassFetch } from '../../api/api';
 import styles from './reset-password.module.css';
 

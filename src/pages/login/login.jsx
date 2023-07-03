@@ -1,10 +1,8 @@
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { setLoginFormValue, signIn } from '../../services/actions/user';
-import { getCookie } from '../../utils/get-cookie';
+import { signIn } from '../../services/actions/user';
 import styles from './login.module.css';
 
 export const Login = () => {

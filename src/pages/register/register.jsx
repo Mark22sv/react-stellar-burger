@@ -4,9 +4,8 @@ import { Button,
          PasswordInput
        } from '@ya.praktikum/react-developer-burger-ui-components';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
 
 import styles from './register.module.css';
@@ -16,7 +15,6 @@ export const Register = () => {
   const [isVisible, setVisible] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-//	const { email, password, name } = useSelector(state => state.auth.form);
 
 	const onChange = e => {
     setUserForm({
@@ -26,15 +24,9 @@ export const Register = () => {
 
 	const onFormSubmit = e => {
 		e.preventDefault();
-    console.log(userForm)
-
-		dispatch(registerUser(userForm));
+    dispatch(registerUser(userForm));
     navigate('/', { replace: true });
 	}
-
-  //   function onClick() {
-  //     navigate('/login', { replace: true });
-  // }
 
   return (
 		<div className={styles.container}>

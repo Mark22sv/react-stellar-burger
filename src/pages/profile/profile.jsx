@@ -1,6 +1,5 @@
 import styles from "../profile/profile.module.css";
 import {
-  EmailInput,
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -9,7 +8,7 @@ import { useNavigate, useMatch, NavLink, Outlet  } from "react-router-dom";
 
 import { signOut, updateUser } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+
 
 export function Profile() {
   const { name, email } = useSelector(
