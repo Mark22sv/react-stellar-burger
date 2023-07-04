@@ -7,9 +7,6 @@ import {
   UPDATE_USER_SUCCESS,
   UPDATE_USER_FAILED,
 
-  ADD_USER,
-  RESET_USER,
-
   SIGNIN_USER_REQUEST,
   SIGNIN_USER_SUCCESS,
   SIGNIN_USER_FAILED,
@@ -19,13 +16,13 @@ import {
   SIGNOUT_USER_FAILED,
 
   SET_AUTH_CHECKED,
-
+  SET_USER
 
 } from "../actions/user";
 
 
 const initialState = {
-  user: {email:'', name:''},
+  user: null,
   isAuthChecked: false,
 
   loginRequest: false,
@@ -45,6 +42,12 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
 	switch (action.type) {
+    case SET_USER:
+      return {
+        ...state,
+        user: action.payload
+      }
+
     case SET_AUTH_CHECKED:
       return {
         ...state,
@@ -68,11 +71,7 @@ export const authReducer = (state = initialState, action) => {
 		case SET_USER_SUCCESS:
 			return {
 				...state,
-        user: {
-          ...state.user,
-          name: action.user.user.name,
-          email: action.user.user.email
-        },
+        user: action.user,
 				loginRequest: false
 			}
 
@@ -94,11 +93,7 @@ export const authReducer = (state = initialState, action) => {
       case UPDATE_USER_SUCCESS:
         return {
           ...state,
-          user: {
-            ...state.user,
-            name: action.user.user.name,
-            email: action.user.user.email
-          },
+          user: action.user,
           updateRequest: false
         }
 
@@ -119,11 +114,7 @@ export const authReducer = (state = initialState, action) => {
     case SIGNIN_USER_SUCCESS:
       return {
         ...state,
-        user: {
-          ...state.user,
-          name: action.user.user.name,
-          email: action.user.user.email
-        },
+        user: action.user,
         signRequest: false
       }
 
@@ -138,11 +129,7 @@ export const authReducer = (state = initialState, action) => {
       case SIGNOUT_USER_SUCCESS: {
         return {
           ...state,
-          user: {
-            ...state.user,
-            name: '',
-            email: ''
-          },
+          user: null,
           signoutRequest: false,
           signoutFailed: true,
         }
@@ -155,27 +142,7 @@ export const authReducer = (state = initialState, action) => {
         }
       }
 
-    case ADD_USER:
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          name: action.user.user.name,
-          email: action.user.user.email
-        }
-      }
-
-    case RESET_USER:
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          name: '',
-          email: ''
-        }
-      }
-
-		default: {
+    default: {
 			return state;
 		}
 	}

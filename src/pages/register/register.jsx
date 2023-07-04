@@ -24,8 +24,9 @@ export const Register = () => {
 
 	const onFormSubmit = e => {
 		e.preventDefault();
-    dispatch(registerUser(userForm));
     navigate('/', { replace: true });
+    dispatch(registerUser(userForm));
+
 	}
 
   return (

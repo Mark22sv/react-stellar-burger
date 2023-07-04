@@ -8,9 +8,6 @@ export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
 export const UPDATE_USER_FAILED = 'UPDATE_USER_FAILED';
 
-export const ADD_USER = 'ADD_USER';
-export const RESET_USER = 'RESET_USER';
-
 export const SIGNIN_USER_REQUEST = 'SIGNIN_USER_REQUEST';
 export const SIGNIN_USER_SUCCESS = 'SIGNIN_USER_SUCCESS';
 export const SIGNIN_USER_FAILED = 'SIGNIN_USER_FAILED';
@@ -40,7 +37,7 @@ export function registerUser({email, password, name}) {
 			.then((res) => {
 				dispatch({
 					type: SIGNIN_USER_SUCCESS,
-					user: res,
+					user: res.user,
 				});
         localStorage.setItem("accessToken", res.accessToken);
         localStorage.setItem("refreshToken", res.refreshToken);
@@ -64,7 +61,7 @@ export const updateUser = (form) => {
         if (res && res.success) {
           dispatch({
             type: UPDATE_USER_SUCCESS,
-            user: res
+            user: res.user
           })
         } else {
             dispatch({
@@ -89,7 +86,7 @@ export function signIn({email, password}) {
 			.then((res) => {
 				dispatch({
 					type: SIGNIN_USER_SUCCESS,
-					user: res,
+					user: res.user,
 				});
         localStorage.setItem("accessToken", res.accessToken);
         localStorage.setItem("refreshToken", res.refreshToken);
@@ -132,14 +129,16 @@ export const signOut = () => {
   };
 }
 
+export const setUser = (user) => ({
+  type: SET_USER,
+  payload: user,
+});
+
 export const getUser = () => {
   return function (dispatch) {
     return getUserFetch()
       .then((res) => {
-        dispatch({
-					type: ADD_USER,
-					user: res,
-				});
+        dispatch(setUser(res.user));
       });
   }
 };
@@ -151,9 +150,7 @@ export const checkUserAuth = () => {
           .catch(() => {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
-            dispatch({
-              type: RESET_USER,
-            });
+            dispatch(setUser(null));
           })
           .finally(() => dispatch(setAuthChecked(true)));
     } else {

@@ -4,7 +4,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useState, useRef } from "react";
-import { useNavigate, useMatch, NavLink, Outlet  } from "react-router-dom";
+import { useMatch, NavLink, Outlet  } from "react-router-dom";
 
 import { signOut, updateUser } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +25,6 @@ export function Profile() {
     password: false,
   });
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const inputNameRef = useRef(null);
   const inputEmailRef = useRef(null);
@@ -43,7 +42,6 @@ export function Profile() {
 
   const onClickOut = () => {
     dispatch(signOut());
-    navigate('/login', { replace: true });
   };
 
   const onClickSave = () => {

@@ -24,7 +24,6 @@ const App = () => {
   useEffect(() => {
     dispatch(checkUserAuth());
     dispatch(getDataIngredients());
-    console.log(localStorage)
   }, [dispatch]);
 
   return (

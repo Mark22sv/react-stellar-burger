@@ -20,8 +20,9 @@ export const Login = () => {
 
 	const onFormSubmit = e => {
 		e.preventDefault();
+    navigate('/profile', { replace: true });
     dispatch(signIn(userForm));
-    navigate('/', { replace: true });
+
   }
 
 
