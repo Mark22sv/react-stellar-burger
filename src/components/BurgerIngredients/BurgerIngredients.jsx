@@ -21,6 +21,7 @@ import { getSelectorDataIngredients, getSelectorConstuctorIngredients } from '..
 import { Link, useLocation } from 'react-router-dom';
 
 
+
 const IngredientsItem = ({ ingredient, selected }) => {
 
   const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);

@@ -76,26 +76,26 @@ export const authReducer = (state = initialState, action) => {
 			}
 
 
-      case UPDATE_USER_REQUEST:
-        return {
-          ...state,
-          updateRequest: true,
-          updateFailed: false,
-        }
+    case UPDATE_USER_REQUEST:
+      return {
+        ...state,
+        updateRequest: true,
+        updateFailed: false,
+      }
 
-      case UPDATE_USER_FAILED:
-        return {
-          ...state,
-          updateRequest: false,
-          updateFailed: true,
-        }
+    case UPDATE_USER_FAILED:
+      return {
+        ...state,
+        updateRequest: false,
+        updateFailed: true,
+      }
 
-      case UPDATE_USER_SUCCESS:
-        return {
-          ...state,
-          user: action.user,
-          updateRequest: false
-        }
+    case UPDATE_USER_SUCCESS:
+      return {
+        ...state,
+        user: action.user,
+        updateRequest: false
+      }
 
     case SIGNIN_USER_REQUEST:
       return {
@@ -118,29 +118,29 @@ export const authReducer = (state = initialState, action) => {
         signRequest: false
       }
 
-      case SIGNOUT_USER_REQUEST: {
-        return {
-          ...state,
-          signoutRequest: true,
-          signoutFailed: false,
+    case SIGNOUT_USER_REQUEST: {
+      return {
+        ...state,
+        signoutRequest: true,
+        signoutFailed: false,
 
-        }
       }
-      case SIGNOUT_USER_SUCCESS: {
-        return {
-          ...state,
-          user: null,
-          signoutRequest: false,
-          signoutFailed: true,
-        }
+    }
+    case SIGNOUT_USER_SUCCESS: {
+      return {
+        ...state,
+        user: null,
+        signoutRequest: false,
+        signoutFailed: true,
       }
-      case SIGNOUT_USER_FAILED: {
-        return {
-          ...state,
-          signoutRequest: false,
-          signoutFailed: true,
-        }
+    }
+    case SIGNOUT_USER_FAILED: {
+      return {
+        ...state,
+        signoutRequest: false,
+        signoutFailed: true,
       }
+    }
 
     default: {
 			return state;

@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
 import { HomePage, Register, Login, ForgotPassword, ResetPassword, Profile, IngredientDetailsPage, Feed, Orders } from '../../pages';
+import {home, login, profile, feed, register, forgotPass, resetPass, orders, ingredientsId } from '../../utils/constants';
 import appStyles from '../app/app.module.css';
 import { getDataIngredients } from '../../services/actions/data';
 import { checkUserAuth } from '../../services/actions/user';
@@ -32,15 +33,15 @@ const App = () => {
         <AppHeader />
       </header>
         <Routes location={background || location}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register"  element={<OnlyUnAuth component={<Register />} />} />
-          <Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
-          <Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPassword />} />} />
-          <Route path="/reset-password" element={<OnlyUnAuth component={<ResetPassword />} />} />
-          <Route path="/profile" element={<OnlyAuth component={<Profile />} />} />
-          <Route path="/ingredients/:id" element={<IngredientDetailsPage />} />
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/profile/orders" element={<Orders />} />
+          <Route path={home} element={<HomePage />} />
+          <Route path={register}  element={<OnlyUnAuth component={<Register />} />} />
+          <Route path={login} element={<OnlyUnAuth component={<Login />} />} />
+          <Route path={forgotPass} element={<OnlyUnAuth component={<ForgotPassword />} />} />
+          <Route path={resetPass} element={<OnlyUnAuth component={<ResetPassword />} />} />
+          <Route path={profile} element={<OnlyAuth component={<Profile />} />} />
+          <Route path={ingredientsId} element={<IngredientDetailsPage />} />
+          <Route path={feed} element={<Feed />} />
+          <Route path={orders} element={<Orders />} />
         </Routes>
         {background && (
         <Routes>
@@ -67,14 +68,3 @@ const App = () => {
 
 export default React.memo(App);
 
-// {/* <Route path="/register"  element={<OnlyUnAuth component={<Register />} />} />
-//           <Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
-//           <Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPassword />} />} />
-//          <Route path="/reset-password" element={<OnlyUnAuth component={<ResetPassword />} />} />
-//           <Route path="/profile" element={<OnlyAuth component={<Profile />} />} /> */}
-// {/* <Route path="/" element={<HomePage />} />
-//           <Route path="/register"  element={<Register />} />
-//           <Route path="/login" element={<Login />} />
-//           <Route path="/forgot-password" element={<ForgotPassword />} />
-//           <Route path="/reset-password" element={<ResetPassword />} />
-//           <Route path="/profile" element={<Profile />} /> */}

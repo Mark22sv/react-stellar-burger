@@ -7,25 +7,21 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
-
+import { home, login } from '../../utils/constants';
 import styles from './register.module.css';
+import { useForm } from '../../hooks/useForm';
 
 export const Register = () => {
-  const [userForm, setUserForm] = useState({name:'', email:'', password:''});
+  const { values, onChange } = useForm({ name: "", email: "", password: "" });
+
   const [isVisible, setVisible] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-	const onChange = e => {
-    setUserForm({
-      ...userForm,
-      [e.target.name]:e.target.value});
-  };
-
 	const onFormSubmit = e => {
 		e.preventDefault();
-    navigate('/', { replace: true });
-    dispatch(registerUser(userForm));
+    navigate(home, { replace: true });
+    dispatch(registerUser(values));
 
 	}
 
@@ -38,7 +34,7 @@ export const Register = () => {
 						type={'text'}
 						placeholder={'Имя'}
 						onChange={onChange}
-						value={userForm.name}
+						value={values.name}
 						name={'name'}
 						error={false}
 						size={'default'}
@@ -48,7 +44,7 @@ export const Register = () => {
 				<div className="pb-6">
 					<EmailInput
             onChange={onChange}
-            value={userForm.email}
+            value={values.email}
             name={'email'}
             size="default"
             placeholder="E-mail"
@@ -60,7 +56,7 @@ export const Register = () => {
             placeholder={"Пароль"}
             onChange={onChange}
             icon={isVisible ? 'ShowIcon' : 'HideIcon'}
-            value={userForm.password}
+            value={values.password}
             name={"password"}
             error={false}
             onIconClick={() => setVisible(!isVisible)}
@@ -78,7 +74,7 @@ export const Register = () => {
 				</Button>
 			</form>
 			<p className="text text_type_main-default text_color_inactive pt-20 pb-4">Уже зарегистрированы?
-				<Link className={styles.link} to='/login'>Войти</Link>
+				<Link className={styles.link} to={login}>Войти</Link>
 			</p>
 		</div >)
 }

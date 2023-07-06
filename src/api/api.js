@@ -1,5 +1,3 @@
-import { getCookie } from "../utils/get-cookie";
-
 const config = {
   url: 'https://norma.nomoreparties.space/api',
   headers: {
@@ -8,9 +6,7 @@ const config = {
 };
 
 const checksAnswer = (res) => {
-  return res.ok
-    ? res.json()
-    : Promise.reject(`Ошибка: ${res.status}`);
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
 const getDataIngredientsFetch = () => {
@@ -145,8 +141,8 @@ export const fetchWithRefresh = async (endpoint, options) => {
     const res = await fetch(`${config.url}/${endpoint}`, options);
     return await checksAnswer(res);
   } catch (err) {
-    if (err.message === "jwt expired") {
-      const refreshData = await refreshToken(); //обновляем токен
+      if (err.message === "jwt expired") {
+        const refreshData = await refreshToken(); //обновляем токен
       if (!refreshData.success) {
         return Promise.reject(refreshData);
       }

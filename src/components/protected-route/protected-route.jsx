@@ -1,6 +1,7 @@
 import { useSelector, shallowEqual } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 import { getSelectorAuth } from "../../utils/get-selector";
+import {home, login } from '../../utils/constants';
 
 const Protected = ({ onlyUnAuth = false, component }) => {
   // isAuthChecked это флаг, показывающий что проверка токена произведена
@@ -21,12 +22,12 @@ const Protected = ({ onlyUnAuth = false, component }) => {
   if (onlyUnAuth && user) {
     // Пользователь авторизован, но роут предназначен для неавторизованного пользователя
     // Делаем редирект на главную страницу или на тот адрес, что записан в location.state.from
-    const { from } = location.state || { from: { pathname: "/" } };
+    const { from } = location.state || { from: { pathname: home } };
     return <Navigate to={from} />;
   }
 
   if (!onlyUnAuth && !user) {
-    return <Navigate to="/login" state={{ from: location }} />;
+    return <Navigate to={login} state={{ from: location }} />;
   }
 
   // !onlyUnAuth && user Пользователь авторизован и роут для авторизованного пользователя

@@ -8,13 +8,14 @@ import { useMatch, NavLink, Outlet  } from "react-router-dom";
 
 import { signOut, updateUser } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
-
+import { profile, orders } from '../../utils/constants';
+import { useForm } from "../../hooks/useForm";
 
 export function Profile() {
   const { name, email } = useSelector(
     (state) => state.auth.user
   );
-  const [value, setValue] = useState({
+  const { values, onChange, setValues } = useForm({
     name: name,
     email: email,
     password: '',
@@ -33,28 +34,21 @@ export function Profile() {
   const profileLink = useMatch("/profile");
   const profileOrdersLink = useMatch("/profile/orders");
 
-  const onChange = (e) => {
-    setValue({
-      ...value,
-      [e.target.name]: e.target.value,
-    });
-  };
-
   const onClickOut = () => {
     dispatch(signOut());
   };
 
   const onClickSave = () => {
-    dispatch(updateUser(value))
+    dispatch(updateUser(values))
   }
 
   function onClickCancel(e) {
     e.preventDefault();
-    setValue({ name, email, password: "" });
+    setValues({ name, email, password: "" });
   }
 
   const onChangeInput =
-  value.name !== name || value.email !== email || value.password;
+  values.name !== name || values.email !== email || values.password;
 
   const style = ({ isActive }) =>
   isActive
@@ -66,21 +60,21 @@ export function Profile() {
       <div className={`${styles.text_container_nav}`}>
         <nav className={`${styles.text_container_list} pb-5`}>
         {profileLink ? (
-            <NavLink to={{ pathname: "/profile" }} className={style}>
+            <NavLink to={{ pathname: profile }} className={style}>
               Профиль
             </NavLink>
           ) : (
-            <NavLink to={{ pathname: "/profile" }} className={style(false)}>
+            <NavLink to={{ pathname: profile }} className={style(false)}>
               Профиль
             </NavLink>
           )}
           {profileOrdersLink ? (
-            <NavLink to={{ pathname: "/profile/orders" }} className={style}>
+            <NavLink to={{ pathname: orders }} className={style}>
               История заказов
             </NavLink>
           ) : (
             <NavLink
-              to={{ pathname: "/profile/orders" }}
+              to={{ pathname: orders }}
               className={style(false)}
             >
               История заказов
@@ -102,9 +96,9 @@ export function Profile() {
               type={"text"}
               placeholder={"Имя"}
               onChange={onChange}
-              icon={value.name ? "EditIcon" : "CloseIcon"}
+              icon={values.name ? "EditIcon" : "CloseIcon"}
               onIconClick={() => setEditing(!isEditing)}
-              value={value.name}
+              value={values.name}
               name={"name"}
               error={false}
               ref={inputNameRef}
@@ -115,9 +109,9 @@ export function Profile() {
               type={"text"}
               placeholder={"E-mail"}
               onChange={onChange}
-              icon={value.email ? "EditIcon" : "CloseIcon"}
+              icon={values.email ? "EditIcon" : "CloseIcon"}
               onIconClick={() => setEditing(!isEditing)}
-              value={value.email}
+              value={values.email}
               name={"email"}
               error={false}
               ref={inputEmailRef}
@@ -128,9 +122,9 @@ export function Profile() {
               type={"password"}
               placeholder={"Пароль"}
               onChange={onChange}
-              icon={value.password ? "CloseIcon" : "EditIcon"}
+              icon={values.password ? "CloseIcon" : "EditIcon"}
               onIconClick={() => setEditing(!isEditing)}
-              value={value.password}
+              value={values.password}
               name={"password"}
               error={false}
               ref={inputPasswordRef}

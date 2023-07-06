@@ -3,34 +3,30 @@ import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { resetPassFetch } from '../../api/api';
 import styles from './reset-password.module.css';
+import { login, forgotPass } from '../../utils/constants';
+import { useForm } from '../../hooks/useForm';
 
 export const ResetPassword = () => {
 	const [isVisible, setVisible] = useState(false);
-  const [userForm, setUserForm] = useState({password:'', token:''});
+  const { values, onChange } = useForm({password: "", token: "" });
 
   const navigate = useNavigate();
 
 	function onClick() {
-    navigate('/login/', { replace: true });
+    navigate(login, { replace: true });
   }
-
-  const onChange = e => {
-    setUserForm({
-      ...userForm,
-      [e.target.name]: e.target.value});
-  };
 
   const onClickSubmit = (e) => {
     e.preventDefault();
     postPass();
-    navigate('/login', { replace: true });
+    navigate(login, { replace: true });
   };
 
   function postPass() {
-    return resetPassFetch(userForm)
+    return resetPassFetch(values)
       .then((res) => {
-        userForm.password = res;
-        userForm.token = res;
+        values.password = res;
+        values.token = res;
         localStorage.removeItem("email");
       })
       .catch((err) => {
@@ -39,7 +35,7 @@ export const ResetPassword = () => {
   }
 
   if (!localStorage.getItem("email")) {
-    return <Navigate to={'/forgot-password'} replace={true} />;
+    return <Navigate to={forgotPass} replace={true} />;
   }
 
 	return (
@@ -55,7 +51,7 @@ export const ResetPassword = () => {
             onChange={onChange}
             icon={isVisible ? "ShowIcon" : "HideIcon"}
             onIconClick={() => setVisible(!isVisible)}
-            value={userForm.password}
+            value={values.password}
             name={"password"}
             error={false}
             errorText={"Ошибка"}
@@ -66,7 +62,7 @@ export const ResetPassword = () => {
             type={"text"}
             placeholder={"Введите код из письма"}
             onChange={onChange}
-            value={userForm.token}
+            value={values.token}
             name={"token"}
             error={false}
             errorText={"Ошибка"}

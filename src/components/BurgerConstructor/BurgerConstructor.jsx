@@ -24,6 +24,7 @@ import { useDrop, useDrag } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import cloneDeep from 'lodash.clonedeep'
 import { getSelectorConstuctorIngredients } from '../../utils/get-selector';
+import { login } from '../../utils/constants';
 
 const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
 
@@ -93,7 +94,7 @@ const BurgerConstructor = () => {
   const navigate = useNavigate();
 
   const handleOpenModal = () => {
-    if (user === null) navigate("/login", { replace: true })
+    if (user === null) navigate(login, { replace: true })
       else {
         const ingredientsId = ingredients.map((item) => item._id)
         const order = {

@@ -1,8 +1,11 @@
+import styles from "./feed.module.css"
+
+
 export function Feed() {
   return (
-   <>
-    <p>FEED</p>
-   </>
+  <div className={ styles.main }>
+
+  </div>
   );
 }
 

@@ -31,12 +31,12 @@ export const setAuthChecked = (value) => ({
 export function registerUser({email, password, name}) {
 	return function (dispatch) {
 		dispatch({
-			type: SIGNIN_USER_REQUEST,
+			type: SET_USER_REQUEST,
 		});
 		resgisterUserFetch({email, password, name})
 			.then((res) => {
 				dispatch({
-					type: SIGNIN_USER_SUCCESS,
+					type: SET_USER_SUCCESS,
 					user: res.user,
 				});
         localStorage.setItem("accessToken", res.accessToken);
@@ -45,7 +45,7 @@ export function registerUser({email, password, name}) {
 			})
 			.catch(() => {
 				dispatch({
-					type: SIGNIN_USER_FAILED,
+					type: SET_USER_FAILED,
 				});
 			})
 	};
@@ -113,8 +113,6 @@ export const signOut = () => {
           dispatch({
             type: SIGNOUT_USER_SUCCESS,
           });
-          dispatch(setAuthChecked(false));
-
         } else {
           dispatch({
             type: SIGNOUT_USER_FAILED

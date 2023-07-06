@@ -1,24 +1,22 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { postMailFetch } from '../../api/api';
 import styles from './forgot-password.module.css';
+import { login, resetPass } from '../../utils/constants';
+import { useForm } from '../../hooks/useForm';
 
 export const ForgotPassword = () => {
-	const [email, setEmail] = useState({email: ''});
+	const [ values, onChangeEmail] = useForm({email: ''});
+  const navigate = useNavigate();
 
-
-	const onChangeEmail = e => {
-		setEmail({
-      ...email,
-      [e.target.name]:e.target.value});
-  };
 
   function postMail() {
-    return postMailFetch(email.email)
+    return postMailFetch(values.email)
       .then(res => {
-        email.email = res.email;
+        values.email = res.email;
         localStorage.setItem('email', res.email);
+        navigate(resetPass, {replace: true});
       })
       .catch((err) => {
         console.error(`Ошибка: ${err}`);
@@ -28,9 +26,7 @@ export const ForgotPassword = () => {
 	const onFormSubmit = e => {
 		e.preventDefault();
 		postMail();
-    if (localStorage.getItem('email') !== null) {
-      return <Navigate to={'/reset-password'} replace={true} />;
-    }
+
   };
 
 	return (
@@ -40,7 +36,7 @@ export const ForgotPassword = () => {
 				<div className="pb-6">
 					<EmailInput
             onChange={onChangeEmail}
-            value={email.email}
+            value={values.email}
             name={"email"}
             isIcon={false}
             placeholder={"Укажите e-mail"}
@@ -59,7 +55,7 @@ export const ForgotPassword = () => {
 				</Button>
 			</form>
 			<p className="text text_type_main-default text_color_inactive pt-20 pb-4">Вспомнили пароль?
-				<Link className={styles.link} to='/login'>Войти</Link>
+				<Link className={styles.link} to={login}>Войти</Link>
 			</p>
 		</div >)
 }
