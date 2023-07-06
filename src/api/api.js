@@ -27,7 +27,10 @@ const setOrderFetch = (order) => {
   return fetch(`${config.url}/orders`,
   {
     method: "POST",
-    headers: config.headers,
+    headers:{
+      'Content-Type': 'application/json',
+      authorization: localStorage.getItem('accessToken')
+    },
     body: JSON.stringify(order)
   })
   .then((res) => checksAnswer(res))

@@ -93,13 +93,15 @@ const BurgerConstructor = () => {
   const navigate = useNavigate();
 
   const handleOpenModal = () => {
-    if (user === null) navigate("/login", { replace: true });
-    const ingredientsId = ingredients.map((item) => item._id)
-    const order = {
-        "ingredients": [...ingredientsId, bun._id]
-        }
-    dispatch(setOrder(order));
-    setIsOpen(true);
+    if (user === null) navigate("/login", { replace: true })
+      else {
+        const ingredientsId = ingredients.map((item) => item._id)
+        const order = {
+            "ingredients": [...ingredientsId, bun._id]
+            }
+        dispatch(setOrder(order));
+        setIsOpen(true);
+      }
   };
 
   const handleCloseModal = () => {
