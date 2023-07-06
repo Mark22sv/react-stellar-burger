@@ -31,15 +31,16 @@ export function Profile() {
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
 
-  const profileLink = useMatch("/profile");
-  const profileOrdersLink = useMatch("/profile/orders");
+  const profileLink = useMatch(profile);
+  const profileOrdersLink = useMatch(orders);
 
   const onClickOut = () => {
     dispatch(signOut());
   };
 
-  const onClickSave = () => {
-    dispatch(updateUser(values))
+  const onClickSave = (e) => {
+    e.preventDefault();
+    dispatch(updateUser(values));
   }
 
   function onClickCancel(e) {
