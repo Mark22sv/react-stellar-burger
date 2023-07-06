@@ -14,7 +14,7 @@ const AppHeader = () => {
       : `${headerStyle.header_link} text_type_main-default  text_color_inactive pl-2`;
   const homeLink = useMatch("/");
   const profileLink = useMatch("/profile");
-  const orderFeedLink = useMatch("/orders");
+  const orderFeedLink = useMatch("/feed");
 
   return (
     <header className={ `${headerStyle.header} pt-4 pb-4` }>
@@ -35,7 +35,7 @@ const AppHeader = () => {
             </NavLink>
           </li>
           <li className={ `${headerStyle.link} pt-4 pb-4` }>
-            <NavLink to={'/'} className={ styles }>
+            <NavLink to={'/feed'} className={ styles }>
             {orderFeedLink ? (
               <div className={ `${headerStyle.icon} ml-5` }>
                 <ListIcon type="primary" />

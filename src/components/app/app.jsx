@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
-import { HomePage, Register, Login, ForgotPassword, ResetPassword, Profile, IngredientDetailsPage } from '../../pages';
+import { HomePage, Register, Login, ForgotPassword, ResetPassword, Profile, IngredientDetailsPage, Feed, Orders } from '../../pages';
 import appStyles from '../app/app.module.css';
 import { getDataIngredients } from '../../services/actions/data';
 import { checkUserAuth } from '../../services/actions/user';
@@ -39,6 +39,8 @@ const App = () => {
           <Route path="/reset-password" element={<OnlyUnAuth component={<ResetPassword />} />} />
           <Route path="/profile" element={<OnlyAuth component={<Profile />} />} />
           <Route path="/ingredients/:id" element={<IngredientDetailsPage />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/profile/orders" element={<Orders />} />
         </Routes>
         {background && (
         <Routes>
