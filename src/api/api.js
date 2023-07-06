@@ -99,7 +99,7 @@ const resgisterUserFetch = async ({email, password, name}) => {
 }
 
 const updateUserFetch = async ({email, name, password}) => {
-  return fetchWithRefresh('auth/user', {
+  return fetch(`${config.url}/auth/user`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
