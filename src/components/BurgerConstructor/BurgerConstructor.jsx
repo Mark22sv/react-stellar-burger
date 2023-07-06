@@ -11,7 +11,9 @@ import { useState, useMemo, useRef, useCallback } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { setOrder, RESET_ORDER } from "../../services/actions/order-details";
-import { useSelector, useDispatch,shallowEqual } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { Navigate, useNavigate } from "react-router-dom";
+import { getSelectorAuth } from "../../utils/get-selector"
 import {
   ADD_CONSRUCTOR_INGREDIENTS,
   REMOVE_CONSRUCTOR_INGREDIENTS,
@@ -58,7 +60,6 @@ const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
 
   const ref = useRef(null)
   const dragDropRef = dragRef(dropRef(ref))
-
   const opacity = isDragging ? 0 : 1
 
   return (
@@ -87,10 +88,12 @@ IngredientsItem.propTypes = {
 const BurgerConstructor = () => {
   const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
   const dispatch = useDispatch();
-
+  const { user } = useSelector(getSelectorAuth, shallowEqual);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
+    if (user === null) navigate("/login", { replace: true });
     const ingredientsId = ingredients.map((item) => item._id)
     const order = {
         "ingredients": [...ingredientsId, bun._id]

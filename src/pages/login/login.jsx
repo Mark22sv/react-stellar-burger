@@ -1,17 +1,16 @@
 import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { signIn } from '../../services/actions/user';
 import styles from './login.module.css';
+
 
 export const Login = () => {
   const [userForm, setUserForm] = useState({email:'', password:''});
   const [isVisible, setVisible] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const inputEmailRef = useRef(null);
-  const inputPasswordRef = useRef(null);
+
   const onChange = e => {
     setUserForm({
       ...userForm,
@@ -20,11 +19,8 @@ export const Login = () => {
 
 	const onFormSubmit = e => {
 		e.preventDefault();
-    navigate('/profile', { replace: true });
     dispatch(signIn(userForm));
-
   }
-
 
   return (
 		<div className={styles.container}>
@@ -37,7 +33,7 @@ export const Login = () => {
             name={'email'}
             size="default"
             placeholder="E-mail"
-            ref={inputEmailRef}
+
           />
 				</div>
 				<div className="pb-6">
@@ -52,7 +48,7 @@ export const Login = () => {
             onIconClick={() => setVisible(!isVisible)}
             errorText={"Ошибка"}
             size={"default"}
-            ref={inputPasswordRef}
+
           />
 				</div>
 				<Button

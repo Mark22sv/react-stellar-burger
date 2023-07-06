@@ -1,13 +1,14 @@
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
+import { getSelectorAuth } from "../../utils/get-selector";
 
 const Protected = ({ onlyUnAuth = false, component }) => {
   // isAuthChecked это флаг, показывающий что проверка токена произведена
   // при этом результат этой проверки не имеет значения, важно только,
   // что сам факт проверки имел место.
-  const isAuthChecked = useSelector((store) => store.auth.isAuthChecked);
-  const user = useSelector((store) => store.auth.user);
-  
+  const { isAuthChecked, user } = useSelector(getSelectorAuth, shallowEqual);
+
+
   const location = useLocation();
 
   if (!isAuthChecked) {
