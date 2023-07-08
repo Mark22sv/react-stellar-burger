@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { OrderInfo } from '../order-info/order-info';
 import Modal from "../modal/modal";
 
 const App = () => {
@@ -44,21 +45,35 @@ const App = () => {
           <Route path={orders} element={<Orders />} />
         </Routes>
         {background && (
-        <Routes>
+          <Routes>
+            <Route
+              path="/ingredients/:id"
+              element={
+                <Modal
+                  onClose={closeModalIngredientDetails}
+                  title="Детали ингредиента"
+                >
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
+        {background && (
+          <Routes>
           <Route
-            path="/ingredients/:id"
+            path="/feed/:id"
             element={
               <Modal
                 onClose={closeModalIngredientDetails}
-                title="Детали ингредиента"
+                title=""
               >
-                <IngredientDetails />
+                <OrderInfo />
               </Modal>
             }
           />
         </Routes>
-      )}
-
+        )}
     </div>
 
   );

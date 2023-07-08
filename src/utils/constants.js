@@ -7,3 +7,5 @@ export const forgotPass = "/forgot-password";
 export const resetPass = "/reset-password";
 export const orders = "/profile/orders";
 export const ingredientsId = "/ingredients/:id";
+
+export const ORDERS_FEED_URL = "wss://norma.nomoreparties.space/orders/all";
