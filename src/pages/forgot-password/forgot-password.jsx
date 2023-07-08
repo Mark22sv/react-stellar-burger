@@ -7,7 +7,7 @@ import { login, resetPass } from '../../utils/constants';
 import { useForm } from '../../hooks/useForm';
 
 export const ForgotPassword = () => {
-	const [ values, onChangeEmail] = useForm({email: ''});
+	const { values, onChange } = useForm({email: ''});
   const navigate = useNavigate();
 
 
@@ -35,7 +35,7 @@ export const ForgotPassword = () => {
 			<form className={styles.form} onSubmit={onFormSubmit}>
 				<div className="pb-6">
 					<EmailInput
-            onChange={onChangeEmail}
+            onChange={onChange}
             value={values.email}
             name={"email"}
             isIcon={false}
