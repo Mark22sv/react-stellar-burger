@@ -37,12 +37,18 @@
 }
 
 .icon{
-
   width: 24px;
   height: 24px;
 }
 
-.text{
-
+.header_link {
+  text-decoration: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  justify-items: center;
 }
 
+.header_link_active {
+  color: var(--text-primary-color);
+}

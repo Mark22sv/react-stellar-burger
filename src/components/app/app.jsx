@@ -1,40 +1,79 @@
 import React from 'react';
 import { useEffect } from 'react';
 import AppHeader from '../appheader/appheader';
-import BurgersIngredients from '../BurgerIngredients/BurgerIngredients';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import { HomePage, Register, Login, ForgotPassword, ResetPassword, Profile, IngredientDetailsPage, Feed, Orders } from '../../pages';
+import {home, login, profile, feed, register, forgotPass, resetPass, orders, ingredientsId } from '../../utils/constants';
 import appStyles from '../app/app.module.css';
 import { getDataIngredients } from '../../services/actions/data';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { getSelectorDataIngredients } from '../../utils/get-selector';
+import { checkUserAuth } from '../../services/actions/user';
+import { useDispatch } from 'react-redux';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import { OrderInfo } from '../order-info/order-info';
+import Modal from "../modal/modal";
 
 const App = () => {
   const dispatch = useDispatch();
-  const { dataRequest, dataFailed } = useSelector(getSelectorDataIngredients, shallowEqual);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const background = location.state && location.state.background;
+
+  const closeModalIngredientDetails = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
+    dispatch(checkUserAuth());
     dispatch(getDataIngredients());
-    }, [dispatch]);
+  }, [dispatch]);
 
   return (
-
     <div>
       <header className={ appStyles.header }>
         <AppHeader />
       </header>
-      <main className={ appStyles.main }>
-        {dataRequest && <p>Loading...........</p>}
-          <DndProvider backend={ HTML5Backend }>
-            <section className={ appStyles.section }>
-              {!dataFailed && <BurgersIngredients />}
-            </section>
-            <section className={ `${ appStyles.section } mt-25 pr-4 pl-4` }>
-              {!dataFailed && <BurgerConstructor />}
-            </section>
-          </DndProvider>
-      </main>
+        <Routes location={background || location}>
+          <Route path={home} element={<HomePage />} />
+          <Route path={register}  element={<OnlyUnAuth component={<Register />} />} />
+          <Route path={login} element={<OnlyUnAuth component={<Login />} />} />
+          <Route path={forgotPass} element={<OnlyUnAuth component={<ForgotPassword />} />} />
+          <Route path={resetPass} element={<OnlyUnAuth component={<ResetPassword />} />} />
+          <Route path={profile} element={<OnlyAuth component={<Profile />} />} />
+          <Route path={ingredientsId} element={<IngredientDetailsPage />} />
+          <Route path={feed} element={<Feed />} />
+          <Route path={orders} element={<Orders />} />
+        </Routes>
+        {background && (
+          <Routes>
+            <Route
+              path="/ingredients/:id"
+              element={
+                <Modal
+                  onClose={closeModalIngredientDetails}
+                  title="Детали ингредиента"
+                >
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
+        {background && (
+          <Routes>
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal
+                onClose={closeModalIngredientDetails}
+                title=""
+              >
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        </Routes>
+        )}
     </div>
 
   );
@@ -43,3 +82,4 @@ const App = () => {
 
 
 export default React.memo(App);
+

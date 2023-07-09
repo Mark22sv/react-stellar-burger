@@ -18,6 +18,7 @@ import {
 import { useDrag } from "react-dnd";
 import { useInView } from 'react-intersection-observer';
 import { getSelectorDataIngredients, getSelectorConstuctorIngredients } from '../../utils/get-selector';
+import { Link, useLocation } from 'react-router-dom';
 
 
 
@@ -76,6 +77,7 @@ const BurgersIngredients = () => {
 
   const { data, selectedIngredient } = useSelector(getSelectorDataIngredients, shallowEqual);
   const dispatch = useDispatch()
+  const location = useLocation();
 
   const dataIngredients = useMemo(() => ({
     "buns": data.filter((el) => el.type === "bun"),
@@ -84,17 +86,17 @@ const BurgersIngredients = () => {
   }), [data]);
 
   const [current, setCurrent] = useState('one');
-  const [isOpen, setIsOpen] = useState(false);
+  //const [isOpen, setIsOpen] = useState(false);
 
 
   const handleOpenModal = (item) => {
-    setIsOpen(true);
-    dispatch({type: ADD_SELECTED_INGREDIENT, data: item});
+    // setIsOpen(true);
+    // dispatch({type: ADD_SELECTED_INGREDIENT, data: item});
   };
 
   const handleCloseModal = () => {
-    setIsOpen(false);
-    dispatch({type: RESET_SELECTED_INGREDIENT});
+    // setIsOpen(false);
+    // dispatch({type: RESET_SELECTED_INGREDIENT});
   };
 
   const [bunRef, bunInView] = useInView({
@@ -168,7 +170,13 @@ const BurgersIngredients = () => {
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
           {dataIngredients.buns.map((item, index) => (
             <li key={index}>
-              <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+              <Link
+                className={ burgerIngredientsStyle.ingridient__link }
+                to={{ pathname: `/ingredients/${item._id}` }}
+                state={{ background: location }}
+              >
+                <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+              </Link>
             </li>
             ))
           }
@@ -179,7 +187,13 @@ const BurgersIngredients = () => {
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
           {dataIngredients.sauces.map((item, index) => (
             <li key={index}>
-              <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+              <Link
+                className={ burgerIngredientsStyle.ingridient__link }
+                to={{ pathname: `/ingredients/${item._id}` }}
+                state={{ background: location }}
+              >
+                <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+              </Link>
             </li>
             ))
           }
@@ -190,17 +204,23 @@ const BurgersIngredients = () => {
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
         {dataIngredients.mains.map((item, index) => (
           <li key={index}>
-            <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+            <Link
+                className={ burgerIngredientsStyle.ingridient__link }
+                to={{ pathname: `/ingredients/${item._id}` }}
+                state={{ background: location }}
+            >
+              <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+            </Link>
           </li>
           ))
         }
         </ul>
       </div>
-      {isOpen &&
+      {/* {isOpen &&
         (<Modal onClose={handleCloseModal} title="Детали ингредиента">
           <IngredientDetails selectedIngredient={ selectedIngredient } />
         </Modal>)
-      }
+      } */}
     </div>
   )
 }

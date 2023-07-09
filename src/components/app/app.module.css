@@ -7,16 +7,4 @@ body{
   margin: 40px 40px 0 40px;
 }
 
-.main{
-  max-width: 1240px;
-  width: 100%;
-  display: flex;
-  gap: 40px;
-  margin: 0 auto 40px;
-}
 
-.section{
-  max-width: 600px;
-  width: 100%;
-  box-sizing: border-box;
-}
