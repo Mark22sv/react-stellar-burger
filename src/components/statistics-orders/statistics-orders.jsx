@@ -13,7 +13,7 @@ export function StatisticsOrder ({ orders, total, totalToday }) {
         <div className={styles.column}>
           <h3 className='text text_type_main-medium pb-1'>Готовы:</h3>
           <ul className={styles.list}>
-            {ordersDone?.map((item, index)=>(
+            {ordersDone.map((item, index)=>(
               <li key={index} className={`${styles.numberOrderDone} text text_type_digits-default`}>{item.number}</li>
             ))}
           </ul>

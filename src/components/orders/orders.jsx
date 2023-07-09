@@ -9,6 +9,7 @@ export function Orders({orders}) {
 
   return (
     <>
+    {orders &&
     <ul className={`${styles.container} pr-2`}>
       {orders.map((item, index) => (
         <li key={index}>
@@ -23,6 +24,7 @@ export function Orders({orders}) {
       ))
       }
     </ul>
+    }
     </>
   )
 };

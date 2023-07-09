@@ -8,7 +8,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 
 export function Card({order}) {
   const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
-  const { number, _id, createdAt, name, status, ingredients } = order;
+  const { number, createdAt, name, ingredients } = order;
 
 
   const findIngredient = (ingredient) => {
@@ -28,9 +28,9 @@ export function Card({order}) {
     let count = 0;
     id.forEach((ingredient) => {
       const check = data.find((item) => item._id === ingredient);
-      if (check?.price) {
+      if (check.price) {
         sum += check.price;
-        if (check?.type === 'bun') {
+        if (check.type === 'bun') {
           sum += check.price;
           bun = check.price;
           count += 1;
@@ -44,7 +44,10 @@ export function Card({order}) {
   }
 
   return (
+    <>
+    {order &&
     <div className={`${styles.container} p-6`}>
+
       <div className={styles.header}>
           <p className='text text_type_digits-default'>#{number}</p>
           <p className='text text_type_main-default text_color_inactive'>{determineDate(createdAt)}</p>
@@ -58,7 +61,7 @@ export function Card({order}) {
                 return (
                   <li key={uuidv4()} className={styles.ingredient}>
                     <img  className={styles.image} src={selectedIngredient?.image}
-                    alt={selectedIngredient?.name} />
+                    alt={selectedIngredient.name} />
                   </li>
                 )
             })
@@ -66,7 +69,7 @@ export function Card({order}) {
           {lastIngredient && (
               <li key={uuidv4()} className={styles.ingredient}>
                 <img className={styles.lastIngredient} src={lastIngredient?.image}
-                  alt={lastIngredient?.name} />
+                  alt={lastIngredient.name} />
                 <p className={`${styles.count} text text_type_main-default`}>{`${numbersHidden}`}</p>
               </li>
               )
@@ -78,6 +81,8 @@ export function Card({order}) {
         </div>
       </div>
   </div>
+  }
+  </>
   )
 };
 

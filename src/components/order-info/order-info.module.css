@@ -1,66 +1,91 @@
-.container {
-  border-radius: 40px;
-  background-color: #1C1C21;
-  box-sizing: border-box;
+.item {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  margin: 0;
+  min-height: 400px;
+  max-width: 640px;
+  box-sizing: border-box;
+  padding-bottom: 24px;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
 
-.box {
+.status {
+  color: #00CCCC;
+}
+
+.list {
+  max-width: 640px;
+  width: 100%;
+  max-height: 320px;
+  box-sizing: border-box;
+  overflow-y: auto;
   display: flex;
-  width: 304px;
-  height: 64px;
-  padding-left: 0;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 24px 0 0;
   list-style: none;
+  margin: 0;
+}
+
+.list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: #2F2F37;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
 }
 
 .ingredient {
-  height: 64px;
-  width: 64px;
-  border-radius: 50%;
-  background: #131316;
-  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.name {
+  flex-grow: 1;
+}
+
+.ingredientsImage {
+  object-fit: cover;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-}
-
-.ingredient:not(:first-child) {
-  margin-left: -20px;
-}
-
-.lastIngredient {
-  opacity: .6;
+  background: linear-gradient(#1C1C21, #1C1C21) padding-box,
+  linear-gradient(45deg, #801AB2, #4C4CFF) border-box;
+  border: 2px solid transparent;
+  border-radius: 50%;
   height: 64px;
-  object-fit: cover;
+  width: 64px;
 }
 
-.image {
-  height: 64px;
-  object-fit: cover;
-}
 
-.count {
-  display: block;
-  position: absolute;
-  top: 18px;
-  right: 21px;
+.details {
+  display: flex;
+  width: 100%;
+  gap: 8px;
 }
 
 .price {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
+  align-self: flex-end;
 }
 
-.box_container {
+.paragraph {
+  margin-top: 40px;
   display: flex;
+  width: 100%;
+  align-items: center;
   justify-content: space-between;
 }

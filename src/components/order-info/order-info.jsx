@@ -14,6 +14,7 @@ export function OrderInfo() {
   const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
   const { id } = useParams();
 
+
   const selectedOrder = orders.find((item) => item._id === id);
   const currentIngredients = selectedOrder.ingredients;
   const ingredients = currentIngredients.map((item) => data.find((ingredient) => ingredient._id ===  item));
@@ -23,15 +24,15 @@ export function OrderInfo() {
     return relativeDate.split(' в ').join(', ') + ' i-GMT+3'
   }
 
-  const totalSum = (id) => {
+  const totalSum = (ingredients) => {
     let sum = 0;
     let bun = 0;
     let count = 0;
-    id.forEach((ingredient) => {
-      const check = data.find((item) => item._id === ingredient);
-      if (check?.price) {
+    ingredients.forEach((ingredient) => {
+      const check = data.find((item) => item._id === ingredient._id);
+      if (check.price) {
         sum += check.price;
-        if (check?.type === 'bun') {
+        if (check.type === 'bun') {
           sum += check.price;
           bun = check.price;
           count += 1;
@@ -46,29 +47,50 @@ export function OrderInfo() {
 
 
  return (
-  <div className={`${styles.container} p-6`}>
-  <div className={styles.header}>
-      <p className='text text_type_digits-default'>#{selectedOrder.number}</p>
-      <p className='text text_type_main-default text_color_inactive'>{determineDate(selectedOrder.createdAt)}</p>
-    </div>
-    <h3 className={`${styles.name} text text_type_main-medium pt-6`}>{selectedOrder.name}</h3>
-  <div className={styles.box_container}>
-    <ul className={`${styles.box}`}>
-      {ingredients.map((item, index) => {
-        <li key={index} className={styles.ingredient}>
-          <img  className={styles.image} src={item.image}
-                alt={item.name} />
-              </li>
-      })
+  <>
+    {selectedOrder &&
+      <div className={styles.item}>
+        <p className={`${styles.header} text text_type_digits-default`}>#{selectedOrder.number}</p>
+        <h2 className='text text_type_main-medium pt-10'>{selectedOrder.name}</h2>
+        <p className={`${styles.status} text text_type_main-default pt-2`}>
+          {selectedOrder.status === 'done' ? 'Выполнен'
+          : selectedOrder.status === 'pending' ? 'Готовится'
+          : selectedOrder?.status === 'created' ? 'Создан'
+          : 'Выполнен' }</p>
+        <h3 className={`${styles.details} text text_type_main-medium pt-15`}>Состав:</h3>
+        <ul className={styles.list}>
+          {
+            ingredients.map((ingredient, index) => {
+              return (
+                <li key={index} className={styles.ingredient}>
+                  <img className={styles.ingredientsImage} src={ingredient.image} alt={ingredient.name} />
+                  <h4 className={`${styles.name} text text_type_main-default pl-4`}>{ingredient.name}</h4>
+                  <div className={`${styles.price} text text_type_digits-default`}>
+                    <span>
+                      {ingredients && (ingredients.filter(item => (item._id === ingredient._id) && (item.type !== 'bun')).length) === 0 ? 2 :
+                        (ingredients.filter(item => (item._id === ingredient._id)).length) }
+                    </span>
+                    x
+                    <p className={styles.details}>
+                      {ingredient?.price}<CurrencyIcon type='primary' />
+                    </p>
+                  </div>
+                </li>
+              )
+            })
+          }
+        </ul>
+        <div className={`${styles.paragraph} text text_type_digits-default`}>
+          <p className='text text_type_main-default text_color_inactive'>{determineDate(selectedOrder.createdAt)}</p>
+          <div className={`${styles.price} text text_type_digits-default`}>
+            {totalSum(ingredients)}
+            <CurrencyIcon type='primary' />
+          </div>
+        </div>
+      </div>
+    }
+    </>
+  )
+};
 
-      }
-    </ul>
-    <div className={`${styles.price} text text_type_digits-default`}>
-          {totalSum(ingredients)}
-          <CurrencyIcon type='primary' />
-    </div>
-  </div>
-</div>
- )
-}
 
