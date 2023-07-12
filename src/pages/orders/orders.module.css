@@ -1,0 +1,15 @@
+.main {
+  max-width: 1126px;
+  display: grid;
+  grid-template-columns: 320px 844px;
+  column-gap:  60px;
+  margin: 120px auto 0;
+  box-sizing: border-box;
+}
+
+.section {
+  width: 844px;
+  box-sizing: border-box;
+  margin-top: -72px;
+}
+

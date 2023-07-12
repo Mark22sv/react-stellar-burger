@@ -19,6 +19,16 @@ const getDataIngredientsFetch = () => {
   .catch((error) => console.log(error));
 };
 
+const getOrderIngredientsFetch = (number) => {
+  return fetch(`${config.url}/orders/${number}`,
+  {
+    method: "GET",
+    headers: config.headers
+  })
+  .then((res) => checksAnswer(res))
+  .catch((error) => console.log(error));
+};
+
 const setOrderFetch = (order) => {
   return fetch(`${config.url}/orders`,
   {
@@ -158,4 +168,4 @@ export const fetchWithRefresh = async (endpoint, options) => {
 };
 
 
-export { getDataIngredientsFetch, setOrderFetch, signInFetch, resgisterUserFetch,  updateUserFetch, getUserFetch, postMailFetch, signOutFetch, resetPassFetch };
+export { getDataIngredientsFetch, setOrderFetch, signInFetch, resgisterUserFetch,  updateUserFetch, getUserFetch, postMailFetch, signOutFetch, resetPassFetch, getOrderIngredientsFetch };

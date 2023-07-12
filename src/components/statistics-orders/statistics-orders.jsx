@@ -7,7 +7,8 @@ export function StatisticsOrder ({ orders, total, totalToday }) {
   const ordersWork = orders && orders.filter((item) => item.status === 'pending').slice(0, 10);
 
   return (
-
+    <>
+    {ordersDone && ordersWork &&
     <div className={styles.info}>
       <div className={styles.orders}>
         <div className={styles.column}>
@@ -32,6 +33,8 @@ export function StatisticsOrder ({ orders, total, totalToday }) {
         <p className='text text_type_main-medium'>Выполнено за сегодня:</p>
         <span className={`${styles.points} text text_type_digits-large`}>{totalToday}</span>
     </div>
+    }
+  </>
   )
 };
 

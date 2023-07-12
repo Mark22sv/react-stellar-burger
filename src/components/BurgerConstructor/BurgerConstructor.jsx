@@ -22,7 +22,7 @@ import {
 } from '../../services/actions/constructor-ingredients';
 import { useDrop, useDrag } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
-import cloneDeep from 'lodash.clonedeep'
+import cloneDeep from 'lodash.clonedeep';
 import { getSelectorConstuctorIngredients } from '../../utils/get-selector';
 import { login } from '../../utils/constants';
 
@@ -98,7 +98,7 @@ const BurgerConstructor = () => {
       else {
         const ingredientsId = ingredients.map((item) => item._id)
         const order = {
-            "ingredients": [...ingredientsId, bun._id]
+            "ingredients": [bun._id, ingredientsId, bun._id]
             }
         dispatch(setOrder(order));
         setIsOpen(true);

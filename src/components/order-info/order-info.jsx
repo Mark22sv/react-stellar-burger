@@ -6,6 +6,8 @@ import styles from './order-info.module.css';
 import { formatRelative } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { getOrderIngredientsFetch } from '../../api/api';
+import { useEffect, useState } from "react";
 
 
 
@@ -13,11 +15,30 @@ export function OrderInfo() {
   const { orders } = useSelector(getSelectorOrdersFeed, shallowEqual);
   const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
   const { id } = useParams();
+  const [dataIngredients, setDataIngredients] = useState(null);
+  let selectedOrder;
+
+  const getOrderIngredients = () => {
+    getOrderIngredientsFetch(id)
+      .then((res) => {
+        setDataIngredients(res.orders[0])
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  };
+
+  useEffect(() => {
+    getOrderIngredients();
+    }, []);
+
+  (!!orders.length)
+  ?  selectedOrder = orders.find((item) => item.number == id)
+  :  selectedOrder=dataIngredients;
 
 
-  const selectedOrder = orders.find((item) => item._id === id);
-  const currentIngredients = selectedOrder.ingredients;
-  const ingredients = currentIngredients.map((item) => data.find((ingredient) => ingredient._id ===  item));
+  const currentIngredients = selectedOrder?.ingredients;
+  const ingredients = currentIngredients?.map((item) => data.find((ingredient) => ingredient._id ===  item));
 
   const determineDate = (date) => {
     const relativeDate = formatRelative(new Date(date), new Date(), { locale: ru });
@@ -55,12 +76,12 @@ export function OrderInfo() {
         <p className={`${styles.status} text text_type_main-default pt-2`}>
           {selectedOrder.status === 'done' ? 'Выполнен'
           : selectedOrder.status === 'pending' ? 'Готовится'
-          : selectedOrder?.status === 'created' ? 'Создан'
+          : selectedOrder.status === 'created' ? 'Создан'
           : 'Выполнен' }</p>
         <h3 className={`${styles.details} text text_type_main-medium pt-15`}>Состав:</h3>
         <ul className={styles.list}>
           {
-            ingredients.map((ingredient, index) => {
+            ingredients?.map((ingredient, index) => {
               return (
                 <li key={index} className={styles.ingredient}>
                   <img className={styles.ingredientsImage} src={ingredient.image} alt={ingredient.name} />

@@ -1,5 +1,5 @@
 import { WebsocketStatus } from "../../utils/ws";
-import { ORDERS_CONNECT, ORDERS_DISCONNECT, ORDERS_WS_CONNECTING, ORDERS_WS_OPEN, ORDERS_WS_CLOSE, ORDERS_WS_MESSAGE, ORDERS_WS_ERROR } from '../actions/ws';
+import { ORDERS_WS_CONNECTING, ORDERS_WS_OPEN, ORDERS_WS_CLOSE, ORDERS_WS_MESSAGE, ORDERS_WS_ERROR } from '../actions/ws';
 
 const initialState = {
   status: WebsocketStatus.OFFLINE,
