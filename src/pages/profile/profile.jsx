@@ -4,11 +4,11 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useState, useRef } from "react";
-import { useMatch, NavLink, Outlet  } from "react-router-dom";
-
-import { signOut, updateUser } from "../../services/actions/user";
+import { useMatch  } from "react-router-dom";
+import { ProfileNavBar } from '../../components/profile-navbar/profile-navbar';
+import { updateUser } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
-import { profile, orders } from '../../utils/constants';
+import { profile } from '../../utils/constants';
 import { useForm } from "../../hooks/useForm";
 
 export function Profile() {
@@ -32,11 +32,6 @@ export function Profile() {
   const inputPasswordRef = useRef(null);
 
   const profileLink = useMatch(profile);
-  const profileOrdersLink = useMatch(orders);
-
-  const onClickOut = () => {
-    dispatch(signOut());
-  };
 
   const onClickSave = (e) => {
     e.preventDefault();
@@ -51,45 +46,9 @@ export function Profile() {
   const onChangeInput =
   values.name !== name || values.email !== email || values.password;
 
-  const style = ({ isActive }) =>
-  isActive
-    ? `${styles.nav_link} ${styles.nav_link_active} text text_type_main-medium`
-    : `${styles.nav_link} text text_type_main-medium text_color_inactive`;
-
   return (
-    <div className={styles.container_profile}>
-      <div className={`${styles.text_container_nav}`}>
-        <nav className={`${styles.text_container_list} pb-5`}>
-        {profileLink ? (
-            <NavLink to={{ pathname: profile }} className={style}>
-              Профиль
-            </NavLink>
-          ) : (
-            <NavLink to={{ pathname: profile }} className={style(false)}>
-              Профиль
-            </NavLink>
-          )}
-          {profileOrdersLink ? (
-            <NavLink to={{ pathname: orders }} className={style}>
-              История заказов
-            </NavLink>
-          ) : (
-            <NavLink
-              to={{ pathname: orders }}
-              className={style(false)}
-            >
-              История заказов
-            </NavLink>
-          )}
-          <NavLink className={style(false)} onClick={onClickOut}>
-            Выход
-          </NavLink>
-        </nav>
-        <Outlet />
-        <p className="text text_type_main-default text_color_inactive pt-20">
-          В этом разделе вы можете изменить свои персональные данные
-        </p>
-      </div>
+    <div className={styles.container}>
+      <ProfileNavBar />
       {!!profileLink ? (
         <form className={styles.form} onSubmit={onClickSave}>
           <fieldset className={`${styles.input_items} pb-3`}>

@@ -1,0 +1,20 @@
+.text_container_nav {
+  max-width: 320px;
+}
+
+.text_container_list {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 192px;
+}
+
+.nav_link {
+  text-decoration: none;
+}
+
+.nav_link_active {
+  color: var(--text-primary-color);
+}

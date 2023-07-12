@@ -8,7 +8,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 
 export function Card({order}) {
   const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
-  const { number, createdAt, name, ingredients } = order;
+  const { number, createdAt, name, ingredients, status } = order;
 
 
   const findIngredient = (ingredient) => {
@@ -53,6 +53,9 @@ export function Card({order}) {
           <p className='text text_type_main-default text_color_inactive'>{determineDate(createdAt)}</p>
         </div>
         <h3 className={`${styles.name} text text_type_main-medium pt-6`}>{name}</h3>
+        {!!status && <p className={'text text_type_main-default pt-2 pb-6'}>{status === 'done' ? 'Выполнен'
+        : status === 'pending' ? 'Готовится'
+        : status === 'created' ? 'Создан' : 'Выполнен' }</p>}
       <div className={styles.box_container}>
         <ul className={`${styles.box}`}>
           {ingredients.map((item, index) =>

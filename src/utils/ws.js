@@ -4,10 +4,3 @@ export const WebsocketStatus  = {
   OFFLINE: 'OFFLINE'
 }
 
-export const OrdersActionType = {
-  DATA: 'data',
-  INSERT: 'insert',
-  DELETE: 'delete',
-  UPDATE: 'update',
-  MOVE: 'move',
-}
