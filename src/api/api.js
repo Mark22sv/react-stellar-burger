@@ -30,7 +30,7 @@ const getOrderIngredientsFetch = (number) => {
 };
 
 const setOrderFetch = (order) => {
-  return fetch(`${config.url}/orders`,
+  return fetchWithRefresh('orders',
   {
     method: "POST",
     headers:{
@@ -39,8 +39,6 @@ const setOrderFetch = (order) => {
     },
     body: JSON.stringify(order)
   })
-  .then((res) => checksAnswer(res))
-
 };
 
 const postMailFetch = async (email) => {
@@ -119,7 +117,7 @@ const updateUserFetch = async ({email, name, password}) => {
     }),
   })
   .then((res) => checksAnswer(res))
-  
+
 };
 
 const getUserFetch = () => {

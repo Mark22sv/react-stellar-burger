@@ -30,22 +30,20 @@ const App = () => {
 
   return (
     <div>
-      <header className={ appStyles.header }>
-        <AppHeader />
-      </header>
-        <Routes location={background || location}>
-          <Route path={home} element={<HomePage />} />
-          <Route path={register}  element={<OnlyUnAuth component={<Register />} />} />
-          <Route path={login} element={<OnlyUnAuth component={<Login />} />} />
-          <Route path={forgotPass} element={<OnlyUnAuth component={<ForgotPassword />} />} />
-          <Route path={resetPass} element={<OnlyUnAuth component={<ResetPassword />} />} />
-          <Route path={profile} element={<OnlyAuth component={<Profile />} />} />
-          <Route path={ingredientsId} element={<IngredientDetailsPage />} />
-          <Route path={feed} element={<Feed />} />
-          <Route path={feedId} element={<FeedInfoPage />} />
-          <Route path={profieOrders} element={<OnlyAuth component={<Orders />} />} />
-          <Route path={profieOrdersId} element={<OnlyAuth component={<OrderInfoPage />} />} />
-        </Routes>
+      <AppHeader />
+      <Routes location={background || location}>
+        <Route path={home} element={<HomePage />} />
+        <Route path={register}  element={<OnlyUnAuth component={<Register />} />} />
+        <Route path={login} element={<OnlyUnAuth component={<Login />} />} />
+        <Route path={forgotPass} element={<OnlyUnAuth component={<ForgotPassword />} />} />
+        <Route path={resetPass} element={<OnlyUnAuth component={<ResetPassword />} />} />
+        <Route path={profile} element={<OnlyAuth component={<Profile />} />} />
+        <Route path={ingredientsId} element={<IngredientDetailsPage />} />
+        <Route path={feed} element={<Feed />} />
+        <Route path={feedId} element={<FeedInfoPage />} />
+        <Route path={profieOrders} element={<OnlyAuth component={<Orders />} />} />
+        <Route path={profieOrdersId} element={<OnlyAuth component={<OrderInfoPage />} />} />
+      </Routes>
 
         {background && (
           <Routes>

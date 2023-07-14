@@ -98,7 +98,7 @@ const BurgerConstructor = () => {
       else {
         const ingredientsId = ingredients.map((item) => item._id)
         const order = {
-            "ingredients": [bun._id, ingredientsId, bun._id]
+            "ingredients": [...ingredientsId, bun._id]
             }
         dispatch(setOrder(order));
         setIsOpen(true);

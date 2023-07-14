@@ -53,6 +53,7 @@ export function OrderInfo() {
     return sum;
   }
 
+
  return (
   <>
     {!!selectedOrder &&
@@ -67,7 +68,7 @@ export function OrderInfo() {
         <h3 className={`${styles.details} text text_type_main-medium pt-15`}>Состав:</h3>
         <ul className={styles.list}>
           {
-            ingredients?.map((ingredient, index) => {
+            Array.from(new Set(ingredients))?.map((ingredient, index) => {
               return (
                 <li key={index} className={styles.ingredient}>
                   <img className={styles.ingredientsImage} src={ingredient.image} alt={ingredient.name} />

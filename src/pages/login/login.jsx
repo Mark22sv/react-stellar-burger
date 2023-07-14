@@ -47,10 +47,9 @@ export const Login = () => {
           />
 				</div>
 				<Button
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
-          onClick={onFormSubmit}
         >
 					Войти
 				</Button>

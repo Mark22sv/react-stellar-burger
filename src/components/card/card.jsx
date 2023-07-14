@@ -1,10 +1,7 @@
 import { useSelector, shallowEqual } from 'react-redux';
 import { getSelectorDataIngredients } from '../../utils/get-selector';
 import styles from './card.module.css';
-import { formatRelative } from 'date-fns';
-import { ru } from 'date-fns/locale';
-import { v4 as uuidv4 } from 'uuid';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 
 export function Card({order}) {
   const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
@@ -16,11 +13,6 @@ export function Card({order}) {
   };
   const lastIngredient = findIngredient(ingredients[5]);
   const numbersHidden = ingredients.length === 6 ? '' : `+${ingredients.length - 6}`;
-
-  const determineDate = (date) => {
-    const relativeDate = formatRelative(new Date(date), new Date(), { locale: ru });
-    return relativeDate.split(' в ').join(', ') + ' i-GMT+3'
-  }
 
   const totalSum = (id) => {
     let sum = 0;
@@ -50,8 +42,11 @@ export function Card({order}) {
 
       <div className={styles.header}>
           <p className='text text_type_digits-default'>#{number}</p>
-          <p className='text text_type_main-default text_color_inactive'>{determineDate(createdAt)}</p>
-        </div>
+          <FormattedDate
+            date={new Date(createdAt)}
+            className="text text_type_main-default text_color_inactive"
+          />
+      </div>
         <h3 className={`${styles.name} text text_type_main-medium pt-6`}>{name}</h3>
         {!!status && <p className={'text text_type_main-default pt-2 pb-6'}>{status === 'done' ? 'Выполнен'
         : status === 'pending' ? 'Готовится'
@@ -62,7 +57,7 @@ export function Card({order}) {
             {const selectedIngredient = findIngredient(item)
               if (index < 5)
                 return (
-                  <li key={uuidv4()} className={styles.ingredient}>
+                  <li key={index} className={styles.ingredient}>
                     <img  className={styles.image} src={selectedIngredient?.image}
                     alt={selectedIngredient.name} />
                   </li>
@@ -70,7 +65,7 @@ export function Card({order}) {
             })
           }
           {lastIngredient && (
-              <li key={uuidv4()} className={styles.ingredient}>
+              <li key={lastIngredient._id} className={styles.ingredient}>
                 <img className={styles.lastIngredient} src={lastIngredient?.image}
                   alt={lastIngredient.name} />
                 <p className={`${styles.count} text text_type_main-default`}>{`${numbersHidden}`}</p>
