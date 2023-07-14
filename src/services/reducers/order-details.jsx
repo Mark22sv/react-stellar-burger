@@ -14,6 +14,7 @@ const initialState = {
   orderIngredient: [],
   dataRequest: false,
   dataFailed: false,
+  clickOnOrder: false
 };
 
 export const orderReducer = (state = initialState, action) => {
@@ -22,14 +23,16 @@ export const orderReducer = (state = initialState, action) => {
       return {
         ...state,
         dataRequest: true,
-        dataFailed: false
+        dataFailed: false,
+        clickOnOrder: true
       };
 
     case GET_ORDER_SUCCESS:
       return {
         ...state,
         orderNumber: action.orderNumber,
-        dataRequest: false
+        dataRequest: false,
+        clickOnOrder: true
       };
 
     case GET_ORDER_FAILED:

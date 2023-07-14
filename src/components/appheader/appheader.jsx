@@ -5,7 +5,7 @@ import {Logo,
         ListIcon,
         ProfileIcon
        } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useMatch, NavLink } from 'react-router-dom';
+import { useMatch, NavLink, Link } from 'react-router-dom';
 import {home, profile, feed } from '../../utils/constants';
 
 const AppHeader = () => {
@@ -50,7 +50,9 @@ const AppHeader = () => {
             </NavLink>
           </li>
         </ul>
-        <Logo />
+        <Link to={home} className={ styles }>
+          <Logo />
+        </Link>
         <NavLink to={profile} className={ styles }>
         {profileLink ? (
           <div className={ `${headerStyle.icon} ml-5 mr-4` }>
