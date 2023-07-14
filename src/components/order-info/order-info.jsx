@@ -1,55 +1,42 @@
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { getSelectorDataIngredients } from '../../utils/get-selector';
 import { useParams } from "react-router-dom";
 import { getSelectorOrdersFeed } from '../../utils/get-selector';
 import styles from './order-info.module.css';
-import { formatRelative } from 'date-fns';
-import { ru } from 'date-fns/locale';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { getOrderIngredientsFetch } from '../../api/api';
-import { useEffect, useState } from "react";
-
-
+import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
+import { getOrderIngredients } from '../../services/actions/order-details';
+import { useEffect } from "react";
+import { getSelectorOrderDetails } from '../../utils/get-selector';
 
 export function OrderInfo() {
   const { orders } = useSelector(getSelectorOrdersFeed, shallowEqual);
   const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
+  const { orderIngredient } = useSelector(getSelectorOrderDetails, shallowEqual);
+  const dispatch = useDispatch();
   const { id } = useParams();
-  const [dataIngredients, setDataIngredients] = useState(null);
   let selectedOrder;
 
-  const getOrderIngredients = () => {
-    getOrderIngredientsFetch(id)
-      .then((res) => {
-        setDataIngredients(res.orders[0])
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  };
-
   useEffect(() => {
-    getOrderIngredients();
-    }, []);
+    dispatch(getOrderIngredients(id));
+  }, [dispatch]);
 
-  (!!orders.length)
-  ?  selectedOrder = orders.find((item) => item.number == id)
-  :  selectedOrder=dataIngredients;
-
+  if (orders.length == 0) {
+    selectedOrder = orderIngredient
+  }
+  else {
+    selectedOrder = orders.find((item) => item.number === Number(id));
+  }
 
   const currentIngredients = selectedOrder?.ingredients;
   const ingredients = currentIngredients?.map((item) => data.find((ingredient) => ingredient._id ===  item));
 
-  const determineDate = (date) => {
-    const relativeDate = formatRelative(new Date(date), new Date(), { locale: ru });
-    return relativeDate.split(' в ').join(', ') + ' i-GMT+3'
-  }
+  const orderDate = selectedOrder.updatedAt;
 
   const totalSum = (ingredients) => {
     let sum = 0;
     let bun = 0;
     let count = 0;
-    ingredients.forEach((ingredient) => {
+    ingredients?.forEach((ingredient) => {
       const check = data.find((item) => item._id === ingredient._id);
       if (check.price) {
         sum += check.price;
@@ -66,10 +53,9 @@ export function OrderInfo() {
     return sum;
   }
 
-
  return (
   <>
-    {selectedOrder &&
+    {!!selectedOrder &&
       <div className={styles.item}>
         <p className={`${styles.header} text text_type_digits-default`}>#{selectedOrder.number}</p>
         <h2 className='text text_type_main-medium pt-10'>{selectedOrder.name}</h2>
@@ -102,7 +88,10 @@ export function OrderInfo() {
           }
         </ul>
         <div className={`${styles.paragraph} text text_type_digits-default`}>
-          <p className='text text_type_main-default text_color_inactive'>{determineDate(selectedOrder.createdAt)}</p>
+          <FormattedDate
+            date={new Date(orderDate)}
+            className="text text_type_main-default text_color_inactive"
+          />
           <div className={`${styles.price} text text_type_digits-default`}>
             {totalSum(ingredients)}
             <CurrencyIcon type='primary' />

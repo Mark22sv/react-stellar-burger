@@ -1,11 +1,17 @@
 import { GET_ORDER_REQUEST,
          GET_ORDER_SUCCESS,
          GET_ORDER_FAILED,
+
+         GET_ORDER_INGREDIENTS_REQUEST,
+         GET_ORDER_INGREDIENTS_SUCCESS,
+         GET_ORDER_INGREDIENTS_FAILED,
+
          RESET_ORDER
  } from '../actions/order-details';
 
 const initialState = {
   orderNumber: '',
+  orderIngredient: [],
   dataRequest: false,
   dataFailed: false,
 };
@@ -32,6 +38,27 @@ export const orderReducer = (state = initialState, action) => {
         dataFailed: true,
         dataRequest: false
       };
+
+      case GET_ORDER_INGREDIENTS_REQUEST:
+        return {
+          ...state,
+          dataRequest: true,
+          dataFailed: false
+        };
+
+      case GET_ORDER_INGREDIENTS_SUCCESS:
+        return {
+          ...state,
+          orderIngredient: action.payload,
+          dataRequest: false
+        };
+
+      case GET_ORDER_INGREDIENTS_FAILED:
+        return {
+          orderIngredient: [],
+          dataFailed: true,
+          dataRequest: false
+        };
 
     case RESET_ORDER:
       return {

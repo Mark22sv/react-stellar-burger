@@ -16,7 +16,7 @@ const getDataIngredientsFetch = () => {
     headers: config.headers
   })
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
+
 };
 
 const getOrderIngredientsFetch = (number) => {
@@ -26,7 +26,7 @@ const getOrderIngredientsFetch = (number) => {
     headers: config.headers
   })
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
+
 };
 
 const setOrderFetch = (order) => {
@@ -40,7 +40,7 @@ const setOrderFetch = (order) => {
     body: JSON.stringify(order)
   })
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
+
 };
 
 const postMailFetch = async (email) => {
@@ -65,7 +65,7 @@ const resetPassFetch = async ({ password, token }) => {
 			password, token
     }),
 	});
-}
+};
 
 const signInFetch = async ({email, password}) => {
 	return await fetch(`${config.url}/auth/login`, {
@@ -78,8 +78,8 @@ const signInFetch = async ({email, password}) => {
 		}),
 	})
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
+
+};
 
 const signOutFetch = async () => {
   return await fetchWithRefresh(`auth/logout`, {
@@ -90,7 +90,7 @@ const signOutFetch = async () => {
     token: localStorage.getItem("refreshToken"),
 	  }),
   })
-}
+};
 
 const resgisterUserFetch = async ({email, password, name}) => {
 	return await fetch(`${config.url}/auth/register`, {
@@ -105,8 +105,7 @@ const resgisterUserFetch = async ({email, password, name}) => {
 		},
 	})
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
+};
 
 const updateUserFetch = async ({email, name, password}) => {
   return fetch(`${config.url}/auth/user`, {
@@ -120,7 +119,7 @@ const updateUserFetch = async ({email, name, password}) => {
     }),
   })
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
+  
 };
 
 const getUserFetch = () => {
