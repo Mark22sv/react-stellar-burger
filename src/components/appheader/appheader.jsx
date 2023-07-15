@@ -23,47 +23,29 @@ const AppHeader = () => {
         <ul className={ headerStyle.list }>
           <li className={ `${headerStyle.link} pt-4 pb-4` }>
             <NavLink to={home} className={ styles }>
-            {homeLink ? (
               <div className={ `${headerStyle.icon} ml-5 mr-4` }>
-                <BurgerIcon type="primary" />
+                <BurgerIcon type={homeLink ? "primary" : "secondary"} />
               </div>
-             ) : (
-              <div className={ `${headerStyle.icon} ml-5 mr-4` }>
-                <BurgerIcon type="secondary" />
-              </div>
-             )}
-             Конструктор
+              Конструктор
             </NavLink>
           </li>
           <li className={ `${headerStyle.link} pt-4 pb-4` }>
             <NavLink to={feed} className={ styles }>
-            {orderFeedLink ? (
               <div className={ `${headerStyle.icon} ml-5 mr-4` }>
-                <ListIcon type="primary" />
+                <ListIcon type={orderFeedLink ? "primary" : "secondary"} />
               </div>
-            ) : (
-              <div className={ `${headerStyle.icon} ml-5 mr-4` }>
-                <ListIcon type="secondary" />
-              </div>
-            )}
-            Лента заказов
+              Лента заказов
             </NavLink>
           </li>
         </ul>
-        <Link to={home} className={ styles }>
+        <Link to={home} >
           <Logo />
         </Link>
         <NavLink to={profile} className={ styles }>
-        {profileLink ? (
           <div className={ `${headerStyle.icon} ml-5 mr-4` }>
-            <ProfileIcon type="primary" />
+            <ProfileIcon type={profileLink ? "primary" : "secondary"} />
           </div>
-        ) : (
-          <div className={ `${headerStyle.icon} ml-5 mr-4` }>
-            <ProfileIcon type="secondary" />
-          </div>
-        )}
-        Личный кабинет
+          Личный кабинет
         </NavLink>
       </nav>
 

@@ -23,29 +23,20 @@ export function ProfileNavBar() {
   return (
     <div className={`${styles.text_container_nav}`}>
       <nav className={`${styles.text_container_list} pb-5`}>
-      {profileLink ? (
-          <NavLink to={{ pathname: profile }} className={style}>
+        <NavLink
+          to={{ pathname: profile }}
+          className={profileLink ? style : style(false)}>
             Профиль
-          </NavLink>
-        ) : (
-          <NavLink to={{ pathname: profile }} className={style(false)}>
-            Профиль
-          </NavLink>
-        )}
-        {profileOrdersLink ? (
-          <NavLink to={{ pathname: profieOrders }} className={style}>
+        </NavLink>
+        <NavLink
+          to={{ pathname: profieOrders }}
+          className={profileOrdersLink ? style : style(false)}>
             История заказов
-          </NavLink>
-        ) : (
-          <NavLink
-            to={{ pathname: profieOrders }}
-            className={style(false)}
-          >
-            История заказов
-          </NavLink>
-        )}
-        <NavLink className={style(false)} onClick={onClickOut}>
-          Выход
+        </NavLink>
+        <NavLink
+          className={style(false)}
+          onClick={onClickOut}>
+            Выход
         </NavLink>
       </nav>
 
