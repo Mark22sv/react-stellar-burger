@@ -12,8 +12,7 @@ import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { setOrder, RESET_ORDER } from "../../services/actions/order-details";
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { Navigate, useNavigate } from "react-router-dom";
-import { getSelectorAuth } from "../../utils/get-selector"
+import { useNavigate } from "react-router-dom";
 import {
   ADD_CONSRUCTOR_INGREDIENTS,
   REMOVE_CONSRUCTOR_INGREDIENTS,
@@ -22,9 +21,10 @@ import {
 } from '../../services/actions/constructor-ingredients';
 import { useDrop, useDrag } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
-import cloneDeep from 'lodash.clonedeep'
-import { getSelectorConstuctorIngredients } from '../../utils/get-selector';
+import cloneDeep from 'lodash.clonedeep';
+import { getSelectorConstuctorIngredients, getSelectorOrderDetails, getSelectorAuth } from '../../utils/get-selector';
 import { login } from '../../utils/constants';
+import { Loader } from '../loader/loader';
 
 const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
 
@@ -88,6 +88,7 @@ IngredientsItem.propTypes = {
 
 const BurgerConstructor = () => {
   const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
+  const { dataRequest, clickOnOrder, orderNumber } = useSelector(getSelectorOrderDetails, shallowEqual);
   const dispatch = useDispatch();
   const { user } = useSelector(getSelectorAuth, shallowEqual);
   const [isOpen, setIsOpen] = useState(false);
@@ -224,12 +225,18 @@ const BurgerConstructor = () => {
           Оформить заказ
           </Button>)}
       </div>
-      {isOpen && (
+      {dataRequest && clickOnOrder && (
         <Modal onClose={handleCloseModal}>
-          <OrderDetails/>
+          <Loader />
         </Modal>
-        )
-      }
+      )}
+
+      {orderNumber && (
+        <Modal onClose={handleCloseModal}>
+          <OrderDetails />
+        </Modal>
+      )}
+      
     </div>
   )
 }

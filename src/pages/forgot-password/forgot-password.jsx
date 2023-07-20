@@ -46,10 +46,9 @@ export const ForgotPassword = () => {
 					/>
 				</div>
 				<Button
-          htmlType="button"
+          htmlType="submit"
           type="primary"
           size="medium"
-          onClick={onFormSubmit}
         >
 					Восстановить
 				</Button>

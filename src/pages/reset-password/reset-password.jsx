@@ -71,7 +71,7 @@ export const ResetPassword = () => {
           />
         </fieldset>
         <div className={`${styles.button} pt-3 mb-15`}>
-          <Button htmlType="submit" type="primary" size="medium" onSubmit={onClickSubmit}>
+          <Button htmlType="submit" type="primary" size="medium" >
             Сохранить
           </Button>
         </div>

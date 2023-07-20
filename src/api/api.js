@@ -16,11 +16,21 @@ const getDataIngredientsFetch = () => {
     headers: config.headers
   })
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
+
+};
+
+const getOrderIngredientsFetch = (number) => {
+  return fetch(`${config.url}/orders/${number}`,
+  {
+    method: "GET",
+    headers: config.headers
+  })
+  .then((res) => checksAnswer(res))
+
 };
 
 const setOrderFetch = (order) => {
-  return fetch(`${config.url}/orders`,
+  return fetchWithRefresh('orders',
   {
     method: "POST",
     headers:{
@@ -29,8 +39,6 @@ const setOrderFetch = (order) => {
     },
     body: JSON.stringify(order)
   })
-  .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
 };
 
 const postMailFetch = async (email) => {
@@ -55,7 +63,7 @@ const resetPassFetch = async ({ password, token }) => {
 			password, token
     }),
 	});
-}
+};
 
 const signInFetch = async ({email, password}) => {
 	return await fetch(`${config.url}/auth/login`, {
@@ -68,8 +76,8 @@ const signInFetch = async ({email, password}) => {
 		}),
 	})
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
+
+};
 
 const signOutFetch = async () => {
   return await fetchWithRefresh(`auth/logout`, {
@@ -80,7 +88,7 @@ const signOutFetch = async () => {
     token: localStorage.getItem("refreshToken"),
 	  }),
   })
-}
+};
 
 const resgisterUserFetch = async ({email, password, name}) => {
 	return await fetch(`${config.url}/auth/register`, {
@@ -95,8 +103,7 @@ const resgisterUserFetch = async ({email, password, name}) => {
 		},
 	})
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
-}
+};
 
 const updateUserFetch = async ({email, name, password}) => {
   return fetch(`${config.url}/auth/user`, {
@@ -110,7 +117,7 @@ const updateUserFetch = async ({email, name, password}) => {
     }),
   })
   .then((res) => checksAnswer(res))
-  .catch((error) => console.log(error));
+
 };
 
 const getUserFetch = () => {
@@ -158,4 +165,4 @@ export const fetchWithRefresh = async (endpoint, options) => {
 };
 
 
-export { getDataIngredientsFetch, setOrderFetch, signInFetch, resgisterUserFetch,  updateUserFetch, getUserFetch, postMailFetch, signOutFetch, resetPassFetch };
+export { getDataIngredientsFetch, setOrderFetch, signInFetch, resgisterUserFetch,  updateUserFetch, getUserFetch, postMailFetch, signOutFetch, resetPassFetch, getOrderIngredientsFetch };
