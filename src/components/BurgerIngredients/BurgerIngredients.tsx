@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, FC } from "react";
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
   Tab,
@@ -19,10 +19,12 @@ import { useDrag } from "react-dnd";
 import { useInView } from 'react-intersection-observer';
 import { getSelectorDataIngredients, getSelectorConstuctorIngredients } from '../../utils/get-selector';
 import { Link, useLocation } from 'react-router-dom';
+import { Ingredient, BurgerIngredientsProps } from '../../services/types/data';
 
 
 
-const IngredientsItem = ({ ingredient, selected }) => {
+
+const IngredientsItem: FC<BurgerIngredientsProps> = ({ ingredient }) => {
 
   const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
   const [{ opacity }, dragRef] = useDrag({
@@ -51,7 +53,6 @@ const IngredientsItem = ({ ingredient, selected }) => {
     <div className={ burgerIngredientsStyle.card }
          style={{ opacity }}
          ref={dragRef}
-         onClick={() => selected(ingredient)}
     >
       <img className={ `${burgerIngredientsStyle.image} ml-4 mr-4` } src={ ingredient.image } alt="фото" />
       <Counter className={ burgerIngredientsStyle.count } count={counter()} size="default" extraClass="m-1" />
@@ -59,7 +60,7 @@ const IngredientsItem = ({ ingredient, selected }) => {
         <p>
           { ingredient.price }
         </p>
-        <CurrencyIcon />
+        <CurrencyIcon type="primary"/>
       </div>
       <p>
         { ingredient.name }
@@ -68,11 +69,6 @@ const IngredientsItem = ({ ingredient, selected }) => {
   );
 }
 
-IngredientsItem.propTypes = {
-  ingredient : ingredientPropTypes.isRequired,
-  selected: PropTypes.func.isRequired
-};
-
 const BurgersIngredients = () => {
 
   const { data, selectedIngredient } = useSelector(getSelectorDataIngredients, shallowEqual);
@@ -80,24 +76,12 @@ const BurgersIngredients = () => {
   const location = useLocation();
 
   const dataIngredients = useMemo(() => ({
-    "buns": data.filter((el) => el.type === "bun"),
-    "sauces": data.filter((el) => el.type === "sauce"),
-    "mains": data.filter((el) => el.type === "main")
+    "buns": data.filter((el: Ingredient) => el.type === "bun"),
+    "sauces": data.filter((el: Ingredient) => el.type === "sauce"),
+    "mains": data.filter((el: Ingredient) => el.type === "main")
   }), [data]);
 
   const [current, setCurrent] = useState('one');
-  //const [isOpen, setIsOpen] = useState(false);
-
-
-  const handleOpenModal = (item) => {
-    // setIsOpen(true);
-    // dispatch({type: ADD_SELECTED_INGREDIENT, data: item});
-  };
-
-  const handleCloseModal = () => {
-    // setIsOpen(false);
-    // dispatch({type: RESET_SELECTED_INGREDIENT});
-  };
 
   const [bunRef, bunInView] = useInView({
 		threshold: .1
@@ -130,13 +114,13 @@ const BurgersIngredients = () => {
 	}, [bunInView, sauceInView, mainInView]);
 
 
-  const scrollElement = {
-    'bun': document.querySelector('#bun'),
-    'sauce': document.querySelector('#sauce'),
-    'main': document.querySelector('#main')
+  const scrollElement: {'bun': string; 'sauce': string; 'main': string} = {
+    'bun': document.querySelector<HTMLInputElement>('#bun')!.value,
+    'sauce': document.querySelector<HTMLInputElement>('#sauce')!.value,
+    'main': document.querySelector<HTMLInputElement>('#main')!.value
   }
 
-  const tabSelect = (tab) => {
+  const tabSelect = (tab: string) => {
     setCurrent(tab);
     tab && scrollElement[tab].scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -168,14 +152,14 @@ const BurgersIngredients = () => {
           Булки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {dataIngredients.buns.map((item, index) => (
+          {dataIngredients.buns.map((item: Ingredient, index: number) => (
             <li key={index}>
               <Link
                 className={ burgerIngredientsStyle.ingridient__link }
                 to={{ pathname: `/ingredients/${item._id}` }}
                 state={{ background: location }}
               >
-                <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+                <IngredientsItem ingredient={ item } />
               </Link>
             </li>
             ))
@@ -185,14 +169,14 @@ const BurgersIngredients = () => {
           Соусы
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {dataIngredients.sauces.map((item, index) => (
+          {dataIngredients.sauces.map((item: Ingredient, index: number) => (
             <li key={index}>
               <Link
                 className={ burgerIngredientsStyle.ingridient__link }
                 to={{ pathname: `/ingredients/${item._id}` }}
                 state={{ background: location }}
               >
-                <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+                <IngredientsItem ingredient={ item } />
               </Link>
             </li>
             ))
@@ -202,25 +186,20 @@ const BurgersIngredients = () => {
           Начинки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-        {dataIngredients.mains.map((item, index) => (
+        {dataIngredients.mains.map((item: Ingredient, index: number) => (
           <li key={index}>
             <Link
                 className={ burgerIngredientsStyle.ingridient__link }
                 to={{ pathname: `/ingredients/${item._id}` }}
                 state={{ background: location }}
             >
-              <IngredientsItem ingredient={ item } selected={ handleOpenModal } />
+              <IngredientsItem ingredient={ item } />
             </Link>
           </li>
           ))
         }
         </ul>
       </div>
-      {/* {isOpen &&
-        (<Modal onClose={handleCloseModal} title="Детали ингредиента">
-          <IngredientDetails selectedIngredient={ selectedIngredient } />
-        </Modal>)
-      } */}
     </div>
   )
 }

@@ -6,8 +6,7 @@ import {
   Button
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerConstructorStyle from '../BurgerConstructor/BurgerConstructor.module.css';
-import { ingredientPropTypes } from "../../utils/prop-types";
-import { useState, useMemo, useRef, useCallback } from "react";
+import { useState, useMemo, useRef, useCallback, FC } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { setOrder, RESET_ORDER } from "../../services/actions/order-details";
@@ -19,17 +18,21 @@ import {
   ADD_BUN_CONSRUCTOR,
   MOVE_CONSRUCTOR_INGREDIENTS
 } from '../../services/actions/constructor-ingredients';
-import { useDrop, useDrag } from "react-dnd";
+import { useDrop, useDrag, DropTargetOptions } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import cloneDeep from 'lodash.clonedeep';
 import { getSelectorConstuctorIngredients, getSelectorOrderDetails, getSelectorAuth } from '../../utils/get-selector';
 import { login } from '../../utils/constants';
 import { Loader } from '../loader/loader';
+import { Ingredient, BurgerConstructorProps } from '../../services/types/data';
 
-const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
+
+
+const IngredientsItem: FC<BurgerConstructorProps> = ({ ingredient, removeElement, moveIngredient }) => {
 
   const { ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
   const index = ingredients.indexOf(ingredient);
+
   const [{ isDragging }, dragRef] = useDrag({
     type: "item",
     item:  { index },
@@ -38,30 +41,31 @@ const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
     })
   })
 
-  const [, dropRef] = useDrop({
-    accept: 'item',
-    hover: (item, monitor) => {
 
-      const dragIndex = item.index;
-      const hoverIndex = index;
+const [, dropRef] = useDrop({
+  accept: 'item',
+  hover: (item: Ingredient, monitor: DropTargetOptions) => {
 
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top;
+    const dragIndex = item.index;
+    const hoverIndex = index;
 
-      // if dragging down, continue only when hover is smaller than middle Y
-      if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
-      // if dragging up, continue only when hover is bigger than middle Y
-      if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
+    const hoverBoundingRect = ref.current?.getBoundingClientRect();
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const hoverActualY = monitor.getClientOffset().y - hoverBoundingRect.top;
 
-      moveIngredient(dragIndex, hoverIndex);
-      item.index = hoverIndex;
-    },
-  })
+    // if dragging down, continue only when hover is smaller than middle Y
+    if (dragIndex < hoverIndex && hoverActualY < hoverMiddleY) return;
+    // if dragging up, continue only when hover is bigger than middle Y
+    if (dragIndex > hoverIndex && hoverActualY > hoverMiddleY) return;
 
-  const ref = useRef(null)
-  const dragDropRef = dragRef(dropRef(ref))
-  const opacity = isDragging ? 0 : 1
+    moveIngredient(dragIndex, hoverIndex);
+    item.index = hoverIndex;
+  },
+})
+
+  const ref = useRef<HTMLElement>(null);
+  const dragDropRef = dragRef(dropRef(ref));
+  const opacity = isDragging ? 0 : 1;
 
   return (
     <li
@@ -82,10 +86,6 @@ const IngredientsItem = ({ ingredient, removeElement, moveIngredient }) => {
   );
 }
 
-IngredientsItem.propTypes = {
-  ingredient : ingredientPropTypes.isRequired
-};
-
 const BurgerConstructor = () => {
   const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
   const { dataRequest, clickOnOrder, orderNumber } = useSelector(getSelectorOrderDetails, shallowEqual);
@@ -97,8 +97,8 @@ const BurgerConstructor = () => {
   const handleOpenModal = () => {
     if (user === null) navigate(login, { replace: true })
       else {
-        const ingredientsId = ingredients.map((item) => item._id)
-        const order = {
+        const ingredientsId = ingredients.map((item: Ingredient) => item._id)
+        const order: {ingredients: Ingredient[]} = {
             "ingredients": [...ingredientsId, bun._id]
             }
         dispatch(setOrder(order));
@@ -117,23 +117,23 @@ const BurgerConstructor = () => {
       if (bun){
         priceBun = bun.price*2;
       } else priceBun = 0;
-      return priceBun + ingredients.reduce((sum, ingredient) => sum + ingredient.price, 0)
+      return priceBun + ingredients.reduce((sum: number, ingredient: Ingredient) => sum + ingredient.price, 0)
     },
     [bun, ingredients]
 
   );
 
-  const removeIngredient = (ingredient) =>{
+  const removeIngredient = (ingredient: Ingredient) =>{
     dispatch({
       type: REMOVE_CONSRUCTOR_INGREDIENTS,
-      payload: ingredients.filter((el) => el.id !== ingredient.id)
+      payload: ingredients.filter((el: Ingredient) => el.id !== ingredient.id)
     });
   };
 
   const [, dropTargetIngredients] = useDrop({
     accept: "ingredients",
-    drop(item) {
-      let newItem = cloneDeep(item);
+    drop(item: {ingredient: Ingredient}) {
+      let newItem: {ingredient: Ingredient} = cloneDeep<{ingredient: Ingredient}>(item);
       newItem.ingredient.id =  uuidv4();
       if (newItem.ingredient.type === "bun")
       {
@@ -152,7 +152,7 @@ const BurgerConstructor = () => {
   });
 
   const moveIngredient = useCallback(
-    (dragIndex, hoverIndex) => {
+    (dragIndex: number, hoverIndex: number) => {
         const dragItem = ingredients[dragIndex];
         const hoverItem = ingredients[hoverIndex];
         // Swap places of dragItem and hoverItem in the array
@@ -184,7 +184,7 @@ const BurgerConstructor = () => {
       <ul className={ burgerConstructorStyle.list }>
         {ingredients &&
           ingredients
-            .map((item) => (
+            .map((item: Ingredient) => (
               <IngredientsItem
                 ingredient={ item }
                 key={ item.id }
@@ -236,7 +236,7 @@ const BurgerConstructor = () => {
           <OrderDetails />
         </Modal>
       )}
-      
+
     </div>
   )
 }

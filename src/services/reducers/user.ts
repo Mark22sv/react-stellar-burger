@@ -16,10 +16,25 @@ import {
   SIGNOUT_USER_FAILED,
 
   SET_AUTH_CHECKED,
-  SET_USER
+  SET_USER,
+
+  UserActions
 
 } from "../actions/user";
+import { User } from "../types/data";
 
+export type UserState = {
+  user: User | null;
+  isAuthChecked: boolean;
+  loginRequest: boolean;
+  loginFailed: boolean;
+  updateRequest: boolean;
+  updateFailed: boolean;
+  signInRequest: boolean;
+  signInFailed: boolean;
+  signoutRequest: boolean;
+  signoutFailed: boolean;
+}
 
 const initialState = {
   user: null,
@@ -40,7 +55,7 @@ const initialState = {
 
 };
 
-export const authReducer = (state = initialState, action) => {
+export const authReducer = (state = initialState, action: UserActions) => {
 	switch (action.type) {
     case SET_USER:
       return {

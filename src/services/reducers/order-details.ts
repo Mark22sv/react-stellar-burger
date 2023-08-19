@@ -6,10 +6,20 @@ import { GET_ORDER_REQUEST,
          GET_ORDER_INGREDIENTS_SUCCESS,
          GET_ORDER_INGREDIENTS_FAILED,
 
-         RESET_ORDER
+         RESET_ORDER,
+         OrderDetailsActions
  } from '../actions/order-details';
+import { Ingredient } from '../types/data';
 
-const initialState = {
+export type OrderDetailsState = {
+  orderNumber: string;
+  orderIngredient: Ingredient[];
+  dataRequest: boolean;
+  dataFailed: boolean;
+  clickOnOrder: boolean;
+}
+
+const initialState: OrderDetailsState = {
   orderNumber: '',
   orderIngredient: [],
   dataRequest: false,
@@ -17,7 +27,7 @@ const initialState = {
   clickOnOrder: false
 };
 
-export const orderReducer = (state = initialState, action) => {
+export const orderReducer = (state = initialState, action: OrderDetailsActions) => {
   switch (action.type) {
     case GET_ORDER_REQUEST:
       return {
