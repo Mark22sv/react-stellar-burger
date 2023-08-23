@@ -1,5 +1,6 @@
+import { AppDispatch, AppThunk } from '..';
 import { resgisterUserFetch, signInFetch, signOutFetch, getUserFetch, updateUserFetch } from '../../api/api';
-import { User } from '../types/data';
+import { User, UserLogin } from '../types/data';
 
 export const SET_USER_REQUEST: 'SET_USER_REQUEST' = 'SET_USER_REQUEST';
 export const SET_USER_SUCCESS: 'SET_USER_SUCCESS' = 'SET_USER_SUCCESS';
@@ -26,7 +27,7 @@ type SetUserRequest = {
 
 type SetUserSuccess = {
   readonly type: typeof SET_USER_SUCCESS;
-  user?: User;
+  user: User;
 };
 
 type SetUserFailed = {
@@ -39,7 +40,7 @@ type UpdateUserRequest = {
 
 type UpdateUserSuccess = {
   readonly type: typeof UPDATE_USER_SUCCESS;
-  user?: User;
+  user: User;
 };
 
 type UpdateUserFailed = {
@@ -52,7 +53,7 @@ type SignInUserRequest = {
 
 type SignInUserSuccess = {
   readonly type: typeof SIGNIN_USER_SUCCESS;
-  user?: User;
+  user: User;
 };
 
 type SignInUserFailed = {
@@ -66,7 +67,7 @@ type SignOutUserRequest = {
 
 type SignOutUserSuccess = {
   readonly type: typeof SIGNOUT_USER_SUCCESS;
-  user?: User;
+
 };
 
 type SignOutUserFailed = {
@@ -75,7 +76,7 @@ type SignOutUserFailed = {
 
 type SetAuthChecked = {
   readonly type: typeof SET_AUTH_CHECKED;
-  payload?: boolean;
+  payload: boolean;
 };
 
 type SetUser = {
@@ -180,8 +181,7 @@ const signOutUserFailed = (): SignOutUserFailed => {
   }
 };
 
-export function registerUser({email, password, name}: User) {
-	return function (dispatch) {
+export const registerUser = ({email, password, name}: User): AppThunk => (dispatch) => {
 		dispatch(setUserRequest());
 		resgisterUserFetch(email, password, name)
 			.then((res) => {
@@ -193,11 +193,9 @@ export function registerUser({email, password, name}: User) {
 			.catch(() => {
 				dispatch(setUserFailed());
 			})
-	};
 };
 
-export const updateUser = ({email, password, name}: User) => {
-  return function (dispatch) {
+export const updateUser = ({email, password, name}: User): AppThunk => (dispatch) => {
     dispatch(updateUserRequest())
     updateUserFetch(email, password, name)
       .then((res) => {
@@ -210,11 +208,9 @@ export const updateUser = ({email, password, name}: User) => {
           dispatch(updatetUserFailed())
 
       });
-  }
 };
 
-export function signIn({email, password}: User) {
-	return function (dispatch) {
+export const signIn = ({email, password}: UserLogin): AppThunk => (dispatch) => {
 		dispatch(signInUserRequest());
 		signInFetch(email, password)
 			.then((res) => {
@@ -226,11 +222,9 @@ export function signIn({email, password}: User) {
 			.catch(() => {
 				dispatch(signInUserFailed());
 			})
-	};
 };
 
-export const signOut = () => {
-  return function (dispatch) {
+export const signOut = (): AppThunk => (dispatch) => {
     dispatch(signOutUserRequest())
     signOutFetch()
       .then(res => {
@@ -244,8 +238,6 @@ export const signOut = () => {
       }).catch(err => {
          dispatch(signOutUserFailed())
       })
-
-  };
 }
 
 export const setUser = (user: User | null): SetUser => ({
@@ -254,16 +246,16 @@ export const setUser = (user: User | null): SetUser => ({
 });
 
 export const getUser = () => {
-  return function (dispatch) {
-    return getUserFetch()
+    return function (dispatch: AppDispatch) {
+      return getUserFetch()
       .then((res) => {
         dispatch(setUser(res.user));
       });
-  }
+    }
 };
 
 export const checkUserAuth = () => {
-  return (dispatch) => {
+  return function (dispatch: AppDispatch) {
     if (localStorage.getItem("accessToken")) {
         dispatch(getUser())
           .catch(() => {
@@ -275,5 +267,8 @@ export const checkUserAuth = () => {
     } else {
         dispatch(setAuthChecked(true));
     }
-  };
+  }
 };
+
+
+

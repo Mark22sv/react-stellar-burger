@@ -1,16 +1,21 @@
-import { IngredientsResponse, Headers, User, ResponseBody, RefreshData, OrderResponse, OrderRequest, UserResponse, LoginResponse } from "../services/types/data";
+import { IngredientsResponse, Headers, User, ResponseBody, RefreshData, OrderResponse, OrderRequest, UserResponse, LoginResponse, OrderIngredient } from "../services/types/data";
 
 const url: string = 'https://norma.nomoreparties.space/api';
 
-async function checksAnswer<T>(
-  res: Response
-): Promise<T> {
-  const jsonData: T = await res.json();
-  if (!res.ok) {
-    throw new Error('Ошибка при загрузке...');
-  }
-  return jsonData;
+
+const checksAnswer = <T>(res: Response): Promise<T> => {
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
 }
+
+// async function checksAnswer<T>(
+//   res: Response
+// ): Promise<T> {
+//   const jsonData: T = await res.json();
+//   if (!res.ok) {
+//     throw new Error('Ошибка при загрузке...');
+//   }
+//   return jsonData;
+// }
 const getDataIngredientsFetch = () => {
   return fetch(`${url}/ingredients`,
   {
@@ -31,21 +36,22 @@ const getOrderIngredientsFetch = (number: number) => {
       'Content-Type': 'application/json'
     } as (HeadersInit | undefined) & Headers
   })
-  .then((res) => checksAnswer<OrderResponse>(res))
+  .then((res) => checksAnswer<ResponseBody<'orders', OrderIngredient[]>>(res))
 
 };
 
-const setOrderFetch = (order: OrderRequest) => {
-  return fetchWithRefresh('orders',
+const setOrderFetch = async (order: string[]) => {
+  return await fetch (`${url}/orders`,
     {
       method: "POST",
       headers:{
         'Content-Type': 'application/json',
         authorization: localStorage.getItem('accessToken')
       } as (HeadersInit | undefined) & Headers,
-      body: JSON.stringify(order)
+      body: JSON.stringify({ingredients: order})
     })
-};
+    .then(res => checksAnswer<OrderResponse>(res))
+  };
 
 const postMailFetch = async (email: string) => {
   return await fetch(`${url}/password-reset`, {

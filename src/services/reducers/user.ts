@@ -55,7 +55,7 @@ const initialState = {
 
 };
 
-export const authReducer = (state = initialState, action: UserActions) => {
+export const authReducer = (state = initialState, action: UserActions): UserState => {
 	switch (action.type) {
     case SET_USER:
       return {
@@ -115,22 +115,22 @@ export const authReducer = (state = initialState, action: UserActions) => {
     case SIGNIN_USER_REQUEST:
       return {
         ...state,
-        signRequest: true,
-        signFailed: false,
+        signInRequest: true,
+        signInFailed: false,
       }
 
     case SIGNIN_USER_FAILED:
       return {
         ...state,
-        signRequest: false,
-        signFailed: true,
+        signInRequest: false,
+        signInFailed: true,
       }
 
     case SIGNIN_USER_SUCCESS:
       return {
         ...state,
         user: action.user,
-        signRequest: false
+        signInRequest: false
       }
 
     case SIGNOUT_USER_REQUEST: {

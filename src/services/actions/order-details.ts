@@ -1,5 +1,6 @@
+import { AppThunk } from '..';
 import { setOrderFetch, getOrderIngredientsFetch } from '../../api/api';
-import { OrderData } from '../types/data';
+import { Ingredient, OrderIngredient, OrderResponse } from '../types/data';
 import {
   RESET_CONSRUCTOR_INGREDIENTS
 } from './constructor-ingredients';
@@ -19,8 +20,8 @@ type GetOrderRequest = {
 };
 
 type GetOrderSuccess = {
-  readonly type: typeof GET_ORDER_SUCCESS;
-  readonly orderNumber?: OrderData;
+  type: typeof GET_ORDER_SUCCESS;
+  orderNumber: number;
 };
 
 type GetOrderFailed = {
@@ -29,7 +30,7 @@ type GetOrderFailed = {
 
 type GetOrderIngredientsSuccess = {
   readonly type: typeof GET_ORDER_INGREDIENTS_SUCCESS;
-  readonly payload?: OrderData;
+  readonly orders: OrderIngredient;
 };
 
 type GetOrderIngredientsRequest = {
@@ -59,10 +60,11 @@ const getOrderRequest = (): GetOrderRequest => {
   }
 };
 
-const getOrderSuccess = (ingredients: OrderData): GetOrderSuccess => {
+
+const getOrderSuccess = (res: OrderResponse): GetOrderSuccess => {
   return {
     type: GET_ORDER_SUCCESS,
-    orderNumber: ingredients
+    orderNumber: res.order.number
   }
 };
 
@@ -78,10 +80,11 @@ const getOrderIngredientsRequest = (): GetOrderIngredientsRequest => {
   }
 };
 
-const getOrderIngredientsSuccess = (number: OrderData): GetOrderIngredientsSuccess => {
+
+const getOrderIngredientsSuccess = (orders: OrderIngredient): GetOrderIngredientsSuccess => {
   return {
     type: GET_ORDER_INGREDIENTS_SUCCESS,
-    payload: number
+    orders
   }
 };
 
@@ -91,27 +94,25 @@ const getOrderIngredientsFailed = (): GetOrderIngredientsFailed => {
   }
 };
 
-export const setOrder = (order) => {
-  return function(dispatch) {
-    dispatch(getOrderRequest());
-    setOrderFetch(order)
-      .then(res => {
-        dispatch(getOrderSuccess(res.order.number)         );
-        dispatch({
-          type: RESET_CONSRUCTOR_INGREDIENTS
-        });
-      })
-      .catch(error => {
-        dispatch(getOrderFailed());
-        console.log(error);
+export const setOrder = (order: string[]): AppThunk => (dispatch) => {
+  dispatch(getOrderRequest());
+  return  setOrderFetch(order)
+    .then(res => {
+      dispatch(getOrderSuccess(res));
+      dispatch({
+        type: RESET_CONSRUCTOR_INGREDIENTS
       });
-  };
+    })
+    .catch(error => {
+      dispatch(getOrderFailed());
+      console.log(error);
+    });
+
 };
 
-export function getOrderIngredients(number) {
-  return function(dispatch) {
+export const getOrderIngredients = (number: number): AppThunk => (dispatch) => {
     dispatch(getOrderIngredientsRequest);
-    getOrderIngredientsFetch(number)
+    return getOrderIngredientsFetch(number)
       .then(res => {
         dispatch(getOrderIngredientsSuccess(res.orders[0]));
       })
@@ -119,6 +120,5 @@ export function getOrderIngredients(number) {
         dispatch(getOrderIngredientsFailed);
         console.log(error);
       });
-  };
 };
 

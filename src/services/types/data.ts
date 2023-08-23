@@ -38,6 +38,11 @@ export type User = {
   password: string;
 };
 
+export type UserLogin = {
+  email: string;
+  password: string;
+};
+
 export type ResponseBody<TDataKey extends string = "", TDataType = {}> = {
   [key in TDataKey]: TDataType;
 } & {
@@ -47,6 +52,7 @@ export type ResponseBody<TDataKey extends string = "", TDataType = {}> = {
   refreshToken: string;
   accessToken: string;
 };
+
 
 export type RefreshData = {
   success: boolean;
@@ -73,6 +79,47 @@ export type OrderData = {
   updatedAt: string;
   _id: string;
 }
+
+
+type OrderStatus = "created" | "pending" | "done";
+
+
+export type OrderIngredient = {
+  _id: string;
+  ingredients: Ingredient[];
+  status: OrderStatus;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+  owner?: {
+    name: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  price?: Number;
+};
+
+export type UserResponse = {
+  success: boolean;
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export type LoginResponse = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+}
+
+export type LogoutResponse = {
+  success: boolean;
+  message: string;
+}
+
 
 
 
@@ -117,28 +164,14 @@ export type PasswordResponse = {
   message: string;
 }
 
-export type IngredientResponse = {
+export type IngredientsResponse = {
   data: Ingredient[];
   success: boolean;
 }
 
 
-export type UserResponse = {
-  success: boolean;
-  user: User;
-}
 
-export type LoginResponse = {
-  success: boolean;
-  accessToken: string;
-  refreshToken: string;
-  user: User;
-}
 
-export type LogoutResponse = {
-  success: boolean;
-  message: string;
-}
 
 export type RefreshTokenResponse = {
   success: boolean;
@@ -162,10 +195,6 @@ export type FeedOrders = {
   orders: FeedOrder[];
 }
 
-export type IngredientsResponse = {
-  data: Ingredient[];
-  success: boolean;
-}
 
 export type CookieProps = {
   [name: string]: string | number | boolean | Date | undefined;
@@ -208,11 +237,11 @@ export type Gallery = {
   data: Ingredient[];
 }
 
-export type OrderIngredient = {
-  item: {
-    _id: string;
-  }
-}
+// export type OrderIngredient = {
+//   item: {
+//     _id: string;
+//   }
+// }
 
 export type Error = {
   success: boolean;

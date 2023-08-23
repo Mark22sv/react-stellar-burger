@@ -19,7 +19,7 @@ const initialState: ConstructorIngredientsState = {
   ingredients: []
 };
 
-export function constructorIngredientsReducer(state = initialState, action: ConstructorIngredientsActions) {
+export function constructorIngredientsReducer(state = initialState, action: ConstructorIngredientsActions): ConstructorIngredientsState {
   switch (action.type) {
     case ADD_CONSRUCTOR_INGREDIENTS:
       return {

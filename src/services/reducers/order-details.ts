@@ -9,25 +9,25 @@ import { GET_ORDER_REQUEST,
          RESET_ORDER,
          OrderDetailsActions
  } from '../actions/order-details';
-import { Ingredient } from '../types/data';
+import { Ingredient, OrderIngredient } from '../types/data';
 
 export type OrderDetailsState = {
-  orderNumber: string;
-  orderIngredient: Ingredient[];
+  orderNumber: number | null;
+  orderIngredient: OrderIngredient | null;
   dataRequest: boolean;
   dataFailed: boolean;
   clickOnOrder: boolean;
 }
 
 const initialState: OrderDetailsState = {
-  orderNumber: '',
-  orderIngredient: [],
+  orderNumber: null,
+  orderIngredient: null,
   dataRequest: false,
   dataFailed: false,
   clickOnOrder: false
 };
 
-export const orderReducer = (state = initialState, action: OrderDetailsActions) => {
+export const orderReducer = (state = initialState, action: OrderDetailsActions): OrderDetailsState => {
   switch (action.type) {
     case GET_ORDER_REQUEST:
       return {
@@ -62,7 +62,7 @@ export const orderReducer = (state = initialState, action: OrderDetailsActions) 
       case GET_ORDER_INGREDIENTS_SUCCESS:
         return {
           ...state,
-          orderIngredient: action.payload,
+          orderIngredient: action.orders,
           dataRequest: false
         };
 

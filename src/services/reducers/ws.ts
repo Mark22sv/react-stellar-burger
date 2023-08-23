@@ -1,12 +1,12 @@
 import { WebsocketStatus } from "../../utils/ws";
 import { ORDERS_WS_CONNECTING, ORDERS_WS_OPEN, ORDERS_WS_CLOSE, ORDERS_WS_MESSAGE, ORDERS_WS_SEND_MESSAGE, ORDERS_WS_ERROR, WsActions } from '../actions/ws';
-import { Ingredient } from "../types/data";
+import { FeedOrder, Ingredient } from "../types/data";
 
 
 type WsInitialState = {
   status: string;
   connectingError?: string;
-  orders: Ingredient[];
+  orders: FeedOrder[];
   total: number;
   totalToday: number;
 };
@@ -19,7 +19,7 @@ const initialState: WsInitialState = {
   totalToday: 0
 };
 
-export const ordersFeedReducer = (state = initialState, action: WsActions) => {
+export const ordersFeedReducer = (state = initialState, action: WsActions): WsInitialState => {
   switch (action.type) {
     case ORDERS_WS_CONNECTING:
       return {
@@ -58,7 +58,7 @@ export const ordersFeedReducer = (state = initialState, action: WsActions) => {
       return {
       ...state
     }
-    
+
     default:
       return state;
   }
