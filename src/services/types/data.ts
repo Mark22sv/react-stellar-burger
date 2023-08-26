@@ -1,0 +1,202 @@
+export type Ingredient = {
+  _id: string;
+  name: string;
+  type: string;
+  proteins: number;
+  fat: number;
+  carbohydrates: number;
+  calories: number;
+  price: number;
+  image: string;
+  image_mobile: string;
+  image_large: string;
+  __v: number;
+  uniqueId: number;
+  id?: string;
+  index?: number;
+}
+
+export type OrderRequest = {
+  ingredients: Array<string>;
+};
+
+export type Style = {
+  isActive: boolean;
+};
+
+export type Headers = {
+  authorization: string | null;
+  "Content-Type": string;
+};
+
+export type User = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export type UserLogin = {
+  email: string;
+  password: string;
+};
+
+export type ResponseBody<TDataKey extends string = "", TDataType = {}> = {
+  [key in TDataKey]: TDataType;
+} & {
+  success: boolean;
+  message?: string;
+  headers?: Headers;
+  refreshToken: string;
+  accessToken: string;
+};
+
+export type RefreshData = {
+  success: boolean;
+  refreshToken: string;
+  accessToken: string;
+}
+export type BurgerConstructorProps = {
+  ingredient: Ingredient;
+  moveIngredient: (dragIndex: number, hoverIndex: number) => void;
+  removeElement: (ingridient: Ingredient)  => void;
+};
+
+export type BurgerIngredientsProps = {
+  ingredient: Ingredient;
+};
+
+export type OrderData = {
+  createdAt: string;
+  ingredients: string[];
+  name: string;
+  number: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
+}
+
+
+type OrderStatus = "created" | "pending" | "done";
+
+
+export type OrderIngredient = {
+  _id: string;
+  ingredients: Ingredient[];
+  status: OrderStatus;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+  owner?: {
+    name: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  price?: Number;
+};
+
+export type UserResponse = {
+  success: boolean;
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type LoginResponse = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+  user: User;
+};
+
+export type LogoutResponse = {
+  success: boolean;
+  message: string;
+};
+
+export type IngredientCard = {
+  order: OrderIngredient;
+};
+
+export type FeedListProps = {
+  orders: OrderData[];
+};
+
+export type ProtectedProps = {
+  onlyUnAuth?: boolean;
+  component: JSX.Element;
+};
+
+export type PostResetPassObj = {
+  password: string;
+  token: string;
+};
+
+export type Order = {
+  name: string;
+  number: number;
+  success: boolean;
+}
+
+
+export type OrderDataContainer = {
+  order: OrderData;
+}
+
+export type OrderResponse = {
+  name: string;
+  order: Order;
+  success: boolean;
+}
+
+export type PasswordResponse = {
+  success: boolean;
+  message: string;
+}
+
+export type IngredientsResponse = {
+  data: Ingredient[];
+  success: boolean;
+}
+
+export type ModalProps = {
+  children?: React.ReactNode;
+  onClose: () => void;
+  title?: string;
+};
+
+export type ModalOverlayProps = {
+  onClose: () => void;
+};
+
+export type RefreshTokenResponse = {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export type FeedOrder = {
+  createdAt: string;
+  ingredients: string[];
+  name: string;
+  number: number;
+  status: string;
+  updatedAt: string;
+  _id: string;
+}
+
+export type FeedOrders = {
+  total: number;
+  totalToday: number;
+  orders: FeedOrder[];
+}
+
+export type Params = {
+  id: string;
+};
+
+export type OrderInfo = {
+  headerStyle?: string;
+}
+
