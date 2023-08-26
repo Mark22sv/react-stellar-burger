@@ -1,5 +1,5 @@
 import { Button, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { resetPassFetch } from '../../api/api';
 import styles from './reset-password.module.css';
@@ -16,7 +16,7 @@ export const ResetPassword = () => {
     navigate(login, { replace: true });
   }
 
-  const onClickSubmit = (e) => {
+  const onClickSubmit = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     postPass();
     navigate(login, { replace: true });
@@ -25,8 +25,8 @@ export const ResetPassword = () => {
   function postPass() {
     return resetPassFetch(values)
       .then((res) => {
-        values.password = res;
-        values.token = res;
+        values.password = res.reset_password;
+        values.token = res.reset_password;
         localStorage.removeItem("email");
       })
       .catch((err) => {

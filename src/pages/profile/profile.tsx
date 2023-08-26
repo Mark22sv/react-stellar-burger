@@ -3,48 +3,53 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useState, useRef } from "react";
+import { useState, useRef, MouseEvent, SyntheticEvent } from "react";
 import { useMatch  } from "react-router-dom";
 import { ProfileNavBar } from '../../components/profile-navbar/profile-navbar';
 import { updateUser } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { profile } from '../../utils/constants';
 import { useForm } from "../../hooks/useForm";
+import { useAppDispatch, useAppSelector } from "../../services";
 
 export function Profile() {
-  const { name, email } = useSelector(
-    (state) => state.auth.user
+  const user = useAppSelector(
+    (store) => store.auth.user
   );
+  const userName: string =  user? user.name : '';
+  const emailUser: string =  user? user.email : '';
+
   const { values, onChange, setValues } = useForm({
-    name: name,
-    email: email,
+    name: userName,
+    email: emailUser,
     password: '',
   });
+
   const [isEditing, setEditing] = useState({
     name: false,
     email: false,
     password: false,
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const inputNameRef = useRef(null);
   const inputEmailRef = useRef(null);
   const inputPasswordRef = useRef(null);
 
   const profileLink = useMatch(profile);
 
-  const onClickSave = (e) => {
+  const onClickSave = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(updateUser(values));
   }
 
-  function onClickCancel(e) {
+  function onClickCancel(e: SyntheticEvent<Element, Event>) {
     e.preventDefault();
-    setValues({ name, email, password: "" });
+    setValues({ name: userName, email: emailUser, password: "" });
   }
 
   const onChangeInput =
-  values.name !== name || values.email !== email || values.password;
+  values.name !== user?.name || values.email !== user?.email || values.password;
 
   return (
     <div className={styles.container}>
@@ -57,7 +62,9 @@ export function Profile() {
               placeholder={"Имя"}
               onChange={onChange}
               icon={values.name ? "EditIcon" : "CloseIcon"}
-              onIconClick={() => setEditing(!isEditing)}
+              onIconClick={() => setEditing({name: !false,
+                email: !false,
+                password: !false})}
               value={values.name}
               name={"name"}
               error={false}
@@ -70,7 +77,9 @@ export function Profile() {
               placeholder={"E-mail"}
               onChange={onChange}
               icon={values.email ? "EditIcon" : "CloseIcon"}
-              onIconClick={() => setEditing(!isEditing)}
+              onIconClick={() => setEditing({name: !false,
+                email: !false,
+                password: !false})}
               value={values.email}
               name={"email"}
               error={false}
@@ -83,7 +92,9 @@ export function Profile() {
               placeholder={"Пароль"}
               onChange={onChange}
               icon={values.password ? "CloseIcon" : "EditIcon"}
-              onIconClick={() => setEditing(!isEditing)}
+              onIconClick={() => setEditing({name: !false,
+                email: !false,
+                password: !false})}
               value={values.password}
               name={"password"}
               error={false}

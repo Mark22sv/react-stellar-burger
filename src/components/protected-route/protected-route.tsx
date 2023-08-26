@@ -1,13 +1,15 @@
-import { useSelector, shallowEqual } from "react-redux";
+import { shallowEqual } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import { getSelectorAuth } from "../../utils/get-selector";
 import {home, login } from '../../utils/constants';
+import { useAppSelector } from "../../services";
+import {  FC } from "react";
+import { ProtectedProps } from "../../services/types/data";
 
-const Protected = ({ onlyUnAuth = false, component }) => {
+const Protected: FC<ProtectedProps> = ({ onlyUnAuth = false, component } : ProtectedProps) => {
   // isAuthChecked это флаг, показывающий что проверка токена произведена
   // при этом результат этой проверки не имеет значения, важно только,
   // что сам факт проверки имел место.
-  const { isAuthChecked, user } = useSelector(getSelectorAuth, shallowEqual);
+  const { isAuthChecked, user } =  useAppSelector((store) => store.auth, shallowEqual);
 
 
   const location = useLocation();
@@ -36,6 +38,6 @@ const Protected = ({ onlyUnAuth = false, component }) => {
 };
 
 export const OnlyAuth = Protected;
-export const OnlyUnAuth = ({ component }) => (
+export const OnlyUnAuth = ({ component }: ProtectedProps) => (
   <Protected onlyUnAuth={true} component={component} />
 );

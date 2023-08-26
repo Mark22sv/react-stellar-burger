@@ -210,9 +210,9 @@ export const updateUser = ({email, password, name}: User): AppThunk => (dispatch
       });
 };
 
-export const signIn = ({email, password}: UserLogin): AppThunk => (dispatch) => {
+export const signIn = (form: UserLogin): AppThunk => (dispatch) => {
 		dispatch(signInUserRequest());
-		signInFetch(email, password)
+		signInFetch(form)
 			.then((res) => {
 				dispatch(signInUserSuccess(res.user));
         localStorage.setItem("accessToken", res.accessToken);

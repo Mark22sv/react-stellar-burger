@@ -36,7 +36,7 @@ export type UserState = {
   signoutFailed: boolean;
 }
 
-const initialState = {
+const initialState: UserState = {
   user: null,
   isAuthChecked: false,
 

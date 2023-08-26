@@ -1,5 +1,5 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
+import { MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { postMailFetch } from '../../api/api';
 import styles from './forgot-password.module.css';
@@ -14,8 +14,8 @@ export const ForgotPassword = () => {
   function postMail() {
     return postMailFetch(values.email)
       .then(res => {
-        values.email = res.email;
-        localStorage.setItem('email', res.email);
+        values.email = res.pass_reset;
+        localStorage.setItem('email', res.pass_reset);
         navigate(resetPass, {replace: true});
       })
       .catch((err) => {
@@ -23,7 +23,7 @@ export const ForgotPassword = () => {
       })
   };
 
-	const onFormSubmit = e => {
+	const onFormSubmit = (e: MouseEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		postMail();
 
@@ -40,8 +40,6 @@ export const ForgotPassword = () => {
             name={"email"}
             isIcon={false}
             placeholder={"Укажите e-mail"}
-						error={false}
-						errorText={'Ошибка'}
 						size={'default'}
 					/>
 				</div>

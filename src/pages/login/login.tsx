@@ -1,18 +1,18 @@
-import { Button, EmailInput, PasswordInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
+import { useState, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { signIn } from '../../services/actions/user';
 import styles from './login.module.css';
 import { forgotPass, register } from '../../utils/constants';
 import { useForm } from '../../hooks/useForm';
+import { useAppDispatch } from '../../services';
 
 export const Login = () => {
   const { values, onChange } = useForm({email:'', password:''});
   const [isVisible, setVisible] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const onFormSubmit = e => {
+  const onFormSubmit = (e: MouseEvent<HTMLFormElement>) => {
 		e.preventDefault();
     dispatch(signIn(values));
   }
@@ -32,7 +32,7 @@ export const Login = () => {
           />
 				</div>
 				<div className="pb-6">
-        <PasswordInput
+        <Input
             type={isVisible ? 'text' : 'password'}
             placeholder={"Пароль"}
             onChange={onChange}

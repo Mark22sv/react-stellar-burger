@@ -1,32 +1,21 @@
 import React from 'react';
 import { useState, useMemo, useEffect, FC } from "react";
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { shallowEqual } from 'react-redux';
 import {
   Tab,
   CurrencyIcon,
   Counter,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import burgerIngredientsStyle from '../BurgerIngredients/BurgerIngredients.module.css';
-import { ingredientPropTypes } from '../../utils/prop-types';
-import PropTypes from "prop-types";
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import {
-  ADD_SELECTED_INGREDIENT,
-  RESET_SELECTED_INGREDIENT
-} from '../../services/actions/data';
 import { useDrag } from "react-dnd";
 import { useInView } from 'react-intersection-observer';
-import { getSelectorDataIngredients, getSelectorConstuctorIngredients } from '../../utils/get-selector';
 import { Link, useLocation } from 'react-router-dom';
 import { Ingredient, BurgerIngredientsProps } from '../../services/types/data';
-
-
-
+import { useAppSelector } from '../../services';
 
 const IngredientsItem: FC<BurgerIngredientsProps> = ({ ingredient }) => {
 
-  const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
+  const { bun, ingredients } = useAppSelector((state) => state.constructorDataIngredients, shallowEqual);
   const [{ opacity }, dragRef] = useDrag({
     type: "ingredients",
     item: { ingredient },
@@ -55,7 +44,9 @@ const IngredientsItem: FC<BurgerIngredientsProps> = ({ ingredient }) => {
          ref={dragRef}
     >
       <img className={ `${burgerIngredientsStyle.image} ml-4 mr-4` } src={ ingredient.image } alt="фото" />
-      <Counter className={ burgerIngredientsStyle.count } count={counter()} size="default" extraClass="m-1" />
+      <div className={ burgerIngredientsStyle.count }>
+        <Counter count={counter()} size="default" extraClass="m-1" />
+      </div>
       <div className={ `${burgerIngredientsStyle.price} mt-1 mb-1` }>
         <p>
           { ingredient.price }
@@ -71,8 +62,7 @@ const IngredientsItem: FC<BurgerIngredientsProps> = ({ ingredient }) => {
 
 const BurgersIngredients = () => {
 
-  const { data, selectedIngredient } = useSelector(getSelectorDataIngredients, shallowEqual);
-  const dispatch = useDispatch()
+  const { data } = useAppSelector((state) => state.dataIngredients, shallowEqual);
   const location = useLocation();
 
   const dataIngredients = useMemo(() => ({
@@ -114,15 +104,12 @@ const BurgersIngredients = () => {
 	}, [bunInView, sauceInView, mainInView]);
 
 
-  const scrollElement: {'bun': string; 'sauce': string; 'main': string} = {
-    'bun': document.querySelector<HTMLInputElement>('#bun')!.value,
-    'sauce': document.querySelector<HTMLInputElement>('#sauce')!.value,
-    'main': document.querySelector<HTMLInputElement>('#main')!.value
-  }
-
   const tabSelect = (tab: string) => {
     setCurrent(tab);
-    tab && scrollElement[tab].scrollIntoView({ behavior: "smooth", block: "start" });
+    const item = document.getElementById(tab);
+    if (item) {
+      return item.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (

@@ -5,15 +5,15 @@ import { HomePage, Register, Login, ForgotPassword, ResetPassword, Profile, Ingr
 import {home, login, profile, feed, feedId, register, forgotPass, resetPass, profieOrders, profieOrdersId,  ingredientsId } from '../../utils/constants';
 import { getDataIngredients } from '../../services/actions/data';
 import { checkUserAuth } from '../../services/actions/user';
-import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import { OrderInfo } from '../order-info/order-info';
 import Modal from "../modal/modal";
+import { useAppDispatch } from '../../services';
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state && location.state.background;

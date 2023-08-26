@@ -10,7 +10,7 @@ import { useState, useMemo, useRef, useCallback, FC } from "react";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { setOrder, RESET_ORDER } from "../../services/actions/order-details";
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { shallowEqual } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import {
   ADD_CONSRUCTOR_INGREDIENTS,
@@ -21,16 +21,16 @@ import {
 import { useDrop, useDrag, DropTargetOptions } from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import cloneDeep from 'lodash.clonedeep';
-import { getSelectorConstuctorIngredients, getSelectorOrderDetails, getSelectorAuth } from '../../utils/get-selector';
 import { login } from '../../utils/constants';
 import { Loader } from '../loader/loader';
 import { Ingredient, BurgerConstructorProps } from '../../services/types/data';
+import { useAppDispatch, useAppSelector } from '../../services';
 
 
 
 const IngredientsItem: FC<BurgerConstructorProps> = ({ ingredient, removeElement, moveIngredient }) => {
 
-  const { ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
+  const { ingredients } = useAppSelector((state) => state.constructorDataIngredients, shallowEqual);
   const index = ingredients.indexOf(ingredient);
 
   const [{ isDragging }, dragRef] = useDrag({
@@ -63,8 +63,8 @@ const [, dropRef] = useDrop({
   },
 })
 
-  const ref = useRef<HTMLElement>(null);
-  const dragDropRef = dragRef(dropRef(ref));
+  const ref = useRef<HTMLLIElement>(null);
+  const dragDropRef = dragRef(dropRef(ref))?.props;
   const opacity = isDragging ? 0 : 1;
 
   return (
@@ -87,20 +87,22 @@ const [, dropRef] = useDrop({
 }
 
 const BurgerConstructor = () => {
-  const { bun, ingredients } = useSelector(getSelectorConstuctorIngredients, shallowEqual);
-  const { dataRequest, clickOnOrder, orderNumber } = useSelector(getSelectorOrderDetails, shallowEqual);
-  const dispatch = useDispatch();
-  const { user } = useSelector(getSelectorAuth, shallowEqual);
+  const { bun, ingredients } = useAppSelector((state) => state.constructorDataIngredients, shallowEqual);
+  const { dataRequest, clickOnOrder, orderNumber } = useAppSelector((state) => state.order, shallowEqual);
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((store) => store.auth, shallowEqual);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleOpenModal = () => {
     if (user === null) navigate(login, { replace: true })
       else {
-        const ingredientsId = ingredients.map((item: Ingredient) => item._id)
-        const order: {ingredients: Ingredient[]} = {
-            "ingredients": [...ingredientsId, bun._id]
-            }
+        const ingredientsId = ingredients.map((item: Ingredient) => item._id);
+        // const order: {ingredients: Ingredient[]} = {
+        //     "ingredients": [...ingredientsId, bun._id]
+        //     }
+        const bunId: string = bun? bun?._id : '';
+        const order: string[] = [...ingredientsId, bunId];
         dispatch(setOrder(order));
         setIsOpen(true);
       }
@@ -225,18 +227,11 @@ const BurgerConstructor = () => {
           Оформить заказ
           </Button>)}
       </div>
-      {dataRequest && clickOnOrder && (
-        <Modal onClose={handleCloseModal}>
-          <Loader />
-        </Modal>
-      )}
-
-      {orderNumber && (
-        <Modal onClose={handleCloseModal}>
-          <OrderDetails />
-        </Modal>
-      )}
-
+        {clickOnOrder && (
+          <Modal onClose={handleCloseModal}>
+            <OrderDetails />
+          </Modal>
+        )}
     </div>
   )
 }

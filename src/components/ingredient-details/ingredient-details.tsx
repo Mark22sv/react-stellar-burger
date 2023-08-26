@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { FC } from 'react';
 import ingredientDetails from './ingredient-details.module.css';
-import { useSelector, shallowEqual } from "react-redux";
-import { getSelectorDataIngredients } from '../../utils/get-selector';
+import { shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useAppSelector } from '../../services';
 
-const IngredientDetails = () => {
-  const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
+const IngredientDetails: FC = () => {
+  const { data } = useAppSelector((state) => state.dataIngredients, shallowEqual);
   const { id } = useParams();
   const selectedIngredient = data.find((item) => item._id === id);
 

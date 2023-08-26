@@ -1,4 +1,4 @@
-import { IngredientsResponse, Headers, User, ResponseBody, RefreshData, OrderResponse, OrderRequest, UserResponse, LoginResponse, OrderIngredient } from "../services/types/data";
+import { IngredientsResponse, Headers, User, ResponseBody, RefreshData, OrderResponse, UserResponse, LoginResponse, OrderIngredient, PostResetPassObj, UserLogin } from "../services/types/data";
 
 const url: string = 'https://norma.nomoreparties.space/api';
 
@@ -7,15 +7,7 @@ const checksAnswer = <T>(res: Response): Promise<T> => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err))
 }
 
-// async function checksAnswer<T>(
-//   res: Response
-// ): Promise<T> {
-//   const jsonData: T = await res.json();
-//   if (!res.ok) {
-//     throw new Error('Ошибка при загрузке...');
-//   }
-//   return jsonData;
-// }
+
 const getDataIngredientsFetch = () => {
   return fetch(`${url}/ingredients`,
   {
@@ -53,38 +45,41 @@ const setOrderFetch = async (order: string[]) => {
     .then(res => checksAnswer<OrderResponse>(res))
   };
 
-const postMailFetch = async (email: string) => {
-  return await fetch(`${url}/password-reset`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		} as (HeadersInit | undefined) & Headers,
-		body: JSON.stringify({
-			email,
-    })
-	});
-};
 
-const resetPassFetch = async ( password: string, token: string ) => {
-  return await fetch(`${url}/password-reset/reset`, {
-		method: 'POST',
-		headers: {
+const postMailFetch = (email: string): Promise<ResponseBody<'pass_reset', string>> => {
+  return fetch(`${url}/password-reset`, {
+    method: "POST",
+    headers: {
 			'Content-Type': 'application/json',
 		} as (HeadersInit | undefined) & Headers,
-		body: JSON.stringify({
-			password, token
+    body: JSON.stringify({
+      email,
     }),
-	});
+  })
+  .then((res) => checksAnswer(res))
 };
 
-const signInFetch = async (email: string, password: string) => {
+const resetPassFetch = (obj: PostResetPassObj): Promise<ResponseBody<'reset_password', string>> => {
+  return fetch(`${url}/password-reset/reset`, {
+    method: "POST",
+    headers: {
+			'Content-Type': 'application/json',
+		} as (HeadersInit | undefined) & Headers,
+    body: JSON.stringify(
+      obj
+    ),
+  })
+  .then((res) => checksAnswer(res))
+};
+
+const signInFetch = async ({email, password}: UserLogin): Promise<ResponseBody<'user', Readonly<User>>> => {
 	return await fetch(`${url}/auth/login`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		} as (HeadersInit | undefined) & Headers,
 		body: JSON.stringify({
-			email, password,
+			email, password
 		}),
 	})
   .then((res) => checksAnswer<LoginResponse>(res))

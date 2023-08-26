@@ -1,24 +1,24 @@
 import { Button,
          EmailInput,
          Input,
-         PasswordInput
+         
        } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
 import { home, login } from '../../utils/constants';
 import styles from './register.module.css';
 import { useForm } from '../../hooks/useForm';
+import { useAppDispatch } from '../../services';
 
 export const Register = () => {
   const { values, onChange } = useForm({ name: "", email: "", password: "" });
 
   const [isVisible, setVisible] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-	const onFormSubmit = e => {
+	const onFormSubmit = (e: MouseEvent<HTMLFormElement>) => {
 		e.preventDefault();
     navigate(home, { replace: true });
     dispatch(registerUser(values));
@@ -51,7 +51,7 @@ export const Register = () => {
           />
 				</div>
 				<div className="pb-6">
-					<PasswordInput
+					<Input
             type={isVisible ? 'text' : 'password'}
             placeholder={"Пароль"}
             onChange={onChange}

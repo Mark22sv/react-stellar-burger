@@ -1,11 +1,19 @@
-import React from 'react';
+import { FC } from 'react';
 import orderDetails from "./order-details.module.css";
-import { useSelector, shallowEqual } from 'react-redux';
-import { getSelectorOrderDetails } from '../../utils/get-selector'
+import { shallowEqual } from 'react-redux';
+import { useAppSelector } from '../../services';
+import { Loader } from '../loader/loader';
 
-const OrderDetails = () => {
-  const { orderNumber } = useSelector(getSelectorOrderDetails, shallowEqual);
+const OrderDetails: FC = () => {
+  const { dataRequest, dataFailed, orderNumber } =  useAppSelector((state) => state.order, shallowEqual);
+
+  if (dataFailed) {
+    return <p>Произошла ошибка при получении данных</p>;
+  } else if (dataRequest) {
+    return <Loader />;
+  } else {
   return (
+
     <ul className={`${ orderDetails.container } pt-9`}>
       <li>
         <p className={`${ orderDetails.number } text text_type_digits-large`}>
@@ -28,6 +36,7 @@ const OrderDetails = () => {
       </p>
     </ul>
   );
+  }
 }
 
-export default React.memo(OrderDetails);
+export default OrderDetails;

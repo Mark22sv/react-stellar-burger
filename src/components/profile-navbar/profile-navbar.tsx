@@ -1,12 +1,13 @@
 import styles from "./profile-navbar.module.css";
 import { useMatch, NavLink  } from "react-router-dom";
 import { signOut } from "../../services/actions/user";
-import { useDispatch } from "react-redux";
-import { profile, profieOrders } from '../../utils/constants';
+import { profile, profieOrders, home } from '../../utils/constants';
+import { useAppDispatch } from "../../services";
+import { Style } from "../../services/types/data";
 
 
 export function ProfileNavBar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const profileLink = useMatch(profile);
   const profileOrdersLink = useMatch(profieOrders);
@@ -15,7 +16,7 @@ export function ProfileNavBar() {
     dispatch(signOut());
   };
 
-  const style = ({ isActive }) =>
+  const style = ( isActive: Style ) =>
   isActive
     ? `${styles.nav_link} ${styles.nav_link_active} text text_type_main-medium`
     : `${styles.nav_link} text text_type_main-medium text_color_inactive`;
@@ -25,16 +26,17 @@ export function ProfileNavBar() {
       <nav className={`${styles.text_container_list} pb-5`}>
         <NavLink
           to={{ pathname: profile }}
-          className={profileLink ? style : style(false)}>
+          className={profileLink ? style : style({isActive: false})}>
             Профиль
         </NavLink>
         <NavLink
           to={{ pathname: profieOrders }}
-          className={profileOrdersLink ? style : style(false)}>
+          className={profileOrdersLink ? style : style({isActive: false})}>
             История заказов
         </NavLink>
         <NavLink
-          className={style(false)}
+          to={{ pathname: home }}
+          className={style({isActive: false})}
           onClick={onClickOut}>
             Выход
         </NavLink>

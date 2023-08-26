@@ -1,6 +1,3 @@
-import { ReactNode } from 'react';
-
-
 export type Ingredient = {
   _id: string;
   name: string;
@@ -53,13 +50,11 @@ export type ResponseBody<TDataKey extends string = "", TDataType = {}> = {
   accessToken: string;
 };
 
-
 export type RefreshData = {
   success: boolean;
   refreshToken: string;
   accessToken: string;
 }
-
 export type BurgerConstructorProps = {
   ingredient: Ingredient;
   moveIngredient: (dragIndex: number, hoverIndex: number) => void;
@@ -106,47 +101,43 @@ export type UserResponse = {
   user: User;
   accessToken: string;
   refreshToken: string;
-}
+};
 
 export type LoginResponse = {
   success: boolean;
   accessToken: string;
   refreshToken: string;
   user: User;
-}
+};
 
 export type LogoutResponse = {
   success: boolean;
   message: string;
-}
-
-
-
-
-
-
+};
 
 export type IngredientCard = {
-  item: Ingredient
-}
+  order: OrderIngredient;
+};
 
-export type ConstructorItem = {
-  id: number;
-  index: number;
-  key: number;
-  children: ReactNode;
-}
+export type FeedListProps = {
+  orders: OrderData[];
+};
 
-export type IngredientPage = {
-  title: string | number | null;
-}
+export type ProtectedProps = {
+  onlyUnAuth?: boolean;
+  component: JSX.Element;
+};
+
+export type PostResetPassObj = {
+  password: string;
+  token: string;
+};
 
 export type Order = {
   name: string;
   number: number;
   success: boolean;
 }
-
 
 
 export type OrderDataContainer = {
@@ -169,9 +160,15 @@ export type IngredientsResponse = {
   success: boolean;
 }
 
+export type ModalProps = {
+  children?: React.ReactNode;
+  onClose: () => void;
+  title?: string;
+};
 
-
-
+export type ModalOverlayProps = {
+  onClose: () => void;
+};
 
 export type RefreshTokenResponse = {
   success: boolean;
@@ -195,55 +192,11 @@ export type FeedOrders = {
   orders: FeedOrder[];
 }
 
-
-export type CookieProps = {
-  [name: string]: string | number | boolean | Date | undefined;
-  expires?: Date | number | string;
-}
-
-export type Location = {
-  hash: string;
-  pathname: string;
-  search: string;
-  state: object | null;
-}
-
-export type Modal = {
-  onCloseClick: () => void;
-  title?: string;
-  children?: ReactNode;
-}
-
-export type ModalOverlay = {
-  onClick: (evt: React.MouseEvent<HTMLDivElement>) => void;
-}
-
-export type ProtectedRoute = {
-  children: ReactNode;
-  path: string;
-  exact: boolean;
-}
+export type Params = {
+  id: string;
+};
 
 export type OrderInfo = {
   headerStyle?: string;
 }
 
-export type IngredientDetails = {
-  title?: string | number;
-}
-
-export type Gallery = {
-  ingredientsType: string;
-  data: Ingredient[];
-}
-
-// export type OrderIngredient = {
-//   item: {
-//     _id: string;
-//   }
-// }
-
-export type Error = {
-  success: boolean;
-  message: string;
-}

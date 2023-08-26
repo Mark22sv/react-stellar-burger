@@ -1,27 +1,27 @@
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { getSelectorDataIngredients } from '../../utils/get-selector';
+import { shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getSelectorOrdersFeed } from '../../utils/get-selector';
 import styles from './order-info.module.css';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { getOrderIngredients } from '../../services/actions/order-details';
 import { useEffect } from "react";
-import { getSelectorOrderDetails } from '../../utils/get-selector';
+import { useAppDispatch, useAppSelector } from "../../services";
+import { Ingredient, Params } from "../../services/types/data";
 
 export function OrderInfo() {
-  const { orders } = useSelector(getSelectorOrdersFeed, shallowEqual);
-  const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
-  const { orderIngredient } = useSelector(getSelectorOrderDetails, shallowEqual);
-  const dispatch = useDispatch();
-  const { id } = useParams();
+  const { orders } =  useAppSelector((store) => store.ordersFeed, shallowEqual);
+  const { data } = useAppSelector((state) => state.dataIngredients, shallowEqual);
+  const { orderIngredient } = useAppSelector((state) => state.order, shallowEqual);
+  const dispatch = useAppDispatch();
+  const { id } = useParams<keyof Params>() as Params;
+  const orderNumber = Number(id);
   let selectedOrder;
 
   useEffect(() => {
-    dispatch(getOrderIngredients(id));
-  }, [dispatch]);
+    dispatch(getOrderIngredients(orderNumber));
+  }, [dispatch, orderNumber]);
 
-  if (orders.length == 0) {
-    selectedOrder = orderIngredient
+  if (orders.length === 0) {
+    selectedOrder = orderIngredient;
   }
   else {
     selectedOrder = orders.find((item) => item.number === Number(id));
@@ -30,14 +30,15 @@ export function OrderInfo() {
   const currentIngredients = selectedOrder?.ingredients;
   const ingredients = currentIngredients?.map((item) => data.find((ingredient) => ingredient._id ===  item));
 
-  const orderDate = selectedOrder.updatedAt;
+  const orderDate: string = selectedOrder ? selectedOrder.updatedAt : '';
 
-  const totalSum = (ingredients) => {
+
+  const totalSum = (ingredients: (Ingredient | undefined)[] | undefined) => {
     let sum = 0;
     let bun = 0;
     let count = 0;
     ingredients?.forEach((ingredient) => {
-      const check = data.find((item) => item._id === ingredient._id);
+      const check = data.find((item) => item._id === ingredient?._id);
       if (check?.price) {
         sum += check.price;
         if (check?.type === 'bun') {

@@ -1,7 +1,8 @@
+import { FeedOrders } from '../../services/types/data';
 import styles from './statistics-orders.module.css';
+import {  FC } from "react";
 
-
-export function StatisticsOrder ({ orders, total, totalToday }) {
+export const StatisticsOrder: FC<FeedOrders> = ({ orders, total, totalToday }) => {
 
   const ordersDone = orders && orders.filter((item) => item.status === 'done').slice(0, 20);
   const ordersWork = orders && orders.filter((item) => item.status === 'pending').slice(0, 10);

@@ -12,9 +12,9 @@ import { Style } from '../../services/types/data';
 const AppHeader = () => {
 
   const styles = ({ isActive }: Style) =>
-    isActive
-      ? `${headerStyle.header_link} ${headerStyle.header_link_active} text_type_main-default pl-2`
-      : `${headerStyle.header_link} text_type_main-default text_color_inactive pl-2`;
+  isActive
+    ? `${headerStyle.header_link} ${headerStyle.header_link_active} text_type_main-default pl-2`
+    : `${headerStyle.header_link} text_type_main-default text_color_inactive pl-2`;
   const homeLink = useMatch(home);
   const profileLink = useMatch(profile);
   const orderFeedLink = useMatch(feed);

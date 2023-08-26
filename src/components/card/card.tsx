@@ -1,26 +1,29 @@
-import { useSelector, shallowEqual } from 'react-redux';
-import { getSelectorDataIngredients } from '../../utils/get-selector';
+
+import { FC } from "react";
+import { shallowEqual } from 'react-redux';
 import styles from './card.module.css';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Ingredient, OrderDataContainer } from '../../services/types/data';
+import { useAppSelector } from "../../services";
 
-export function Card({order}) {
-  const { data } = useSelector(getSelectorDataIngredients, shallowEqual);
+export const Card: FC<OrderDataContainer> = ({order}) => {
+  const { data } = useAppSelector((state) => state.dataIngredients, shallowEqual);
   const { number, createdAt, name, ingredients, status } = order;
 
 
-  const findIngredient = (ingredient) => {
-    return data.find(item => item._id === ingredient)
+  const findIngredient = (ingredient: string) => {
+    return data.find((item: Ingredient) => item._id === ingredient)
   };
   const lastIngredient = findIngredient(ingredients[5]);
   const numbersHidden = ingredients.length === 6 ? '' : `+${ingredients.length - 6}`;
 
-  const totalSum = (id) => {
+  const totalSum = (id: string[]) => {
     let sum = 0;
     let bun = 0;
     let count = 0;
     id.forEach((ingredient) => {
-      const check = data.find((item) => item._id === ingredient);
-      if (check.price) {
+      const check = data.find((item: Ingredient) => item._id === ingredient);
+      if (check?.price) {
         sum += check.price;
         if (check.type === 'bun') {
           sum += check.price;
@@ -59,7 +62,7 @@ export function Card({order}) {
                 return (
                   <li key={index} className={styles.ingredient}>
                     <img  className={styles.image} src={selectedIngredient?.image}
-                    alt={selectedIngredient.name} />
+                    alt={selectedIngredient?.name} />
                   </li>
                 )
             })

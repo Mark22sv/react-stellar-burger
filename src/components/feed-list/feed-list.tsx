@@ -1,11 +1,13 @@
+import { FC } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { Card } from '../card/card';
 import styles from './feed-list.module.css';
 import { feed } from "../../utils/constants";
+import { FeedListProps } from "../../services/types/data";
 
 
 
-export function FeedList({orders}) {
+export const FeedList: FC<FeedListProps> = ({orders}) => {
   const location = useLocation();
 
 

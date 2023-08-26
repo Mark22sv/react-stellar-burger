@@ -1,6 +1,6 @@
 import { AppThunk } from '..';
 import { setOrderFetch, getOrderIngredientsFetch } from '../../api/api';
-import { Ingredient, OrderIngredient, OrderResponse } from '../types/data';
+import { OrderIngredient, OrderResponse } from '../types/data';
 import {
   RESET_CONSRUCTOR_INGREDIENTS
 } from './constructor-ingredients';
@@ -71,6 +71,7 @@ const getOrderSuccess = (res: OrderResponse): GetOrderSuccess => {
 const getOrderFailed = (): GetOrderFailed => {
   return {
     type: GET_ORDER_FAILED,
+
   }
 };
 

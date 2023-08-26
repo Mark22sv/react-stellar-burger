@@ -1,3 +1,4 @@
+import { fail } from 'assert';
 import { GET_ORDER_REQUEST,
          GET_ORDER_SUCCESS,
          GET_ORDER_FAILED,
@@ -9,13 +10,15 @@ import { GET_ORDER_REQUEST,
          RESET_ORDER,
          OrderDetailsActions
  } from '../actions/order-details';
-import { Ingredient, OrderIngredient } from '../types/data';
+import { OrderIngredient } from '../types/data';
 
 export type OrderDetailsState = {
   orderNumber: number | null;
   orderIngredient: OrderIngredient | null;
   dataRequest: boolean;
   dataFailed: boolean;
+  dataIngredientsRequest: boolean;
+  dataIngredientsFailed: boolean;
   clickOnOrder: boolean;
 }
 
@@ -24,6 +27,8 @@ const initialState: OrderDetailsState = {
   orderIngredient: null,
   dataRequest: false,
   dataFailed: false,
+  dataIngredientsRequest: false,
+  dataIngredientsFailed: false,
   clickOnOrder: false
 };
 
@@ -47,7 +52,8 @@ export const orderReducer = (state = initialState, action: OrderDetailsActions):
 
     case GET_ORDER_FAILED:
       return {
-        orderNumber: '',
+        ...state,
+        orderNumber: null,
         dataFailed: true,
         dataRequest: false
       };
@@ -55,28 +61,30 @@ export const orderReducer = (state = initialState, action: OrderDetailsActions):
       case GET_ORDER_INGREDIENTS_REQUEST:
         return {
           ...state,
-          dataRequest: true,
-          dataFailed: false
+          dataIngredientsRequest: true,
+          dataIngredientsFailed: false
         };
 
       case GET_ORDER_INGREDIENTS_SUCCESS:
         return {
           ...state,
           orderIngredient: action.orders,
-          dataRequest: false
+          dataIngredientsRequest: false
         };
 
       case GET_ORDER_INGREDIENTS_FAILED:
         return {
-          orderIngredient: [],
-          dataFailed: true,
-          dataRequest: false
+          ...state,
+          orderIngredient: null,
+          dataIngredientsFailed: true,
+          dataIngredientsRequest: false
         };
 
     case RESET_ORDER:
       return {
         ...state,
-        orderNumber: ''
+        orderNumber: null,
+        clickOnOrder: false
       };
 
     default:

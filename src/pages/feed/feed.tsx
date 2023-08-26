@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import styles from "./feed.module.css"
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { shallowEqual } from 'react-redux';
 import { ORDERS_FEED_URL } from '../../utils/constants';
-import { getSelectorOrdersFeed } from '../../utils/get-selector';
 import { connect, disconnect } from '../../services/actions/ws';
 import { FeedList } from "../../components/feed-list/feed-list";
 import { StatisticsOrder } from "../../components/statistics-orders/statistics-orders";
+import { useAppDispatch, useAppSelector } from "../../services";
 
 export function Feed() {
-  const dispatch = useDispatch();
-  const { orders, total, totalToday } = useSelector(getSelectorOrdersFeed, shallowEqual);
+  const dispatch = useAppDispatch();
+  const { orders, total, totalToday } = useAppSelector((store) => store.ordersFeed, shallowEqual);
 
   useEffect(() => {
     dispatch(connect(ORDERS_FEED_URL));
