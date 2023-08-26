@@ -1,5 +1,5 @@
 import { Button, EmailInput, Input } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, MouseEvent } from 'react';
+import { useState, FormEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 import { signIn } from '../../services/actions/user';
 import styles from './login.module.css';
@@ -12,7 +12,7 @@ export const Login = () => {
   const [isVisible, setVisible] = useState(false);
   const dispatch = useAppDispatch();
 
-  const onFormSubmit = (e: MouseEvent<HTMLFormElement>) => {
+  const onFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
     dispatch(signIn(values));
   }

@@ -1,5 +1,5 @@
 import { Button, EmailInput } from '@ya.praktikum/react-developer-burger-ui-components';
-import { MouseEvent } from 'react';
+import { FormEventHandler } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { postMailFetch } from '../../api/api';
 import styles from './forgot-password.module.css';
@@ -23,7 +23,7 @@ export const ForgotPassword = () => {
       })
   };
 
-	const onFormSubmit = (e: MouseEvent<HTMLFormElement>) => {
+	const onFormSubmit: FormEventHandler<HTMLFormElement> = (e)  => {
 		e.preventDefault();
 		postMail();
 

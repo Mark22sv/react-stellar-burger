@@ -3,11 +3,10 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useState, useRef, MouseEvent, SyntheticEvent } from "react";
+import { useState, useRef, FormEventHandler, SyntheticEvent } from "react";
 import { useMatch  } from "react-router-dom";
 import { ProfileNavBar } from '../../components/profile-navbar/profile-navbar';
 import { updateUser } from "../../services/actions/user";
-import { useDispatch, useSelector } from "react-redux";
 import { profile } from '../../utils/constants';
 import { useForm } from "../../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../../services";
@@ -38,7 +37,7 @@ export function Profile() {
 
   const profileLink = useMatch(profile);
 
-  const onClickSave = (e: MouseEvent<HTMLFormElement>) => {
+  const onClickSave: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     dispatch(updateUser(values));
   }

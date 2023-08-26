@@ -11,7 +11,7 @@ const modalRoot: HTMLElement | null = document.querySelector('#react-modals');
 
 const Modal: FC<ModalProps> = ({ title, children, onClose }) => {
   useEffect(() => {
-    const keyHandler = (evt: {key: string}) => {
+    const keyHandler = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', keyHandler);

@@ -139,7 +139,7 @@ const BurgersIngredients = () => {
           Булки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {dataIngredients.buns.map((item: Ingredient, index: number) => (
+          {dataIngredients.buns.map((item, index) => (
             <li key={index}>
               <Link
                 className={ burgerIngredientsStyle.ingridient__link }
@@ -156,7 +156,7 @@ const BurgersIngredients = () => {
           Соусы
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-          {dataIngredients.sauces.map((item: Ingredient, index: number) => (
+          {dataIngredients.sauces.map((item, index) => (
             <li key={index}>
               <Link
                 className={ burgerIngredientsStyle.ingridient__link }
@@ -173,7 +173,7 @@ const BurgersIngredients = () => {
           Начинки
         </h2>
         <ul className={ `${burgerIngredientsStyle.list} pt-6 pb-10` }>
-        {dataIngredients.mains.map((item: Ingredient, index: number) => (
+        {dataIngredients.mains.map((item, index) => (
           <li key={index}>
             <Link
                 className={ burgerIngredientsStyle.ingridient__link }

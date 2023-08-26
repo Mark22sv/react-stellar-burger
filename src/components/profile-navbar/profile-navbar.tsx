@@ -4,7 +4,7 @@ import { signOut } from "../../services/actions/user";
 import { profile, profieOrders, home } from '../../utils/constants';
 import { useAppDispatch } from "../../services";
 import { Style } from "../../services/types/data";
-
+import { MouseEventHandler } from "react";
 
 export function ProfileNavBar() {
   const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ export function ProfileNavBar() {
   const profileLink = useMatch(profile);
   const profileOrdersLink = useMatch(profieOrders);
 
-  const onClickOut = () => {
+  const onClickOut: MouseEventHandler<HTMLAnchorElement> = () => {
     dispatch(signOut());
   };
 

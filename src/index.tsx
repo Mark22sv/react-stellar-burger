@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from './services/store'
 import { createRoot } from 'react-dom/client';
 
-const container = document.getElementById('root');
+const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 root.render(
@@ -18,3 +18,5 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+

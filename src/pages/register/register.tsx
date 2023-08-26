@@ -1,9 +1,9 @@
 import { Button,
          EmailInput,
          Input,
-         
+
        } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useState, MouseEvent } from 'react';
+import { useState, FormEventHandler } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/actions/user';
 import { home, login } from '../../utils/constants';
@@ -18,7 +18,7 @@ export const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-	const onFormSubmit = (e: MouseEvent<HTMLFormElement>) => {
+	const onFormSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 		e.preventDefault();
     navigate(home, { replace: true });
     dispatch(registerUser(values));
